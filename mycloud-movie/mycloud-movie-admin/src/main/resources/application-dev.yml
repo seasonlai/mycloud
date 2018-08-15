@@ -11,3 +11,6 @@ spring:
         max-idle: 4
         min-idle: 0
         max-wait: 6000
+logging:
+  level:
+    com.season: debug

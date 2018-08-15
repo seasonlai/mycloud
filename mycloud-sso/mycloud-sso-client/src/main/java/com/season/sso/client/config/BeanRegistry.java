@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Configuration("sso-client-beanRegistry")
 @EnableAsync
+@EnableDiscoveryClient
 public class BeanRegistry {
 
     static Logger logger = LoggerFactory.getLogger(BeanRegistry.class);
@@ -73,17 +75,6 @@ public class BeanRegistry {
         registration.setEnabled(false);
         return registration;
     }
-
-//    @Bean
-//    public FilterRegistrationBean delegatingFilterProxy(){
-//        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-//        DelegatingFilterProxy proxy = new DelegatingFilterProxy();
-//        proxy.setTargetFilterLifecycle(true);
-//        proxy.setTargetBeanName("shiroFilter");
-//        filterRegistrationBean.setFilter(proxy);
-//        return filterRegistrationBean;
-//    }
-
 
     /**
      * 应用启动后向认证中心加载权限

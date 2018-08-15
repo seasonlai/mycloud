@@ -30,6 +30,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.season.common</groupId>
+            <artifactId>mycloud-common-web</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.season.movie</groupId>
             <artifactId>mycloud-movie-dao</artifactId>
             <version>0.0.1-SNAPSHOT</version>

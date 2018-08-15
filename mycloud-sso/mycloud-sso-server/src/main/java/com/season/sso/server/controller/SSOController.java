@@ -188,12 +188,14 @@ public class SSOController extends BaseController {
 
             token = UUID.randomUUID().toString();
             redisTemplate.opsForValue()
-                    .set(getKey(MYCLOUD_SERVER_SESSION_ID + sessionId), token);
+                    .set(getKey(MYCLOUD_SERVER_SESSION_ID + sessionId), token
+                            ,session.getTimeout(),TimeUnit.MILLISECONDS);
 //            redisTemplate.opsForList()
 //                    .leftPush(getKey(MYCLOUD_SERVER_SESSION_IDS + token), appCode);
 //            redisTemplate.expire(getKey(MYCLOUD_SERVER_SESSION_IDS + token),
 //                    session.getTimeout(), TimeUnit.MILLISECONDS);
-            redisTemplate.opsForValue().set(getKey(MYCLOUD_SERVER_CODE + token), token);
+            redisTemplate.opsForValue().set(getKey(MYCLOUD_SERVER_CODE + token), token
+                    ,session.getTimeout(),TimeUnit.MILLISECONDS);
             if (StringUtils.isEmpty(backUrl)) {
                 backUrl = "/sso/index";
             }

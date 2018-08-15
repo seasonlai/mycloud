@@ -27,56 +27,58 @@
     <div class="ui sidebar vertical left menu overlay  borderless visible sidemenu inverted  grey"
          style="transition-duration: 0.1s; overflow: hidden; outline: none;" data-color="grey" tabindex="0">
         <a class="item logo" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/index.html">
-            <img src="./Admin Template_files/logo.png" alt="stagblogo" class=""><img
-                src="./Admin Template_files/thumblogo.png" alt="stagblogo" class="displaynone">
+            <img th:src="${application._imgPath}+'logo.png'" alt="stagblogo" class="">
+            <img th:src="${application._imgPath}+'logo.png'" alt="stagblogo" class="displaynone">
         </a>
         <div class="ui accordion inverted">
-
             <a class="title item">
-                <i class="ion-speedometer titleIcon icon"></i> Dashboard <i class="dropdown icon"></i>
+                <i class="ion-speedometer titleIcon icon"></i> 网站概况 <i class="dropdown icon"></i>
+            </a>
+            <a class="title item">
+                <i class="ion-speedometer titleIcon icon"></i> 影片管理 <i class="dropdown icon"></i>
             </a>
             <div class="content">
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/index.html">
-                    Dashboard v1
+                    上传影片
+                </a>
+                <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/index.html">
+                    查询影片
                 </a>
             </div>
 
             <div class="title item">
                 <i class="ion-ios-lightbulb titleIcon icon"></i>
 
-                <i class="dropdown icon"></i> Apps
+                <i class="dropdown icon"></i> 用户管理
             </div>
             <div class="content">
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/inbox.html">
-                    Inbox
+                    管理员
                 </a>
 
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/chat.html">
-                    Chat
+                    VIP会员
                 </a>
 
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/filter.html">
-                    Filter
-                </a>
-                <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/todo.html">
-                    Todo
+                    普通用户
                 </a>
             </div>
             <div class="title item">
                 <i class="ion-ios-world titleIcon  icon"></i>
 
-                <i class="dropdown icon"></i> Layouts
+                <i class="dropdown icon"></i> 权限管理
             </div>
             <div class="content">
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/sidebar.html">
-                    Sidebar
+                    管理员权限
                 </a>
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/menu.html">
-                    Nav
+                    用户权限
                 </a>
 
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/box.html">
-                    Box
+                    影片权限
                 </a>
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/cards.html">
                     Cards
@@ -633,7 +635,7 @@
                 </div>
                 <div class="statistic">
                     <div class="value">
-                        <img src="./Admin Template_files/carol.png" class="ui circular inline image"> 21254
+                        <img th:src="${application._imgPath}+'carol.png'" class="ui circular inline image"> 21254
                     </div>
                     <div class="label">
                         Team Members
@@ -748,7 +750,7 @@
                     <h4 class="ui header">Followers Activity</h4>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/Abraham.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'Abraham.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="date">
@@ -761,7 +763,7 @@
                     </div>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/carol.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'carol.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="summary">
@@ -774,7 +776,7 @@
                     </div>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/Daryl.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'Daryl.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="date">
@@ -787,7 +789,7 @@
                     </div>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/deana.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'deana.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="summary">
@@ -800,7 +802,7 @@
                     </div>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/enid.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'enid.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="date">
@@ -813,7 +815,7 @@
                     </div>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/Glenn.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'Glenn.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="summary">
@@ -826,7 +828,7 @@
                     </div>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/Hershell.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'Hershell.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="date">
@@ -839,7 +841,7 @@
                     </div>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/Hershell.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'Hershell.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="summary">
@@ -852,7 +854,7 @@
                     </div>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/Meggie.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'Meggie.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="date">
@@ -865,7 +867,7 @@
                     </div>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/Michonne.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'Michonne.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="summary">
@@ -878,7 +880,7 @@
                     </div>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/Rick.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'Rick.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="date">
@@ -891,7 +893,7 @@
                     </div>
                     <div class="event">
                         <div class="label">
-                            <img src="./Admin Template_files/Tara.png" alt="label-image">
+                            <img th:src="${application._imgPath}+'Tara.png'" alt="label-image">
                         </div>
                         <div class="content">
                             <div class="summary">
@@ -2148,20 +2150,6 @@
         <!--maincontent-->
     </div>
 </div>
-<!--jquery-->
-<script async="" th:src="${application._staticPath}+'movie-admin/js/analytics.js'"></script>
-<script th:src="${application._staticPath}+'movie-admin/js/jquery-2.1.4.min.js'"></script>
-<!--jquery-->
-<!--semantic-->
-<script th:src="${application._staticPath}+'movie-admin/js/semantic.min.js'"></script>
-<!--semantic-->
-<!--<script th:src="${application._staticPath}+/Admin Template_files/js.cookie.js"></script>-->
-<script th:src="${application._staticPath}+'movie-admin/js/jquery.nicescroll.min.js"></script>
-
-<script data-pace-options="{ &quot;ajax&quot;: false }"
-        th:src="${application._staticPath}+'movie-admin/js/pace.js'"></script>
-
-<script th:src="${application._staticPath}+'movie-admin/js/main.js'"></script>
 
 <div id="ascrail2000" class="nicescroll-rails nicescroll-rails-vr"
      style="width: 5px; z-index: 9999999; cursor: default; position: fixed; top: 0px; height: 100%; right: 0px; display: block; opacity: 0;">
@@ -2184,6 +2172,21 @@
          style="position: absolute; top: 0px; height: 2px; width: 190px; background-color: rgb(61, 59, 59); border: 0px; background-clip: padding-box; border-radius: 0px; left: 0px;"></div>
 </div>
 
+
+<!--jquery-->
+<script async="" th:src="${application._staticPath}+'movie-admin/js/analytics.js'"></script>
+<script th:src="${application._staticPath}+'movie-admin/js/jquery-2.1.4.min.js'"></script>
+<!--jquery-->
+<!--semantic-->
+<script th:src="${application._staticPath}+'movie-admin/js/semantic.min.js'"></script>
+<!--semantic-->
+<!--<script th:src="${application._staticPath}+/Admin Template_files/js.cookie.js"></script>-->
+<script th:src="${application._staticPath}+'movie-admin/js/jquery.nicescroll.min.js'"></script>
+
+<script data-pace-options="{ &quot;ajax&quot;: false }"
+        th:src="${application._staticPath}+'movie-admin/js/pace.js'"></script>
+
+<script th:src="${application._staticPath}+'movie-admin/js/main.js'"></script>
 
 </body>
 </html>

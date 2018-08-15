@@ -2,6 +2,7 @@ package com.season.sso.client.session;
 
 import com.season.sso.client.jms.SSOClientJMS;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.session.UnknownSessionException;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.crazycake.shiro.exception.SerializationException;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Administrator on 2018/8/15.
@@ -28,17 +30,33 @@ public class CustomSessionDao extends RedisSessionDAO {
     private String keyPrefix;
     @Value("${sso.server.idPrefix:server-session-id:}")
     private String MYCLOUD_SERVER_SESSION_ID;
-    @Value("${sso.server.idsPrefix:server-session-ids:}")
-    private String MYCLOUD_SERVER_SESSION_IDS;
     @Value("${sso.server.code:server-code:}")
     private String MYCLOUD_SERVER_CODE;
     @Value("${sso.client.idPrefix:client-session-id:}")
     private String MYCLOUD_CLIENT_SESSION_ID;
-    @Value("${sso.client.idsPrefix:client-session-ids:}")
-    private String MYCLOUD_CLIENT_SESSION_IDS;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+
+    @Override
+    public void update(Session session) throws UnknownSessionException {
+        super.update(session);
+        if (session.getId() != null) {
+            String sessionId = session.getId().toString();
+            //更新单点服务器token
+            String token = redisTemplate.opsForValue().get(keyPrefix + MYCLOUD_SERVER_SESSION_ID + sessionId);
+            if (!Objects.isNull(token)) {
+                redisTemplate.expire(keyPrefix + MYCLOUD_SERVER_SESSION_ID + sessionId
+                        , session.getTimeout(), TimeUnit.MILLISECONDS);
+                redisTemplate.expire(keyPrefix + MYCLOUD_SERVER_CODE + token
+                        , session.getTimeout(), TimeUnit.MILLISECONDS);
+            }
+        } else {
+            logger.error("session or session id is null");
+            throw new UnknownSessionException("session or session id is null");
+        }
+    }
 
     @Override
     public void delete(Session session) {
@@ -57,7 +75,6 @@ public class CustomSessionDao extends RedisSessionDAO {
                 if (Objects.equals(delete, Boolean.FALSE)) {
                     logger.error("删除服务端键 {} 失败", keyPrefix + MYCLOUD_SERVER_SESSION_ID + sessionId);
                 }
-                redisTemplate.delete(keyPrefix + MYCLOUD_SERVER_SESSION_IDS + sessionId);
                 redisTemplate.delete(keyPrefix + MYCLOUD_SERVER_CODE + token);
             }
         } else {
