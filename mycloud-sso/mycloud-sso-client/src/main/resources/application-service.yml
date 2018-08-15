@@ -1,0 +1,41 @@
+spring:
+  activemq:
+    broker-url: tcp://localhost:61616
+    in-memory: true
+    pool:
+      enabled: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10000/eureka/
+
+######### 自定义 #########
+shiro:
+  thread:
+    pool:
+      corePoolSize: 2
+      maxPoolSize: 5
+      queueCapacity: 20
+  redis:
+    keyPrefix: "${spring.application.name}:cache:"
+    expire: 600
+    session:
+      expire: -2
+      keyPrefix: "mycloud:session:"
+
+app:
+  cache:
+    redis:
+      keyPrefix: "${spring.application.name}:cache:"
+
+mycloud:
+  static:
+    url: http://localhost:10009/
+    image:
+      url: http://localhost:10009/images/
+    video:
+      url: http://localhost:10009/videos/
+  sso:
+    url: http://localhost:10003/
+    serviceUrl: http://mycloud-sso/

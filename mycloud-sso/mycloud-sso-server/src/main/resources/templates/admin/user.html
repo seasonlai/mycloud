@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/index::header('管理员',~{})">
+</head>
+<body>
+<nav th:replace="/admin/index::navbar"></nav>
+<div th:replace="/admin/index::content('user',~{::mainContent})">
+    <th:block th:fragment="mainContent">
+        <h4 class="page-header">管理员列表</h4>
+        <div id="toolbar">
+            <button id="btn_add" type="button" onclick="addUser()" class="btn btn-default">
+                <span class="fa fa-plus" aria-hidden="true"></span>&nbsp;新增
+            </button>
+            <button id="btn_del" type="button" onclick="delUser()" class="btn btn-default">
+                <span class="fa fa-trash" aria-hidden="true"></span>&nbsp;删除
+            </button>
+            <button id="btn_edit" type="button" onclick="lockOrUnlock(1)" class="btn btn-default">
+                <span class="fa fa-lock" aria-hidden="true"></span>&nbsp;锁定
+            </button>
+            <button id="btn_delete" type="button" onclick="lockOrUnlock(0)" class="btn btn-default">
+                <span class="fa fa-unlock" aria-hidden="true"></span>&nbsp;解锁
+            </button>
+            <button id="btn_role" type="button" onclick="authenticate()" class="btn btn-default">
+                <span class="fa fa-cog" aria-hidden="true"></span>&nbsp;角色分配
+            </button>
+        </div>
+        <table id="table">
+        </table>
+    </th:block>
+
+</div>
+
+
+<div class="modal fade" id="modalUser" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" data-backdrop='static' aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 id="editUserTitle" class="modal-title">添加用户</h4>
+            </div>
+            <div class="modal-body">
+                <form id="userForm" class="form-horizontal" role="form" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="inputUserName" class="col-xs-2 col-sm-2 control-label">
+                            <span style="color: red">*</span>用户名:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <input type="hidden" id="inputUserId" name="userId">
+                            <!--<input type="hidden" id="inputOption" name="option">-->
+                            <input type="text" id="inputUserName" name="userName" class="form-control"
+                                   data-container="body" data-placement="top">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-xs-2 col-sm-2  control-label">
+                            <span style="color: red">*</span>密&nbsp;&nbsp;码:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <input type="text" id="inputPassword" name="password" class="col-sm-10 form-control"
+                                   data-container="body" data-placement="top">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword2" class="col-xs-2 col-sm-2  control-label">
+                            <span style="color: red">*</span>确认密码:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <input type="text" id="inputPassword2" name="password2" class="col-sm-10 form-control"
+                                   data-container="body" data-placement="top">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-2  control-label">
+                            <span style="color: red">*</span>是否锁定:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio" id="radioY" name="locked" checked value="1" required>
+                                是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" id="radioN" name="locked" value="0">
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" onclick="submitUser()" class="btn btn-primary">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" id="modalUserRole" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" data-backdrop='static' aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 id="editUserRoleTitle" class="modal-title">角色分配</h4>
+            </div>
+            <div class="modal-body">
+                <form id="userRoleForm" class="form-horizontal" role="form" onsubmit="return false;">
+                    <div>
+                        <label for="appBelong">所属应用： </label>
+                        <select id="appBelong" onchange="initRoles()" class="form-control"
+                                style="width: 200px;display: inline-block">
+                        </select>
+                    </div>
+                    <div id="rolesDiv" style="margin-top: 10px">
+                        <ul id="rolesContainer" style="padding-left: 4px">
+
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" onclick="submitUserRole()" class="btn btn-primary">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+</body>
+
+<script th:replace="/admin/index::script"></script>
+
+<script th:src="${application._staticPath}+'/script/admin/user.js'"></script>
+</html>

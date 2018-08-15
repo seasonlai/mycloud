@@ -1,0 +1,25 @@
+server:
+  port: 10006
+spring:
+  application:
+    name: mycloud-movie-admin
+  profiles:
+    active: dev
+    include: dao,service
+  thymeleaf:
+    cache: false
+  mvc:
+    favicon:
+      enabled: false
+
+
+
+########## 自定义 ###########
+
+app:
+  name: 电影应用后台
+  workerId: 1
+  dataCenterId: 1
+  company: c式
+  email: season@email
+  code: mycloud-movie-admin

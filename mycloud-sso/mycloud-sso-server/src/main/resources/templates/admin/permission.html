@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/index::header('角色管理',~{::link})">
+    <link th:href="${application._staticPath}+'/lib/zTree/css/metroStyle/metroStyle.css'" rel="stylesheet">
+</head>
+<body>
+<nav th:replace="/admin/index::navbar"></nav>
+<div th:replace="/admin/index::content('permission',~{::mainContent})">
+    <th:block th:fragment="mainContent">
+        <h4 class="page-header">权限管理</h4>
+        <div>
+            <label for="appSelected">应用： </label>
+            <select id="appSelected" class="form-control"
+                    style="width: 200px;display: inline-block" onchange="refreshTree()">
+                <option th:each="app,state:${apps}"
+                        th:value="${app.appId}"
+                        th:text="${app.appName}">
+                </option>
+            </select>
+        </div>
+
+        <div style="margin-top: 10px;">
+            <ul id="permissionTree" class="ztree"></ul>
+        </div>
+    </th:block>
+</div>
+
+<div class="modal fade" id="modalPermission" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" data-backdrop='static' aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 id="editPermissionTitle" class="modal-title">添加权限</h4>
+            </div>
+            <div class="modal-body">
+                <form id="permissionForm" class="form-horizontal" role="form" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="appBelong" class="col-xs-2 col-sm-2 control-label">
+                            <span style="color: red">*</span>所属应用:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <select id="appBelong" name="appId" class="form-control" disabled
+                                    style="width: 200px;display: inline-block">
+                                <option th:each="app,state:${apps}" th:value="${app.appId}" th:text="${app.appName}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPermissionName" class="col-xs-2 col-sm-2 control-label">
+                            <span style="color: red">*</span>权限名称:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <input type="hidden" id="inputPermissionId" name="permissionId">
+                            <input type="hidden" id="inputParentIdId" name="parentId">
+                            <input type="hidden" id="inputPermissionAppId" name="permissionAppId">
+                            <!--<input type="hidden" id="inputOption" name="option">-->
+                            <input type="text" id="inputPermissionName" name="permissionName" class="form-control"
+                                   data-container="body" data-placement="top">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPermissionUrl" class="col-xs-2 col-sm-2  control-label">
+                            <span style="color: red">*</span>权限URL:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <input type="text" id="inputPermissionUrl" name="permissionUrl" class="col-sm-10 form-control"
+                                   data-container="body" data-placement="top">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPermissionNeed" class="col-xs-2 col-sm-2  control-label">
+                            <span style="color: red">*</span>所需权限:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <input type="text" id="inputPermissionNeed" name="permissionNeed" class="col-sm-10 form-control"
+                                   data-container="body" data-placement="top">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputSort" class="col-xs-2 col-sm-2  control-label">
+                            <span style="color: red">*</span>排序号:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <input type="number" id="inputSort" name="sort" class="col-sm-10 form-control"
+                                   data-container="body" data-placement="top">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-2  control-label">
+                            <span style="color: red">*</span>是否启用:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio"  name="enable" checked value="1" required>
+                                是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="enable" value="0">
+                                否
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-2  control-label">
+                            <span style="color: red">*</span>是否菜单:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio" name="menu" checked value="1" required>
+                                是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="menu" value="0">
+                                否
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="textDescription" class="col-xs-2 col-sm-2  control-label">
+                            描&nbsp;&nbsp;述:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <textarea type="text" id="textDescription" name="description"
+                                      class="col-sm-10 form-control" placeholder="80个字以内">
+                            </textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" onclick="submitPermission()" class="btn btn-primary">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script th:replace="/admin/index::script"></script>
+<script th:src="${application._staticPath}+'/lib/zTree/js/jquery.ztree.core.min.js'"></script>
+<script th:src="${application._staticPath}+'/lib/zTree/js/jquery.ztree.exedit.js'"></script>
+<script th:src="${application._staticPath}+'/script/admin/permission.js'"></script>
+</body>
+</html>

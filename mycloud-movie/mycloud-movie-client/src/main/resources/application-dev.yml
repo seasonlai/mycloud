@@ -1,0 +1,27 @@
+spring:
+  redis:
+    host: 127.0.0.1
+    password: 123456
+    port: 6379
+    timeout: 5000
+    database: 0
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 4
+        min-idle: 0
+        max-wait: 6000
+logging:
+  level:
+#    root: debug
+    com.season: debug
+    org.apache.shiro.web.servlet: debug
+
+
+###### 自定义 ######
+file:
+  image:
+    path: D:/mycloud/images/
+    format: jpg|png|gif|bmp
+  video:
+    path: D:/mycloud/videos/

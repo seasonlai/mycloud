@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header(title,links)">
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title th:text="${title}?:_">电影</title>
+    <link th:href="${application._staticPath}+'movie/css/style.css'" rel="stylesheet" type="text/css" media="all"/>
+    <link th:href="${application._staticPath}+'movie/css/slider.css'" rel="stylesheet" type="text/css" media="all"/>
+    <th:block th:replace="${links}">
+    </th:block>
+</head>
+<body>
+<div class="headertop_desc" th:fragment="headertop_desc">
+    <div class="wrap">
+        <div class="nav_list">
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li><a href="contact.html">联系我们</a></li>
+            </ul>
+        </div>
+        <div class="account_desc">
+            <ul>
+                <li><a href="contact.html">注册</a></li>
+                <li><a href="contact.html">登录</a></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+
+<div class="header_top" th:fragment="header_top">
+    <div class="logo">
+        <a th:href="${movie}">
+            <img th:src="${application._imgPath}+'mylogo.png'" alt=""/>
+        </a>
+    </div>
+    <div class="header_top_right">
+        <div class="search_box">
+            <form>
+                <input type="text" value="搜索影片" onfocus="this.value = '';"
+                       onblur="if (this.value == '') {this.value = '搜索影片';}">
+                <input type="submit" value="">
+            </form>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+</div>
+
+
+
+<div class="footer" th:fragment="footer">
+    <div class="wrap">
+        <div class="section group">
+            <div class="col_1_of_4 span_1_of_4">
+                <h4>信息</h4>
+                <ul>
+                    <li><a href="#">关于我们</a></li>
+                    <li><a href="#">消费者服务</a></li>
+                    <li><a href="#">Advanced Search</a></li>
+                    <li><a href="#">Orders and Returns</a></li>
+                    <li><a href="contact.html">联系我们</a></li>
+                </ul>
+            </div>
+            <div class="col_1_of_4 span_1_of_4">
+                <h4>为何选择我们</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Customer Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="contact.html">Site Map</a></li>
+                    <li><a href="#">Search Terms</a></li>
+                </ul>
+            </div>
+            <div class="col_1_of_4 span_1_of_4">
+                <h4>我的账户</h4>
+                <ul>
+                    <li><a href="contact.html">Sign In</a></li>
+                    <li><a href="index.html">View Cart</a></li>
+                    <li><a href="#">My Wishlist</a></li>
+                    <li><a href="#">Track My Order</a></li>
+                    <li><a href="contact.html">Help</a></li>
+                </ul>
+            </div>
+            <div class="col_1_of_4 span_1_of_4">
+                <h4>联系方式</h4>
+                <ul>
+                    <li><span>+91-123-456789</span></li>
+                    <li><span>+00-123-000000</span></li>
+                </ul>
+                <div class="social-icons">
+                    <h4>关注我们</h4>
+                    <ul>
+                        <li><a href="#" target="_blank"><img th:src="${application._imgPath}+'facebook.png'" alt=""/></a></li>
+                        <li><a href="#" target="_blank"><img th:src="${application._imgPath}+'twitter.png'" alt=""/></a></li>
+                        <li><a href="#" target="_blank"><img th:src="${application._imgPath}+'skype.png'" alt=""/> </a></li>
+                        <li><a href="#" target="_blank"> <img th:src="${application._imgPath}+'linkedin.png'" alt=""/></a></li>
+                        <div class="clear"></div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="copy_right">
+            <p>Copyright &copy; 2018.Company name C式 rights reserved.</p>
+        </div>
+    </div>
+</div>
+
+<th:block th:fragment="scripts">
+    <script type="text/javascript" th:src="${application._staticPath}+'lib/jquery.min.js'"></script>
+    <script type="text/javascript" th:src="${application._staticPath}+'lib/move-top.js'"></script>
+    <script type="text/javascript" th:src="${application._staticPath}+'lib/easing.js'"></script>
+    <script type="text/javascript" th:src="${application._staticPath}+'lib/jquery.nivo.slider.js'"></script>
+</th:block>
+
+</body>
+</html>

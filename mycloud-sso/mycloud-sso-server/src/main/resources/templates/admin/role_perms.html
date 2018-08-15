@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/index::header('角色管理',~{::link})">
+    <link th:href="${application._staticPath}+'/lib/zTree/css/metroStyle/metroStyle.css'" rel="stylesheet">
+</head>
+<body>
+<nav th:replace="/admin/index::navbar"></nav>
+<div th:replace="/admin/index::content('role',~{::mainContent})">
+    <th:block th:fragment="mainContent">
+        <p><a th:href="@{/admin/role}">角色管理</a>&nbsp;&gt;&nbsp;角色授权</p>
+        <div style="border-bottom: 1px solid #eee"></div>
+        <div style="margin-top: 10px">
+            <label for="appSelected">应用： </label>
+            <select id="appSelected" class="form-control"
+                    style="width: 200px;display: inline-block"
+                    th:each="app,state:${apps}">
+                <option th:value="${app.appId}" th:text="${app.appName}"></option>
+            </select>
+        </div>
+        <div style="margin: 10px 0;">
+            <button type="button" class="btn btn-sm btn-default" onclick="submitRolePerms()">确认</button>
+        </div>
+        <div style="margin-top: 10px;">
+            <ul id="rolePermissionTree" class="ztree"></ul>
+        </div>
+
+    </th:block>
+</div>
+
+
+<script th:replace="/admin/index::script"></script>
+
+<script th:src="${application._staticPath}+'/lib/zTree/js/jquery.ztree.core.min.js'"></script>
+<script th:src="${application._staticPath}+'/lib/zTree/js/jquery.ztree.excheck.js'"></script>
+<script th:src="${application._staticPath}+'/script/admin/role_perms.js'"></script>
+</body>
+</html>

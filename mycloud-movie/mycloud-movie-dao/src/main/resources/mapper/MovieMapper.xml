@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.season.movie.dao.mapper.MovieMapper">
+  <resultMap id="BaseResultMap" type="com.season.movie.dao.entity.Movie">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="kind" jdbcType="INTEGER" property="kind" />
+    <result column="kinds" jdbcType="VARCHAR" property="kinds" />
+    <result column="cover" jdbcType="VARCHAR" property="cover" />
+    <result column="play_count" jdbcType="BIGINT" property="playCount" />
+    <result column="show_year" jdbcType="DATE" property="showYear" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+</mapper>

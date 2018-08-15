@@ -1,0 +1,34 @@
+server:
+  port: 10003
+spring:
+  application:
+    name: mycloud-sso
+  profiles:
+    active: dev
+    include: service
+  #取消模板缓存
+  thymeleaf:
+    cache: false
+  mvc:
+    favicon:
+      enabled: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    locale: zh_CN
+###############   自定义属性   #########################
+#shiro:
+#  cookie:
+#    name: "sso_session_id"
+
+app:
+  name: 认证中心
+  workerId: 1
+  dataCenterId: 1
+  company: c式
+  email: season@email
+  code: mycloud-sso
+
+mycloud:
+  sso:
+    type: server

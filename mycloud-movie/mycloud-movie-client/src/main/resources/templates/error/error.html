@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>错误页面</title>
+</head>
+<body>
+    <h2 th:text="${#request.getAttribute('ex')}?:_">页面出错</h2>
+</body>
+</html>

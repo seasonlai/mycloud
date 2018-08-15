@@ -1,0 +1,32 @@
+server:
+  port: 10005
+spring:
+  application:
+    name: mycloud-movie-client
+  profiles:
+    active: dev
+    include: dao,service
+  thymeleaf:
+    cache: false
+  mvc:
+    favicon:
+      enabled: false
+
+########## 自定义 ###########
+
+app:
+  name: 电影应用客户端
+  workerId: 1
+  dataCenterId: 1
+  company: c式
+  email: season@email
+  code: mycloud-movie-client
+
+
+#线程池配置
+threads:
+  data:
+    coreSize: 10
+    maxSize: 30
+    queueCapacity: 20
+

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="bootstrap::header('注册',~{::link})">
+    <link th:href="${application._staticPath}+'/style/signin.css'" rel="stylesheet">
+</head>
+
+
+<body>
+
+<form class="form-signin" id="registerForm" method="post" th:action="@{/register}">
+    <h2 class="form-signin-heading" style="text-align: center">新用户注册</h2>
+    <input type="text" id="inputUser" name="username"
+           class="form-control" placeholder="用户名"
+           data-container="body" data-placement="top"
+           data-content="xx"
+    >
+    <input type="password" id="inputPassword" name="password"
+           class="form-control" placeholder="密码"
+           data-container="body" data-placement="top"
+           data-content="xx"
+    >
+    <input type="password" id="inputPassword2" name="password2"
+           class="form-control has-warning" placeholder="确认密码"
+           data-container="body" data-placement="top"
+           data-content="xx">
+    <div class="form-control captchaDiv">
+        <input id="inputCaptcha" style="width: 60%" class="captcha"
+               name="captcha" type="text" placeholder="验证码"
+               data-container="body" data-placement="top"
+               data-content="xx"/>
+        <img id="imgCaptcha" alt="验证码" style="cursor: pointer" onclick="refreshImg(this)" class="pull-right"
+             th:src="@{/captcha}">
+    </div>
+    <div class="checkbox pull-right">
+        <a th:href="@{/sso/login}" th:text="快速登陆"/>
+    </div>
+    <button class="btn btn-lg btn-warning btn-block" type="submit" id="register">注册</button>
+</form>
+
+<script th:replace="bootstrap::script"></script>
+
+<script th:src="${application._staticPath}+'/lib/jquery.form.js'"></script>
+<script th:src="${application._staticPath}+'/lib/validate/jquery.validate.min.js'"></script>
+<script th:src="${application._staticPath}+'/lib/validate/messages_zh.js'"></script>
+
+
+<script th:src="${application._staticPath}+'/script/login/register.js'"></script>
+<script th:src="${application._staticPath}+'/script/Alert.js'"></script>
+<script th:src="${application._staticPath}+'/script/common.js'"></script>
+
+</body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var backUrl =/*[[${session.backUrl}]]*/
+    /*]]>*/
+</script>
+</html>

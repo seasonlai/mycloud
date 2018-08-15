@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.season.movie.dao.mapper.MovieDetailMapper">
+    <resultMap id="BaseResultMap" type="com.season.movie.dao.entity.MovieDetail">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="movie_id" jdbcType="BIGINT" property="movieId"/>
+        <result column="director" jdbcType="VARCHAR" property="director"/>
+        <result column="actors" jdbcType="VARCHAR" property="actors"/>
+        <result column="show_year" jdbcType="TIMESTAMP" property="showYear"/>
+        <result column="keyword" jdbcType="VARCHAR" property="keyword"/>
+        <result column="description" jdbcType="LONGVARCHAR" property="description"/>
+    </resultMap>
+
+    <select id="selectByMovieId" resultMap="BaseResultMap">
+        SELECT *
+        FROM movie_detail
+        WHERE movie_id = #{id}
+    </select>
+</mapper>

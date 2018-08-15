@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/admin/index::header('应用管理',~{})">
+</head>
+<body>
+<nav th:replace="/admin/index::navbar"></nav>
+<div th:replace="/admin/index::content('application',~{::mainContent})">
+    <th:block th:fragment="mainContent">
+        <h4 class="page-header">应用列表</h4>
+        <div id="toolbar">
+            <button id="btn_add" type="button" onclick="editApp(1)" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;新增
+            </button>
+            <button id="btn_edit" type="button" onclick="editApp(2)" class="btn btn-default">
+                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;修改
+            </button>
+            <button id="btn_delete" type="button" onclick="delApp()" class="btn btn-default">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;删除
+            </button>
+        </div>
+        <table id="table">
+        </table>
+    </th:block>
+</div>
+
+<div class="modal fade" id="modalApp" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" data-backdrop='static' aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 id="editAppTitle" class="modal-title">添加应用</h4>
+            </div>
+            <div class="modal-body">
+                <form id="appForm" class="form-horizontal" role="form" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="inputAppName" class="col-xs-2 col-sm-2 control-label">
+                            <span style="color: red">*</span>应用名称:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <input type="hidden" id="inputAppId" name="appId">
+                            <!--<input type="hidden" id="inputOption" name="option">-->
+                            <input type="text" id="inputAppName" name="appName" class="form-control"
+                                   data-container="body" data-placement="top">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputAppCode" class="col-xs-2 col-sm-2  control-label">
+                            <span style="color: red">*</span>应用编码:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <input type="text" id="inputAppCode" name="appCode" class="col-sm-10 form-control"
+                                   data-container="body" data-placement="top">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputSort" class="col-xs-2 col-sm-2  control-label">
+                            <span style="color: red">*</span>排&nbsp;序&nbsp;号:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <input type="number" id="inputSort" name="sort" class="col-sm-10 form-control"
+                                   data-container="body" data-placement="top">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-2  control-label">
+                            <span style="color: red">*</span>是否启用:
+                        </label>
+                        <div class="col-xs-8 col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio" id="radioY" name="enable" checked value="1" required>
+                                是
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" id="radioN" name="enable" value="0">
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" onclick="submitApp()" class="btn btn-primary">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script th:replace="/admin/index::script"></script>
+
+<script th:src="${application._staticPath}+'/script/admin/app.js'"></script>
+
+
+</body>
+</html>

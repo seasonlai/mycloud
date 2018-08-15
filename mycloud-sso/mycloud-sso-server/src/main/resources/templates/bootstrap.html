@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header(title,links)">
+    <th:block th:fragment="headerDetail">
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+        <meta name="description" content="">
+        <meta name="author" content="season">
+
+        <!-- Bootstrap core CSS -->
+        <link th:href="${application._staticPath}+'/bootstrap/css/bootstrap.min.css'" rel="stylesheet">
+        <link th:href="${application._staticPath}+'/style/style.css'" rel="stylesheet">
+
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <link th:href="${application._staticPath}+'/bootstrap/ie10-viewport-bug-workaround.css'" rel="stylesheet">
+
+        <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <link th:href="${application._staticPath}+'/bootstrap/ie10-viewport-bug-workaround.css'" rel="stylesheet">
+
+    </th:block>
+
+    <title th:text="${title}?:_">season</title>
+    <th:block th:replace="${links}"/>
+
+</head>
+<body>
+
+
+<th:block th:fragment="script">
+    <script th:src="${application._staticPath}+'/lib/jquery.min.js'"></script>
+    <script th:src="${application._staticPath}+'/bootstrap/js/bootstrap.min.js'"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script th:src="${application._staticPath}+'/bootstrap/ie10-viewport-bug-workaround.js'"></script>
+</th:block>
+
+</body>
+</html>

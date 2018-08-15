@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: discovery-eureka-mycloud
+  profiles:
+    active: eureka1
+---
+spring:
+  profiles: eureka1
+server:
+  port: 10000
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  instance:
+    hostname: localhost

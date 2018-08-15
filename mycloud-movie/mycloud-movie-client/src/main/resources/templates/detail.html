@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common::header('电影详情',~{})">
+</head>
+<body>
+<div class="header">
+    <div th:replace="common::headertop_desc"></div>
+    <div class="wrap">
+        <div th:replace="common::header_top">
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div class="wrap">
+        <div class="content_top">
+            <div class="back-links">
+                <p><a th:href="@{movie}">首页</a> &gt;&gt;
+                    <a href="#" class="active" th:text="${movie.info.name}">--</a>
+                </p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="section group">
+            <div class="cont-desc span_1_of_2">
+                <div class="product-details">
+                    <div class="grid images_3_of_2">
+                        <img th:src="${application._imgPath}+${movie.info.cover}" alt=""/>
+                    </div>
+                    <div class="desc span_3_of_2">
+                        <h2 th:text="${movie.info.name}">--</h2>
+                        <div class="price">
+                            <p>价格: <span th:text="'￥'+${movie.info.price}">￥500</span></p>
+                        </div>
+                        <div class="available">
+                            <ul>
+                                <li><span>上映年代:</span> &nbsp;
+                                    <i th:text="${movie.info.showYear}?${#dates.format(movie.info.showYear,'yyyy')}:_">--</i>
+                                </li>
+                                <li><span>导演:</span>&nbsp;
+                                    <i th:text="${movie.detail}?${movie.detail.director}:_">--</i>
+                                </li>
+                                <li><span>主演:</span>&nbsp;
+                                    <i th:text="${movie.detail}?${movie.detail.actors}:_">--</i>
+                                </li>
+                                <li><span>类型:</span>&nbsp;
+                                    <i th:each="kind,state:${movie.kinds}">
+                                        <th:block th:if="${state.index} gt 0">,</th:block>
+                                        <th:block th:text="${kind.name}?:_">--</th:block>
+                                    </i>
+                                    <i th:if="${#lists.isEmpty(movie.kinds)}">--</i>
+                                </li>
+                                <li><span>地区:</span>&nbsp;
+                                    --
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="share-desc">
+                            <div class="share">
+                                <p>更新日期: </p>
+                                <i th:text="${movie.info.createTime}?${#dates.format(movie.info.createTime,'yyyy-MM-dd')}:_">--</i>
+                            </div>
+                            <div class="button"><span><a href="#">立即播放</a></span></div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="wish-list">
+                            <ul>
+                                <li class="wish"><a href="#">Add to Wishlist</a></li>
+                                <li class="compare"><a href="#">Add to Compare</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="product_desc">
+                    <h2>简介 :</h2>
+                    <p th:text="${movie.detail}?${movie.detail.description}:_">--</p>
+                </div>
+            </div>
+            <div class="rightsidebar span_3_of_1 sidebar">
+                <h2>猜你喜欢</h2>
+                <div class="special_movies">
+                    <div class="movie_poster">
+                        <a href="detail.html"><img src="images/end-game.jpg" alt=""/></a>
+                    </div>
+                    <div class="movie_desc">
+                        <h3><a href="detail.html">End Game</a></h3>
+                        <p><span>$620.87</span> &nbsp; $500.35</p>
+                        <span><a href="#">Add to Cart</a></span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="special_movies">
+                    <div class="movie_poster">
+                        <a href="detail.html"><img src="images/Coraline.jpg" alt=""/></a>
+                    </div>
+                    <div class="movie_desc">
+                        <h3><a href="detail.html">Coraline</a></h3>
+                        <p><span>$620.87</span> &nbsp; $500.35</p>
+                        <span><a href="#">Add to Cart</a></span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="special_movies">
+                    <div class="movie_poster">
+                        <a href="detail.html"><img src="images/Eclipse.jpg" alt=""/></a>
+                    </div>
+                    <div class="movie_desc">
+                        <h3><a href="detail.html">Eclipse</a></h3>
+                        <p><span>$620.87</span> &nbsp; $500.35</p>
+                        <span><a href="#">Add to Cart</a></span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="special_movies">
+                    <div class="movie_poster">
+                        <a href="detail.html"><img src="images/Priest.jpg" alt=""/></a>
+                    </div>
+                    <div class="movie_desc">
+                        <h3><a href="detail.html">Priest 3D</a></h3>
+                        <p><span>$620.87</span> &nbsp; $500.35</p>
+                        <span><a href="#">Add to Cart</a></span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="special_movies">
+                    <div class="movie_poster">
+                        <a href="detail.html"><img src="images/Sorority_Wars.jpg" alt=""/></a>
+                    </div>
+                    <div class="movie_desc">
+                        <h3><a href="detail.html">Sorority Wars</a></h3>
+                        <p><span>$620.87</span> &nbsp; $500.35</p>
+                        <span><a href="#">Add to Cart</a></span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="common::footer"></div>
+
+
+<script th:replace="common::scripts"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $().UItoTop({easingType: 'easeOutQuart'});
+
+    });
+
+    function DropDown(el) {
+        this.dd = el;
+        this.initEvents();
+    }
+    DropDown.prototype = {
+        initEvents: function () {
+            var obj = this;
+
+            obj.dd.on('click', function (event) {
+                $(this).toggleClass('active');
+                event.stopPropagation();
+            });
+        }
+    }
+
+    $(function () {
+
+        var dd = new DropDown($('#dd'));
+
+        $(document).click(function () {
+            // all dropdowns
+            $('.wrapper-dropdown-2').removeClass('active');
+        });
+
+    });
+</script>
+
+<a href="#" id="toTop"><span id="toTopHover"> </span></a>
+
+</body>
+</html>
+
