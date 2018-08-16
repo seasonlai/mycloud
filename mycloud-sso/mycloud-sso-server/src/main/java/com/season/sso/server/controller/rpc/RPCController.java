@@ -1,6 +1,7 @@
 package com.season.sso.server.controller.rpc;
 
 import com.season.common.base.BaseResult;
+import com.season.sso.client.constant.Constant;
 import com.season.sso.client.model.LoginPermission;
 import com.season.sso.client.model.LoginRole;
 import com.season.sso.server.entity.Permission;
@@ -33,22 +34,20 @@ public class RPCController {
 
     @Autowired
     StringRedisTemplate redisTemplate;
-
-    @Value("${app.cache.redis.keyPrefix:mycloud:cache:}")
-    private String keyPrefix;
-    @Value("${sso.server.code:server-code:}")
-    private String MYCLOUD_SERVER_CODE;
     @Autowired
     private UserService userService;
     @Autowired
     PermissionService permissionService;
+
+    @Autowired
+    private Constant constant;
 
     @ApiOperation(value = "校验token")
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     public Object code(HttpServletRequest request) {
         String tokenParam = request.getParameter("token");
         String token = redisTemplate.opsForValue()
-                .get(keyPrefix+MYCLOUD_SERVER_CODE + tokenParam);
+                .get(constant.getKeyPrefix()+constant.getMYCLOUD_SERVER_CODE() + tokenParam);
         if (StringUtils.isEmpty(token) || !token.equals(tokenParam)) {
             return new BaseResult(-1, "无效token");
         }

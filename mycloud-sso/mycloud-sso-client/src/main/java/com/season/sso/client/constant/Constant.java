@@ -1,11 +1,44 @@
 package com.season.sso.client.constant;
 
 import com.season.common.base.BaseConstant;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Created by Administrator on 2018/6/2.
  */
 public class Constant extends BaseConstant {
+
+    @Value("${shiro.redis.session.keyPrefix:mycloud:cache:}")
+    private String keyPrefix;
+    @Value("${sso.server.idPrefix:server-session-id:}")
+    private String MYCLOUD_SERVER_SESSION_ID;
+    @Value("${sso.client.idPrefix:client-session-id:}")
+    private String MYCLOUD_CLIENT_SESSION_ID;
+    @Value("${sso.server.idsPrefix:server-session-ids:}")
+    private String MYCLOUD_SERVER_SESSION_IDS;
+    @Value("${sso.server.code:server-code:}")
+    private String MYCLOUD_SERVER_CODE;
+
+    public String getKeyPrefix() {
+        return keyPrefix;
+    }
+
+    public String getMYCLOUD_SERVER_SESSION_ID() {
+        return MYCLOUD_SERVER_SESSION_ID;
+    }
+
+//    public String getMYCLOUD_SERVER_SESSION_IDS() {
+//        return MYCLOUD_SERVER_SESSION_IDS;
+//    }
+
+
+    public String getMYCLOUD_CLIENT_SESSION_ID() {
+        return MYCLOUD_CLIENT_SESSION_ID;
+    }
+
+    public String getMYCLOUD_SERVER_CODE() {
+        return MYCLOUD_SERVER_CODE;
+    }
 
     /**
      * 未登录错误码

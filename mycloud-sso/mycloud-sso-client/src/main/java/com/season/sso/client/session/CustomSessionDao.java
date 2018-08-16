@@ -1,5 +1,6 @@
 package com.season.sso.client.session;
 
+import com.season.sso.client.constant.Constant;
 import com.season.sso.client.jms.SSOClientJMS;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
@@ -26,14 +27,9 @@ public class CustomSessionDao extends RedisSessionDAO {
 
     @Value("${mycloud.sso.type:client}")
     private String ssoType;
-    @Value("${app.cache.redis.keyPrefix:mycloud:cache:}")
-    private String keyPrefix;
-    @Value("${sso.server.idPrefix:server-session-id:}")
-    private String MYCLOUD_SERVER_SESSION_ID;
-    @Value("${sso.server.code:server-code:}")
-    private String MYCLOUD_SERVER_CODE;
-    @Value("${sso.client.idPrefix:client-session-id:}")
-    private String MYCLOUD_CLIENT_SESSION_ID;
+
+    @Autowired
+    private Constant constant;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -45,11 +41,11 @@ public class CustomSessionDao extends RedisSessionDAO {
         if (session.getId() != null) {
             String sessionId = session.getId().toString();
             //更新单点服务器token
-            String token = redisTemplate.opsForValue().get(keyPrefix + MYCLOUD_SERVER_SESSION_ID + sessionId);
+            String token = redisTemplate.opsForValue().get(constant.getKeyPrefix() + constant.getMYCLOUD_SERVER_SESSION_ID() + sessionId);
             if (!Objects.isNull(token)) {
-                redisTemplate.expire(keyPrefix + MYCLOUD_SERVER_SESSION_ID + sessionId
+                redisTemplate.expire(constant.getKeyPrefix() + constant.getMYCLOUD_SERVER_SESSION_ID() + sessionId
                         , session.getTimeout(), TimeUnit.MILLISECONDS);
-                redisTemplate.expire(keyPrefix + MYCLOUD_SERVER_CODE + token
+                redisTemplate.expire(constant.getKeyPrefix() + constant.getMYCLOUD_SERVER_CODE() + token
                         , session.getTimeout(), TimeUnit.MILLISECONDS);
             }
         } else {
@@ -64,18 +60,18 @@ public class CustomSessionDao extends RedisSessionDAO {
         if (session != null && session.getId() != null) {
             String sessionId = session.getId().toString();
             //删除客户端所有redis缓存
-            Boolean delete = redisTemplate.delete(keyPrefix + MYCLOUD_CLIENT_SESSION_ID + sessionId);
+            Boolean delete = redisTemplate.delete(constant.getKeyPrefix() + constant.getMYCLOUD_CLIENT_SESSION_ID() + sessionId);
             if (Objects.equals(delete, Boolean.FALSE)) {
-                logger.warn("删除客户端键 {} 失败,不存在或出错", keyPrefix + MYCLOUD_CLIENT_SESSION_ID + sessionId);
+                logger.warn("删除客户端键 {} 失败,不存在或出错", constant.getKeyPrefix() + constant.getMYCLOUD_CLIENT_SESSION_ID() + sessionId);
             }
             //删除服务端的缓存
             if ("server".equals(ssoType)) {
-                String token = redisTemplate.opsForValue().get(keyPrefix + MYCLOUD_SERVER_SESSION_ID + sessionId);
-                delete = redisTemplate.delete(keyPrefix + MYCLOUD_SERVER_SESSION_ID + sessionId);
+                String token = redisTemplate.opsForValue().get(constant.getKeyPrefix() + constant.getMYCLOUD_SERVER_SESSION_ID() + sessionId);
+                delete = redisTemplate.delete(constant.getKeyPrefix() + constant.getMYCLOUD_SERVER_SESSION_ID() + sessionId);
                 if (Objects.equals(delete, Boolean.FALSE)) {
-                    logger.error("删除服务端键 {} 失败", keyPrefix + MYCLOUD_SERVER_SESSION_ID + sessionId);
+                    logger.error("删除服务端键 {} 失败", constant.getKeyPrefix() + constant.getMYCLOUD_SERVER_SESSION_ID() + sessionId);
                 }
-                redisTemplate.delete(keyPrefix + MYCLOUD_SERVER_CODE + token);
+                redisTemplate.delete(constant.getKeyPrefix() + constant.getMYCLOUD_SERVER_CODE() + token);
             }
         } else {
             logger.error("session or session id is null");

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/cards.html -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="index::header('影片列表',~{})">
+
+</head>
+
+<body th:replace="index::body('movie','movieList',~{::mainContent})">
+<th:block th:fragment="mainContent">
+    <div class="item ui colhidden">
+        <div class="ui icon input">
+            <input type="text" placeholder="Search...">
+            <i class="search icon"></i>
+        </div>
+    </div>
+
+    <div class="ui equal width left aligned padded grid stackable">
+        <div class="row">
+            <div class="column">
+
+                <div class="ui segment">
+
+                    <div class="ui five stackable cards">
+
+                        <div class="ui card">
+                            <div class="image">
+                                <img th:src="${application._imgPath}+'images1.jpg'"
+                                     data-src="img/gallery/images1.jpg" class="transition visible">
+                            </div>
+                            <div class="content">
+                                <a class="header">Domitila Hale</a>
+                                <div class="meta">
+                                    <span class="date">Joined in 2011</span>
+                                </div>
+                                <div class="description">
+                                    Domitila is an student living in New York.
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <a>
+                                    <i class="user icon"></i> 185 Friends
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="ui card">
+                            <div class="image">
+                                <img th:src="${application._imgPath}+'images2.jpg'"
+                                     data-src="img/gallery/images2.jpg" class="transition visible">
+                            </div>
+                            <div class="content">
+                                <a class="header">Tiana Davin</a>
+                                <div class="meta">
+                                    <span class="date">Joined in 2015</span>
+                                </div>
+                                <div class="description">
+                                    Tiana is an dentist living in London.
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <a>
+                                    <i class="user icon"></i> 106 Friends
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="ui card">
+                            <div class="image">
+                                <img th:src="${application._imgPath}+'images3.jpg'"
+                                     data-src="img/gallery/images3.jpg" class="transition visible">
+                            </div>
+                            <div class="content">
+                                <a class="header">Ji-Yeong Yi</a>
+                                <div class="meta">
+                                    <span class="date">Joined in 2013</span>
+                                </div>
+                                <div class="description">
+                                    Ji is an photographer living in Seul.
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <a>
+                                    <i class="user icon"></i> 42 Friends
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="ui card">
+                            <div class="image">
+                                <img th:src="${application._imgPath}+'images4.jpg'"
+                                     data-src="img/gallery/images4.jpg" class="transition visible">
+                            </div>
+                            <div class="content">
+                                <a class="header">Aroha Finley</a>
+                                <div class="meta">
+                                    <span class="date">Joined in 2012</span>
+                                </div>
+                                <div class="description">
+                                    Aroha is an model living in Paris.
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <a>
+                                    <i class="user icon"></i> 95 Friends
+                                </a>
+                            </div>
+                        </div>
+
+
+                        <div class="ui card">
+                            <div class="image">
+                                <img th:src="${application._imgPath}+'images5.jpg'"
+                                     data-src="img/gallery/images5.jpg" class="transition visible">
+                            </div>
+                            <div class="content">
+                                <a class="header">Ceres Traversi</a>
+                                <div class="meta">
+                                    <span class="date">Joined in 2016</span>
+                                </div>
+                                <div class="description">
+                                    Ceres is an teacher living in Moscow.
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <a>
+                                    <i class="user icon"></i> 128 Friends
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+
+<th:block th:include="index::script">
+
+</th:block>
+</html>

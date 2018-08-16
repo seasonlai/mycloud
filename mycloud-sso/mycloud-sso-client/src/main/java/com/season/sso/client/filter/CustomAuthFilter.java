@@ -3,6 +3,7 @@ package com.season.sso.client.filter;
 import com.season.common.base.BaseException;
 import com.season.common.base.BaseResult;
 import com.season.common.web.util.HttpUtils;
+import com.season.sso.client.constant.Constant;
 import com.season.sso.client.model.LoginUser;
 import com.season.sso.client.service.SSOService;
 import com.season.sso.client.util.ShiroUtil;
@@ -41,12 +42,8 @@ public class CustomAuthFilter extends FormAuthenticationFilter {
     @Value("${mycloud.sso.type:client}")
     private String ssoType;
 
-    @Value("${app.cache.redis.keyPrefix:mycloud:cache:}")
-    private String keyPrefix;
-    @Value("${sso.client.idPrefix:client-session-id:}")
-    private String MYCLOUD_CLIENT_SESSION_ID;
-    @Value("${sso.client.idsPrefix:client-session-ids:}")
-    private String MYCLOUD_CLIENT_SESSION_IDS;
+    @Autowired
+    private Constant constant;
 
     @Autowired
     private SSOService SSOService;
@@ -103,7 +100,7 @@ public class CustomAuthFilter extends FormAuthenticationFilter {
         String sessionId = session.getId().toString();
         // 判断局部会话是否登录
         String token = redisTemplate.opsForValue()
-                .get(getKey(MYCLOUD_CLIENT_SESSION_ID + session.getId()));
+                .get(getKey(constant.getMYCLOUD_CLIENT_SESSION_ID() + session.getId()));
         if (StringUtils.isNotBlank(token)) {
             // 移除url中的code参数
             if (null != request.getParameter("token")) {
@@ -129,7 +126,7 @@ public class CustomAuthFilter extends FormAuthenticationFilter {
 
                 // code校验正确，创建局部会话
                 redisTemplate.opsForValue()
-                        .set(getKey(MYCLOUD_CLIENT_SESSION_ID + sessionId), token, timeOut, TimeUnit.SECONDS);
+                        .set(getKey(constant.getMYCLOUD_CLIENT_SESSION_ID() + sessionId), token, timeOut, TimeUnit.SECONDS);
                 // 保存code对应的局部会话sessionId，方便退出操作
 //                redisTemplate.opsForList()
 //                        .rightPush(getKey(MYCLOUD_CLIENT_SESSION_IDS + token), sessionId);
@@ -158,7 +155,7 @@ public class CustomAuthFilter extends FormAuthenticationFilter {
     }
 
     private String getKey(String key) {
-        return keyPrefix + key;
+        return constant.getKeyPrefix() + key;
     }
 
     public String getAppCode() {

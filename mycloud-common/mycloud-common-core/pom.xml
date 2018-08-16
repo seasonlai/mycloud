@@ -20,6 +20,7 @@
         <swagger2.version>2.7.0</swagger2.version>
         <jwt.version>3.2.0</jwt.version>
         <commons-lang3.version>3.7</commons-lang3.version>
+        <commons-io.version>2.5</commons-io.version>
     </properties>
 
     <dependencies>
@@ -28,6 +29,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
         </dependency>
 
         <!--JJWT库-->

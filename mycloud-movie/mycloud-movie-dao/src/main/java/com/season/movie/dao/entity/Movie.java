@@ -1,6 +1,7 @@
 package com.season.movie.dao.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Movie {
@@ -19,7 +20,7 @@ public class Movie {
     /**
      * 电影价格
      */
-    private Long price;
+    private BigDecimal price;
 
     /**
      * 电影主要类型
@@ -95,7 +96,7 @@ public class Movie {
      *
      * @return price - 电影价格
      */
-    public Long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -104,7 +105,7 @@ public class Movie {
      *
      * @param price 电影价格
      */
-    public void setPrice(Long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

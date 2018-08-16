@@ -1,6 +1,7 @@
 package com.season.sso.client.config;
 
 import com.season.common.web.config.AppConfig;
+import com.season.sso.client.constant.Constant;
 import com.season.sso.client.filter.CustomAuthFilter;
 import com.season.sso.client.filter.PermsFilter;
 import com.season.sso.client.service.ClientShiroService;
@@ -64,6 +65,11 @@ public class BeanRegistry {
         FilterRegistrationBean registration = new FilterRegistrationBean(filter);
         registration.setEnabled(false);
         return registration;
+    }
+
+    @Bean
+    public Constant constant(){
+        return new Constant();
     }
 
     /**

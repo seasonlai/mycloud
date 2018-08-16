@@ -61,20 +61,14 @@ public class SSOController extends BaseController {
     @Autowired
     private AppService appService;
 
-    @Value("${app.cache.redis.keyPrefix:mycloud:cache:}")
-    private String keyPrefix;
-    @Value("${sso.server.idPrefix:server-session-id:}")
-    private String MYCLOUD_SERVER_SESSION_ID;
-    @Value("${sso.server.idsPrefix:server-session-ids:}")
-    private String MYCLOUD_SERVER_SESSION_IDS;
-    @Value("${sso.server.code:server-code:}")
-    private String MYCLOUD_SERVER_CODE;
+    @Autowired
+    private Constant constant;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
 
     private String getKey(String key) {
-        return keyPrefix + key;
+        return constant.getKeyPrefix() + key;
     }
 
     @ApiIgnore
@@ -119,7 +113,7 @@ public class SSOController extends BaseController {
         Session session = subject.getSession();
         Serializable sessionId = session.getId();
         String token = redisTemplate.opsForValue()
-                .get(getKey(MYCLOUD_SERVER_SESSION_ID + sessionId));
+                .get(getKey(constant.getMYCLOUD_SERVER_SESSION_ID() + sessionId));
         if (!StringUtils.isEmpty(token)) {//已经登录
             //返回backUrl
             if (StringUtils.isEmpty(backUrl)) {
@@ -167,7 +161,7 @@ public class SSOController extends BaseController {
         Session session = subject.getSession();
         Serializable sessionId = session.getId();
         String token = redisTemplate.opsForValue()
-                .get(getKey(MYCLOUD_SERVER_SESSION_ID + sessionId));
+                .get(getKey(constant.getMYCLOUD_SERVER_SESSION_ID() + sessionId));
         if (StringUtils.isEmpty(token)) {
             //添加用户认证信息
             UsernamePasswordToken usernamePasswordToken
@@ -188,13 +182,13 @@ public class SSOController extends BaseController {
 
             token = UUID.randomUUID().toString();
             redisTemplate.opsForValue()
-                    .set(getKey(MYCLOUD_SERVER_SESSION_ID + sessionId), token
+                    .set(getKey(constant.getMYCLOUD_SERVER_SESSION_ID() + sessionId), token
                             ,session.getTimeout(),TimeUnit.MILLISECONDS);
 //            redisTemplate.opsForList()
 //                    .leftPush(getKey(MYCLOUD_SERVER_SESSION_IDS + token), appCode);
 //            redisTemplate.expire(getKey(MYCLOUD_SERVER_SESSION_IDS + token),
 //                    session.getTimeout(), TimeUnit.MILLISECONDS);
-            redisTemplate.opsForValue().set(getKey(MYCLOUD_SERVER_CODE + token), token
+            redisTemplate.opsForValue().set(getKey(constant.getMYCLOUD_SERVER_CODE() + token), token
                     ,session.getTimeout(),TimeUnit.MILLISECONDS);
             if (StringUtils.isEmpty(backUrl)) {
                 backUrl = "/sso/index";

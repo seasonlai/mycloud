@@ -8,7 +8,7 @@ CREATE TABLE movie (
   COMMENT '电影id',
   name        VARCHAR(100) NOT NULL
   COMMENT '电影名',
-  price       DECIMAL                       DEFAULT 0
+  price       DECIMAL(4,2)                       DEFAULT 0
   COMMENT '电影价格',
   kind        INT          NOT NULL         DEFAULT 1
   COMMENT '电影主要类型',
