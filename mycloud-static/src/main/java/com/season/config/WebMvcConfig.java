@@ -13,6 +13,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Value("${file.image.path:/images/}")
     private String imgPath;
+    @Value("${file.tmp.path:/tmp/}")
+    private String tmpPath;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -24,7 +26,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:" + imgPath);
+        registry.addResourceHandler("/images/**", "/tmp/**")
+                .addResourceLocations("file:" + imgPath, "file:" + tmpPath);
+
     }
 }

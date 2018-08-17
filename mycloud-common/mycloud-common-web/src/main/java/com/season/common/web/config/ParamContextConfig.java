@@ -22,6 +22,13 @@ public class ParamContextConfig implements ServletContextListener {
     private String static_path;
     @Value("${mycloud.static.image.url:null}")
     private String static_img_path;
+    @Value("${mycloud.static.tmp.url:null}")
+    private String static_tmp_path;
+
+    @Value("${file.img.path:null}")
+    private String disk_img_path;
+    @Value("${file.tmp.path:null}")
+    private String disk_tmp_path;
 
     @Autowired
     private AppConfig appConfig;
@@ -31,8 +38,11 @@ public class ParamContextConfig implements ServletContextListener {
         ServletContext context = servletContextEvent.getServletContext();
         context.setAttribute("_staticPath", static_path);
         context.setAttribute("_imgPath", static_img_path);
+        context.setAttribute("_tmpPath", static_tmp_path);
         context.setAttribute("_realPath", context.getRealPath("/"));
         context.setAttribute("_appName", appConfig.getName());
+        context.setAttribute("_diskImgPath", disk_img_path);
+        context.setAttribute("_diskTmpPath", disk_tmp_path);
         logger.info("ServletContext初始化参数完成，如：_staticPath：{}", static_path);
     }
 

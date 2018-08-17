@@ -10,6 +10,7 @@
         <module>mycloud-movie-dao</module>
         <module>mycloud-movie-client</module>
         <module>mycloud-movie-admin</module>
+        <module>mycloud-movie-service</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -1,108 +1,156 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="index::header('上传影片',~{::link})">
+<head>
+    <th:block th:replace="index::header('上传影片',~{})"/>
     <link th:href="${application._staticPath}+'movie-admin/css/jquery-ui.min.css'" rel="stylesheet">
+    <link th:href="${application._staticPath}+'lib/jQuery-cropper/css/cropper.min.css'" rel="stylesheet">
+    <style>
+        .bar {
+            height: 10px;
+            background: green;
+        }
+
+        #progress {
+            background: gray;
+            margin: 0 5px 0;
+        }
+    </style>
 </head>
-<body th:replace="index::body('movie','movieUpload',~{::mainContent})">
-<th:block th:fragment="mainContent">
-    <div class="sixteen wide tablet eight wide computer column">
-        <div class="ui segments">
-            <div class="ui segment">
-                <h5 class="ui header">
-                    上传影片
-                </h5>
-            </div>
-            <form class="ui form segment form5">
-                <div class="field">
-                    <label>电影封面</label>
-                    <div class="ui small image" style="width:100%">
-                        <img class="ui middle aligned small image " th:src="${application._imgPath}+'image.png'">
-                        <!--<span>xxx？？</span>-->
-                        <div class="fileBtn" style="display:inherit;margin-left: 5px;width: 10%;">
-                            <!--label包裹input，点了label相当于点了input-->
-                            <label style="cursor: pointer">选择图片<input type="file" hidden></label>
+<body>
+<div th:replace="index::conteWrap('movie','movieUpload',~{::mainContent})">
+    <th:block th:fragment="mainContent">
+        <div class="sixteen wide tablet eight wide computer column">
+            <div class="ui segments">
+                <div class="ui segment">
+                    <h5 class="ui header">
+                        上传影片
+                    </h5>
+                </div>
+                <form class="ui form segment movieForm" id="movieForm">
+                    <div class="field">
+                        <label>电影封面</label>
+                        <div class="ui small image" style="width:100%">
+                            <img id="uploadImg" class="ui middle aligned small image "
+                                 th:src="${application._imgPath}+'image.png'">
+                            <div class="fileBtn" id="uploadImgBtn"
+                                 style="display:inherit;margin-left: 5px;width: 10%;">
+                                <!--label包裹input，点了label相当于点了input-->
+                                <label style="cursor: pointer">选择图片
+                                    <input id="inputImg" type="file" name="uploadImg" hidden>
+                                </label>
+                            </div>
+                            <!--<div id="progress" style="width: 15%;display: none">-->
+                            <!--<div class="bar" style="width: 0%;"></div>-->
+                            <!--</div>-->
+                        </div>
+                        <input hidden id="movieImg" name="movieImg">
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <label>名称</label>
+                            <input placeholder="电影名称" name="movieName" type="text">
+                        </div>
+                        <div class="field">
+                            <label>类型</label>
+                            <div class="ui dropdown selection multiple" tabindex="0">
+                                <select name="movieKind" multiple="">
+                                    <option value="">选择类别</option>
+                                    <option th:each="item,index:${kinds}"
+                                            th:value="${item.id}"
+                                            th:text="${item.name}">
+                                    </option>
+                                </select><i class="dropdown icon"></i>
+                                <div class="default text">选择类别</div>
+                                <div class="menu" tabindex="-1">
+                                    <div class="item"
+                                         th:each="item,index:${kinds}"
+                                         th:data-value="${item.id}"
+                                         th:text="${item.name}">
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
-                </div>
-                <div class="two fields">
-                    <div class="field">
-                        <label>名称</label>
-                        <input placeholder="First Name" name="first-name" type="text">
-                    </div>
-                    <div class="field">
-                        <label>类型</label>
-                        <div class="ui dropdown selection multiple" tabindex="0"><select name="exactCount" multiple="">
-                            <option value="">Select Values</option>
-                            <option value="1" selected="">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select><i class="dropdown icon"></i>
-                            <a class="ui label transition visible" data-value="1"
-                               style="display: inline-block !important;">1
-                                <i class="delete icon"></i></a>
-                            <div class="default text">Select Values</div>
-                            <div class="menu" tabindex="-1">
-                                <div class="item active filtered" data-value="1">1</div>
-                                <div class="item" data-value="2">2</div>
-                                <div class="item" data-value="3">3</div>
-                                <div class="item" data-value="4">4</div>
-                                <div class="item" data-value="5">5</div>
+                    <div class="two fields">
+                        <div class="field">
+                            <label>上映时间</label>
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                <input type="text" id="datepicker" name="showTime" size="30" placeholder="日期"
+                                       value="2017-06-01">
                             </div>
                         </div>
-
+                        <div class="field">
+                            <label>电影价格</label>
+                            <input type="number" name="price">
+                        </div>
                     </div>
-                </div>
-                <div class="two fields">
-                    <div class="field" id="example1">
-                        <label>上映时间</label>
-                        <div class="ui input left icon">
-                            <i class="calendar icon"></i>
-                            <input type="text" id="datepicker" size="30" placeholder="日期" value="2017-06-01">
+                    <div class="two fields">
+                        <div class="field">
+                            <label>导演</label>
+                            <input name="director" type="text">
+                        </div>
+                        <div class="field">
+                            <label>主演</label>
+                            <input type="text" name="actor">
                         </div>
                     </div>
                     <div class="field">
-                        <label>电影价格</label>
-                        <input type="password" name="password">
-                    </div>
-                </div>
-                <div class="two fields">
-                    <div class="field">
-                        <label>导演</label>
-                        <input placeholder="Username" name="username" type="text">
+                        <label>关键字</label>
+                        <input placeholder="如热血、青春、惊悚等" name="keyword" type="text">
                     </div>
                     <div class="field">
-                        <label>主演</label>
-                        <input type="password" name="password">
+                        <label>简介</label>
+                        <textarea name="introduce" cols="5"></textarea>
                     </div>
-                </div>
-                <div class="field">
-                    <label>关键字</label>
-                    <input placeholder="Username" name="username" type="text">
-                </div>
-                <div class="field">
-                    <label>简介</label>
-                    <textarea name="minLength" cols="5"></textarea>
-                </div>
-                <div class="ui blue submit button">上传</div>
-            </form>
+                    <div class="ui blue submit button">上传</div>
+                </form>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+<div class="ui  modal actionmodal">
+    <div class="header">
+        裁剪图片
+    </div>
+    <div class="image content">
+        <div class="ui massive image" style="height: 250px;width: 250px">
+            <img id="movieCropImg">
+        </div>
+        <div class="description">
+            <div class="ui header">图片预览</div>
+            <div class="img-preview" style="overflow: hidden;width: 200px;height: 200px;">
+            </div>
         </div>
     </div>
-</th:block>
-
+    <div class="actions">
+        <div class="ui gray deny button">
+            取消
+        </div>
+        <div class="ui positive right icon button">
+            确定
+        </div>
+    </div>
+</div>
 </body>
 
 <script th:replace="index::script"></script>
-<script th:src="${application._staticPath}+'movie-admin/js/customjs/custom-validation.js'"></script>
-<script th:src="${application._staticPath}+'movie-admin/js/jquery-ui.min.js'"></script>
-<script th:src="${application._staticPath}+'movie-admin/js/customjs/custom-datePicker-zh.js'"></script>
+<script th:src="${application._staticPath}+'/lib/jquery.form.js'"></script>
 <!-- jquery file upload相关js -->
-<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/jquery.ui.widget.js'"></script>
-<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/jquery.iframe-transport.js"></script>
-<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/jquery.fileupload.js'"></script>
-<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/jquery.fileupload-process.js'"></script>
-<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/jquery.fileupload-validate.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/vendor/jquery.ui.widget.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.iframe-transport.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload-process.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload-validate.js'"></script>
+
+<script th:src="${application._staticPath}+'lib/jQuery-cropper/js/cropper.min.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-cropper/js/jquery-cropper.min.js'"></script>
 
 <script th:src="${application._staticPath}+'movie-admin/movie/movieUpload.js'"></script>
+
+<!--方法重名了，所以放在后面-->
+<!--<script th:src="${application._staticPath}+'movie-admin/js/jquery-ui.min.js'"></script>-->
+<!--<script th:src="${application._staticPath}+'movie-admin/js/customjs/custom-datePicker-zh.js'"></script>-->
 </html>

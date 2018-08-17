@@ -1,5 +1,7 @@
 package com.season.common.base;
 
+import com.season.common.model.ResultCode;
+
 public class BaseResult{
 
     public int code;
@@ -50,19 +52,19 @@ public class BaseResult{
     }
 
     public static BaseResult success(String msg, Object data){
-        return new BaseResult(0,msg,data);
+        return new BaseResult(ResultCode.SUCCESS,msg,data);
     }
 
     public static BaseResult success(String msg){
 
-        return new BaseResult(0,msg);
+        return new BaseResult(ResultCode.SUCCESS,msg);
     }
 
     public static BaseResult successData(Object data){
-        return new BaseResult(0,"成功",data);
+        return new BaseResult(ResultCode.SUCCESS,"成功",data);
     }
 
     public static BaseResult success(){
-        return new BaseResult(0,"成功",null);
+        return new BaseResult(ResultCode.SUCCESS,"成功",null);
     }
 }

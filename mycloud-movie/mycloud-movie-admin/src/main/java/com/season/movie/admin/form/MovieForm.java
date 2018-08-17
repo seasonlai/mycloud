@@ -1,5 +1,9 @@
 package com.season.movie.admin.form;
 
+import com.season.movie.dao.entity.Movie;
+import com.season.movie.dao.entity.MovieDetail;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,14 +16,15 @@ import java.util.Date;
 public class MovieForm {
 
     //封面
-    private String img;
+    private String movieImg;
     @NotBlank
-    private String name;
+    private String movieName;
     //类型
     @NotNull
-    private String kind;
+    private String movieKind;
     //上映时间
     @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date showTime;
 
     @Digits(integer = 99,fraction = 99)
@@ -33,28 +38,28 @@ public class MovieForm {
     //简介
     private String introduce;
 
-    public String getImg() {
-        return img;
+    public String getMovieImg() {
+        return movieImg;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setMovieImg(String movieImg) {
+        this.movieImg = movieImg;
     }
 
-    public String getName() {
-        return name;
+    public String getMovieName() {
+        return movieName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
     }
 
-    public String getKind() {
-        return kind;
+    public String getMovieKind() {
+        return movieKind;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setMovieKind(String movieKind) {
+        this.movieKind = movieKind;
     }
 
     public Date getShowTime() {
@@ -103,5 +108,24 @@ public class MovieForm {
 
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
+    }
+
+    public Movie movie(){
+        Movie movie = new Movie();
+        movie.setPrice(price);
+        movie.setName(movieName);
+        movie.setCover(movieImg);
+        movie.setKinds(movieKind);
+        return movie;
+    }
+
+    public MovieDetail movieDetail(){
+        MovieDetail movieDetail1 = new MovieDetail();
+        movieDetail1.setActors(actor);
+        movieDetail1.setDescription(introduce);
+        movieDetail1.setKeyword(keyword);
+        movieDetail1.setShowYear(showTime);
+        movieDetail1.setDirector(director);
+        return movieDetail1;
     }
 }

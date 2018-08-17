@@ -5,3 +5,5 @@ file:
   image:
     path: D:/mycloud/images/
     format: jpg|png|gif|bmp
+  tmp:
+    path: D:/mycloud/tmp/

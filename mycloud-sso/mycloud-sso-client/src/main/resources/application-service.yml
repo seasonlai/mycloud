@@ -36,6 +36,15 @@ mycloud:
       url: http://localhost:10009/images/
     video:
       url: http://localhost:10009/videos/
+    tmp:
+      url: http://localhost:10009/tmp/
   sso:
     url: http://localhost:10003/
     serviceUrl: http://mycloud-sso/
+
+file:
+  image:
+    path: D:/mycloud/images/
+    format: jpg|png|gif|bmp
+  tmp:
+    path: D:/mycloud/tmp/

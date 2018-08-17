@@ -1,10 +1,6 @@
-package com.season.sso.server.config;
+package com.season.movie.admin.config;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.season.sso.server.entity.App;
-import com.season.sso.server.entity.Permission;
-import com.season.sso.server.entity.Role;
-import com.season.sso.server.entity.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -38,21 +34,11 @@ public class Swagger2 {
 		//添加全局默认参数
 		parameters.add(authorization.build());
 
-		//防止无限递归
-		TypeResolver typeResolver = new TypeResolver();
-		AlternateTypeRule[] rules = {
-				new AlternateTypeRule(typeResolver.resolve(Role.class),typeResolver.resolve(Object.class)),
-				new AlternateTypeRule(typeResolver.resolve(App.class),typeResolver.resolve(Object.class)),
-				new AlternateTypeRule(typeResolver.resolve(Permission.class),typeResolver.resolve(Object.class)),
-				new AlternateTypeRule(typeResolver.resolve(User.class),typeResolver.resolve(Object.class))
-		};
-
 		return new Docket(DocumentationType.SWAGGER_2)
-				.groupName("mycloud-sso")
+				.groupName("mycloud-movie-admin")
 				.apiInfo(apiInfo())
-				.alternateTypeRules(rules)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.season.sso.server.controller"))
+				.apis(RequestHandlerSelectors.basePackage("com.season.movie.admin.controller"))
 				.paths(PathSelectors.any())
 				.build()
 				.globalOperationParameters(parameters);
@@ -60,8 +46,8 @@ public class Swagger2 {
 	
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
-				.title("mycloud-sso服务测试")
-				.description("单点登录")
+				.title("mycloud-movie-admin服务测试")
+				.description("电影管理员版")
 //				.contact(new Contact("season","http://www.baidu.com",""))
 				.termsOfServiceUrl("http://mycloud.ui")
 				.version("1.0")

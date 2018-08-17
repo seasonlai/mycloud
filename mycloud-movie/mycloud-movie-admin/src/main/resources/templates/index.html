@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="header(title,links)">
+<th:block th:fragment="header(title,links)">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
@@ -11,19 +11,11 @@
     <link th:href="${application._staticPath}+'movie-admin/css/main.css'" rel="stylesheet">
     <link th:href="${application._staticPath}+'movie-admin/css/style.css'" rel="stylesheet">
     <link th:href="${application._staticPath}+'movie-admin/plugins/pace/pace.css'" rel="stylesheet">
-
     <th:block th:replace="${links}"/>
-</head>
+</th:block>
 
-<body class="pace-done" style="overflow: hidden;" th:fragment="body(menu_big,menu_small,mainContent)">
-<div class="pace  pace-inactive">
-    <div class="pace-progress" data-progress-text="100%" data-progress="99"
-         style="transform: translate3d(100%, 0px, 0px);">
-        <div class="pace-progress-inner"></div>
-    </div>
-    <div class="pace-activity"></div>
-</div>
-<div id="contextWrap">
+<body>
+<div id="contextWrap" th:fragment="conteWrap(menu_big,menu_small,mainContent)">
     <!--sidebar-->
     <div class="ui sidebar vertical left menu overlay  borderless visible sidemenu inverted  grey"
          style="transition-duration: 0.1s; overflow: hidden; outline: none;" data-color="grey" tabindex="0">
@@ -720,12 +712,11 @@
         </div>
     </div>
 </div>
-</body>
 
+</body>
 
 <th:block th:fragment="script">
     <!--jquery-->
-    <script async="" th:src="${application._staticPath}+'movie-admin/js/analytics.js'"></script>
     <script th:src="${application._staticPath}+'movie-admin/js/jquery-2.1.4.min.js'"></script>
     <!--jquery-->
     <!--semantic-->
@@ -738,6 +729,7 @@
             th:src="${application._staticPath}+'movie-admin/plugins/pace/pace.js'"></script>
 
     <script th:src="${application._staticPath}+'movie-admin/js/main.js'"></script>
+    <script th:src="${application._staticPath}+'movie-admin/js/common.js'"></script>
 
 </th:block>
 
