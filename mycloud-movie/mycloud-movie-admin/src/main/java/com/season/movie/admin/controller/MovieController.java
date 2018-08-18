@@ -1,10 +1,12 @@
 package com.season.movie.admin.controller;
 
+import com.github.pagehelper.Page;
 import com.season.common.base.BaseResult;
 import com.season.common.model.ResultCode;
 import com.season.common.web.util.WebFileUtils;
 import com.season.movie.admin.form.MovieForm;
 import com.season.movie.dao.entity.Kind;
+import com.season.movie.dao.entity.Movie;
 import com.season.movie.service.service.KindServcie;
 import com.season.movie.service.service.MovieService;
 import io.swagger.annotations.Api;
@@ -46,31 +48,43 @@ public class MovieController extends BaseController {
         return new ModelAndView("movie/movieList");
     }
 
+    @ApiOperation(value = "影片添加页面", httpMethod = "GET")
+    @GetMapping("/movieAdd")
+    public ModelAndView movieAdd() {
+        ModelAndView mav = new ModelAndView("movie/movieAdd");
+        List<Kind> kinds = kindServcie.listAll();
+        mav.addObject("kinds", kinds);
+        return mav;
+    }
     @ApiOperation(value = "影片上传页面", httpMethod = "GET")
     @GetMapping("/movieUpload")
     public ModelAndView movieUpload() {
         ModelAndView mav = new ModelAndView("movie/movieUpload");
         List<Kind> kinds = kindServcie.listAll();
-        mav.addObject("kinds",kinds);
+        mav.addObject("kinds", kinds);
         return mav;
     }
 
     @ApiOperation("新增电影")
     @PostMapping("/addMovie")
-    public BaseResult addMovie(@Validated MovieForm movieForm, HttpServletRequest request){
+    public BaseResult addMovie(@Validated MovieForm movieForm, HttpServletRequest request) {
 
         File tmpFileDir = WebFileUtils.getTmpFileDir(request);
         File goalFileDir = WebFileUtils.getImgFileDir(request);
         movieService.addMovie(movieForm.movie(),
-                movieForm.movieDetail(),
-                tmpFileDir,goalFileDir,
-                String.valueOf(request.getServletContext()
-                        .getAttribute("_imgPath")));
-
+                movieForm.movieDetail(), tmpFileDir, goalFileDir);
         return BaseResult.success();
 
     }
 
+
+    @ApiOperation("分页查询电影")
+    @PostMapping("/movieList")
+    public BaseResult movieListPage(Movie movie
+            , @RequestParam(value = "pageSize", defaultValue = "20") Integer pageSize
+            , @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+        return BaseResult.successData(movieService.listAll(movie, pageNum, pageSize));
+    }
 
 //    @ApiOperation(value = "上传影片封面", httpMethod = "POST")
 //    @PostMapping("/uploadImg")
@@ -97,32 +111,6 @@ public class MovieController extends BaseController {
 //        return BaseResult.successData(url);
 
     //    }
-    @ApiOperation(value = "上传影片封面", httpMethod = "POST")
-    @PostMapping("/uploadImg")
-    public BaseResult uploadMovieImg(@RequestParam("imgData") String imgData,
-                                     @RequestParam("filename") String filename,
-                                     HttpServletRequest request) {
-        String url = null;
-        File tmpFileDir =  WebFileUtils.getTmpFileDir(request);
-        File file =  WebFileUtils.getTmpFileDir(request);
-        if (Objects.isNull(file)) {
-            return new BaseResult(ResultCode.IO_ERROR, "获取临时路径失败");
-        }
-        filename =  WebFileUtils.getFileNameWithTimestamp(filename);
-        file = new File(tmpFileDir, filename);
-        String base64 = imgData.substring(imgData.indexOf(",") + 1);
-        byte[] decoderBytes = Base64.getDecoder().decode(base64);
-        try {
-            FileUtils.writeByteArrayToFile(file, decoderBytes);
-        } catch (IOException e) {
-            logger.error("写文件失败", e);
-            return new BaseResult(ResultCode.IO_ERROR, "上传文件失败");
-        }
-        //返回图片访问路径
-        url = request.getSession().getServletContext().getAttribute("_tmpPath") + filename;
-        return BaseResult.successData(url);
-
-    }
 
 
 }

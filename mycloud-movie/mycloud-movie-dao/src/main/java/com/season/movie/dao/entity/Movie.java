@@ -22,10 +22,6 @@ public class Movie {
      */
     private BigDecimal price;
 
-    /**
-     * 电影主要类型
-     */
-    private Integer kind;
 
     /**
      * 电影的多种类型，以逗号隔开
@@ -109,23 +105,6 @@ public class Movie {
         this.price = price;
     }
 
-    /**
-     * 获取电影主要类型
-     *
-     * @return kind - 电影主要类型
-     */
-    public Integer getKind() {
-        return kind;
-    }
-
-    /**
-     * 设置电影主要类型
-     *
-     * @param kind 电影主要类型
-     */
-    public void setKind(Integer kind) {
-        this.kind = kind;
-    }
 
     /**
      * 获取电影的多种类型，以逗号隔开

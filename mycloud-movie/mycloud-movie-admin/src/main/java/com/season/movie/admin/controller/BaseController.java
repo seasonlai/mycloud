@@ -24,7 +24,7 @@ public class BaseController {
 
     @ExceptionHandler
     public Object exception(Exception e, HttpServletRequest request, HttpServletResponse response) {
-
+        logger.error("统一异常处理：",e);
         if (HttpUtils.isAjaxRequest(request)) {
             HttpUtils.writeJson(new BaseResult(ResultCode.ERROR, e.getMessage()), response);
             return null;

@@ -8,7 +8,7 @@ CREATE TABLE movie (
   COMMENT '电影id',
   name        VARCHAR(100) NOT NULL
   COMMENT '电影名',
-  price       DECIMAL(4,2)                       DEFAULT 0
+  price       DECIMAL(4, 2)                 DEFAULT 0
   COMMENT '电影价格',
   kind        INT          NOT NULL         DEFAULT 1
   COMMENT '电影主要类型',
@@ -18,7 +18,7 @@ CREATE TABLE movie (
   COMMENT '电影封面图',
   play_count  BIGINT       NOT NULL         DEFAULT 0
   COMMENT '统计播放次数',
-  show_year   YEAR         NOT NULL         DEFAULT 2018
+  show_year   TIMESTAMP    NOT NULL         DEFAULT '2018-01-01'
   COMMENT '电影上映年代',
   create_time TIMESTAMP    NOT NULL         DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建、上传时间',
@@ -51,8 +51,6 @@ CREATE TABLE movie_detail (
   COMMENT '导演',
   actors      VARCHAR(255) NOT NULL DEFAULT ''
   COMMENT '电影主演',
-  show_year   TIMESTAMP
-  COMMENT '电影上映时间',
   description TEXT         NOT NULL
   COMMENT '电影描述',
   keyword     VARCHAR(255) NOT NULL DEFAULT ''
@@ -125,3 +123,34 @@ INSERT movie (name, play_count, cover) VALUES
   ('复仇者联盟3', 235323, 'Priest.jpg'), ('阿凡达', 35324, 'Sorority_Wars.jpg'), ('不明身份', 23435, 'Unstoppable.jpg'),
   ('超时空同居', 533234, 'caoshik.jpg'), ('蚁人2', 342532, 'yiren2.jpg');
 
+--  2018-08-18更新 --------
+-- 删除movie的kind字段
+ALTER TABLE movie
+  DROP COLUMN kind;
+-- 修改movie的play_count可以为空
+ALTER TABLE movie
+  MODIFY COLUMN play_count BIGINT DEFAULT 0
+  COMMENT '播放次数统计';
+-- 增加文件任务表
+DROP TABLE IF EXISTS task;
+CREATE TABLE task (
+  id       BIGINT                AUTO_INCREMENT
+  COMMENT 'id',
+  name     VARCHAR(200) NOT NULL
+  COMMENT '任务名称',
+  filePath VARCHAR(200) NOT NULL
+  COMMENT '文件路劲',
+  enable   TINYINT               DEFAULT 1
+  COMMENT '是有有效',
+  size     BIGINT       NOT NULL
+  COMMENT '文件大小',
+  process  BIGINT       NOT NULL DEFAULT 0
+  COMMENT '进度（断点续传）',
+  finish   TINYINT               DEFAULT 0
+  COMMENT '是否完成 1：完成 0：未完成',
+  PRIMARY KEY (id),
+  KEY (name)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COMMENT '文件任务表';

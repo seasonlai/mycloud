@@ -28,11 +28,6 @@ public class MovieDetail {
      */
     private String actors;
 
-    /**
-     * 电影上映时间
-     */
-    @Column(name = "show_year")
-    private Date showYear;
 
     /**
      * 电影关键字
@@ -116,23 +111,6 @@ public class MovieDetail {
         this.actors = actors;
     }
 
-    /**
-     * 获取电影上映时间
-     *
-     * @return show_year - 电影上映时间
-     */
-    public Date getShowYear() {
-        return showYear;
-    }
-
-    /**
-     * 设置电影上映时间
-     *
-     * @param showYear 电影上映时间
-     */
-    public void setShowYear(Date showYear) {
-        this.showYear = showYear;
-    }
 
     /**
      * 获取电影关键字

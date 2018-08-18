@@ -44,21 +44,25 @@
                 <i class="ion-speedometer titleIcon icon"></i> 影片管理 <i class="dropdown icon"></i>
             </div>
             <div th:class="(${menu_big eq 'movie'}?'active ':'')+' content'">
+                <a th:class="(${menu_small eq 'movieAdd'}?'active ':'')+(${menu_big eq 'movie'}?'transition visible ':'')+' item'"
+                   th:href="@{/admin/movieAdd}">
+                    添加影片
+                </a>
+                <a th:class="(${menu_small eq 'movieList'}?'active ':'')+(${menu_big eq 'movie'}?'transition visible ':'')+' item'"
+                   th:href="@{/admin/movieList}">
+                    编辑影片
+                </a>
                 <a th:class="(${menu_small eq 'movieUpload'}?'active ':'')+(${menu_big eq 'movie'}?'transition visible ':'')+' item'"
                    th:href="@{/admin/movieUpload}">
                     上传影片
                 </a>
-                <a th:class="(${menu_small eq 'movieList'}?'active ':'')+(${menu_big eq 'movie'}?'transition visible ':'')+' item'"
-                   th:href="@{/admin/movieList}">
-                    影片列表
-                </a>
                 <a th:class="(${menu_small eq 'movieKind'}?'active ':'')+(${menu_big eq 'movie'}?'transition visible ':'')+' item'"
                    href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/index.html">
-                    影片类别
+                    编辑类别
                 </a>
                 <a th:class="(${menu_small eq 'movieComment'}?'active ':'')+(${menu_big eq 'movie'}?'transition visible ':'')+' item'"
                    href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/index.html">
-                    影评管理
+                    编辑影评
                 </a>
             </div>
             <div class="title item">
@@ -132,13 +136,13 @@
                 </div>
                 <div class="ui divider"></div>
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/inbox.html">
-                    上传影片
+                    添加影片
                 </a>
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/filter.html">
-                    影片列表
+                    编辑影片
                 </a>
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/todo.html">
-                    影片类别
+                    编辑类别
                 </a>
                 <a class="item" href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/todo.html">
                     影评管理
@@ -717,8 +721,13 @@
 
 <th:block th:fragment="script">
     <!--jquery-->
-    <script th:src="${application._staticPath}+'movie-admin/js/jquery-2.1.4.min.js'"></script>
+    <script th:replace="~{::js_jquery}"></script>
+    <script th:replace="~{::js_basic}"></script>
     <!--jquery-->
+
+</th:block>
+
+<th:block th:fragment="js_basic">
     <!--semantic-->
     <script th:src="${application._staticPath}+'movie-admin/semantic/dist/semantic.min.js'"></script>
     <!--semantic-->
@@ -730,7 +739,10 @@
 
     <script th:src="${application._staticPath}+'movie-admin/js/main.js'"></script>
     <script th:src="${application._staticPath}+'movie-admin/js/common.js'"></script>
+</th:block>
 
+<th:block th:fragment="js_jquery">
+    <script th:src="${application._staticPath}+'movie-admin/js/jquery-2.1.4.min.js'"></script>
 </th:block>
 
 

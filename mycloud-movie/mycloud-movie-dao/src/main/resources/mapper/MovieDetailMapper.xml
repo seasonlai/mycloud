@@ -9,7 +9,6 @@
         <result column="movie_id" jdbcType="BIGINT" property="movieId"/>
         <result column="director" jdbcType="VARCHAR" property="director"/>
         <result column="actors" jdbcType="VARCHAR" property="actors"/>
-        <result column="show_year" jdbcType="TIMESTAMP" property="showYear"/>
         <result column="keyword" jdbcType="VARCHAR" property="keyword"/>
         <result column="description" jdbcType="LONGVARCHAR" property="description"/>
     </resultMap>

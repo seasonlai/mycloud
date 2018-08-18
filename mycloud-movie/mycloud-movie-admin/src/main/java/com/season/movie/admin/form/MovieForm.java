@@ -116,6 +116,7 @@ public class MovieForm {
         movie.setName(movieName);
         movie.setCover(movieImg);
         movie.setKinds(movieKind);
+        movie.setShowYear(showTime);
         return movie;
     }
 
@@ -124,7 +125,6 @@ public class MovieForm {
         movieDetail1.setActors(actor);
         movieDetail1.setDescription(introduce);
         movieDetail1.setKeyword(keyword);
-        movieDetail1.setShowYear(showTime);
         movieDetail1.setDirector(director);
         return movieDetail1;
     }

@@ -25,7 +25,7 @@ public class ParamContextConfig implements ServletContextListener {
     @Value("${mycloud.static.tmp.url:null}")
     private String static_tmp_path;
 
-    @Value("${file.img.path:null}")
+    @Value("${file.image.path:null}")
     private String disk_img_path;
     @Value("${file.tmp.path:null}")
     private String disk_tmp_path;

@@ -1,8 +1,9 @@
 package com.season.movie.service.service;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.season.common.base.BaseException;
 import com.season.common.model.ResultCode;
-import com.season.common.web.util.WebFileUtils;
 import com.season.movie.dao.entity.Movie;
 import com.season.movie.dao.entity.MovieDetail;
 import com.season.movie.dao.mapper.MovieDetailMapper;
@@ -17,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.weekend.Weekend;
 
-import javax.xml.transform.Result;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018/8/1.
@@ -58,12 +59,12 @@ public class MovieService {
     }
 
     @Transactional
-    public void addMovie(Movie movie, MovieDetail movieDetail, File tmpFileDir, File goalFileDir, String imgUrl) {
+    public void addMovie(Movie movie, MovieDetail movieDetail, File tmpFileDir, File goalFileDir) {
         String movieImg = movie.getCover();
         File srcFile = null, goalFile = null;
-        boolean needCopy = true;
+        boolean needCopy;
         //图片名称处理
-        if (!StringUtils.isEmpty(movieImg)) {
+        if (needCopy = !StringUtils.isEmpty(movieImg)) {
             movieImg = movieImg.substring(movieImg.lastIndexOf("/") + 1);
             srcFile = new File(tmpFileDir, movieImg);
             if (!srcFile.exists()) {
@@ -75,7 +76,7 @@ public class MovieService {
                 if (goalFile.exists()) {
                     logger.warn("将会覆盖图片：{}", goalFile.getAbsoluteFile());
                 }
-                movie.setCover(imgUrl + (imgUrl.endsWith("/") ? "" : "/") + movieImg);
+                movie.setCover(movieImg);
             }
         }
         //开始插入movie
@@ -84,7 +85,7 @@ public class MovieService {
             throw new BaseException(ResultCode.SERVICE_ERROR, "添加电影失败");
         }
         //添加电影细节
-        movieDetail.setId(movie.getId());
+        movieDetail.setMovieId(movie.getId());
         count = movieDetailMapper.insert(movieDetail);
         if (count <= 0) {
             throw new BaseException(ResultCode.SERVICE_ERROR, "添加电影细节失败");
@@ -94,9 +95,22 @@ public class MovieService {
             try {
                 FileUtils.copyFile(srcFile, goalFile);
             } catch (IOException e) {
-                logger.error("拷贝文件失败",e);
+                logger.error("拷贝文件失败", e);
                 throw new BaseException(ResultCode.SERVICE_ERROR, "添加电影封面时失败");
             }
         }
+    }
+
+    public Object listAll(Movie movie, Integer pageNum, Integer pageSize) {
+        //设好分页
+        Page<Object> page = PageHelper.startPage(pageNum, pageSize);
+        List<Movie> movies = movieMapper.selectAll();
+        Map<String,Object> map = new HashMap<>(4);
+        map.put("list",movies);
+        map.put("total",page.getTotal());
+        map.put("pages",page.getPages());
+        map.put("pageNum",page.getPageNum());
+        map.put("pageSize",page.getPageSize());
+        return map;
     }
 }
