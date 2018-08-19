@@ -21,21 +21,21 @@
                         password="123456">
         </jdbcConnection>
 
-        <javaModelGenerator targetPackage="com.season.movie.entity" targetProject="src/main/java"/>
+        <javaModelGenerator targetPackage="com.season.movie.dao.entity" targetProject="src/main/java"/>
 
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
 
-        <javaClientGenerator targetPackage="com.season.movie.mapper" targetProject="src/main/java"
+        <javaClientGenerator targetPackage="com.season.movie.dao.mapper" targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="%">
+        <!--<table tableName="%">-->
             <!--mysql 配置-->
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
             <!--oracle 配置-->
             <!--<generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from dual" identity="false" type="pre"/>-->
-        </table>
-        <!--<table tableName="kind">-->
-            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
         <!--</table>-->
+        <table tableName="task">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>

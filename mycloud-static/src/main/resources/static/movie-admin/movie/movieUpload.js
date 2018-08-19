@@ -26,3 +26,20 @@ $("#myFile").fileupload({
 function cancelUpload() {
     jqXHR.abort();
 }
+
+$(function () {
+
+    $(".ui.actionmodal").modal({
+        closable: false,
+        onDeny: function () {
+        },
+        onApprove: function () {
+
+        }
+    });
+
+});
+
+function showMovieAdd() {
+    $('#videoForm').modal("show");
+}

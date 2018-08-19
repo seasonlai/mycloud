@@ -134,23 +134,55 @@ ALTER TABLE movie
 -- 增加文件任务表
 DROP TABLE IF EXISTS task;
 CREATE TABLE task (
-  id       BIGINT                AUTO_INCREMENT
+  id       BIGINT  AUTO_INCREMENT
   COMMENT 'id',
   name     VARCHAR(200) NOT NULL
   COMMENT '任务名称',
   filePath VARCHAR(200) NOT NULL
-  COMMENT '文件路劲',
-  enable   TINYINT               DEFAULT 1
-  COMMENT '是有有效',
-  size     BIGINT       NOT NULL
+  COMMENT '文件路径',
+  size     BIGINT  DEFAULT 0
   COMMENT '文件大小',
-  process  BIGINT       NOT NULL DEFAULT 0
+  process  BIGINT  DEFAULT 0
   COMMENT '进度（断点续传）',
-  finish   TINYINT               DEFAULT 0
-  COMMENT '是否完成 1：完成 0：未完成',
+  status   TINYINT DEFAULT 0
+  COMMENT '状态',
+  kind     TINYINT DEFAULT 0
+  COMMENT '类型: 0-上传 1-下载',
   PRIMARY KEY (id),
   KEY (name)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   COMMENT '文件任务表';
+
+-- 2018-08-19更新---------
+-- 增加视频表
+DROP TABLE IF EXISTS video;
+CREATE TABLE video (
+  id      BIGINT  AUTO_INCREMENT
+  COMMENT '视频id',
+  name    VARCHAR(200) COMMENT '视频名称',
+  quality VARCHAR(50) COMMENT '质量: 高清，标清...',
+  status  TINYINT DEFAULT 0
+  COMMENT '状态：可用、不存在、侵权',
+  PRIMARY KEY (id),
+  KEY (name)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COMMENT '视频表';
+-- 增加质量表
+DROP TABLE IF EXISTS quality;
+CREATE TABLE quality (
+  id   TINYINT AUTO_INCREMENT
+  COMMENT '质量表id',
+  name VARCHAR(50) COMMENT '名称',
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET utf8
+  COMMENT '质量表';
+-- 给表movieDetail添加视频源列
+ALTER TABLE movie_detail
+  ADD COLUMN video_id BIGINT DEFAULT NULL
+COMMENT '视频id';
