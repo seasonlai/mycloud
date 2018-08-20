@@ -5,7 +5,7 @@ spring:
     name: mycloud-movie-admin
   profiles:
     active: dev
-    include: dao,service
+    include: service
   thymeleaf:
     cache: false
   mvc:

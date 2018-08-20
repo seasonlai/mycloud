@@ -1,0 +1,15 @@
+使用第三方框架jasypt进行加密解密
+
+在配置文件中配置盐
+jasypt.encryptor.password=salt
+
+然后运行单元测试
+
+    @Autowired
+    StringEncryptor stringEncryptor;
+
+    @Test
+    public void encryptPwd() {
+        String result = stringEncryptor.encrypt("123456");//待加密的密码
+        System.out.println(result);
+    }

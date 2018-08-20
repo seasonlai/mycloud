@@ -3,7 +3,7 @@ spring:
     include: dao
   redis:
     host: 127.0.0.1
-    password: 123456
+    password: ENC(W9Fdtjzo7LH1xPfw6ygkKnrJx5TR1yDy)
     port: 6379
     timeout: 0
     database: 0
@@ -13,6 +13,3 @@ spring:
         max-idle: 4
         min-idle: 0
         max-wait: 6000
-logging:
-  level:
-    com.season: debug
