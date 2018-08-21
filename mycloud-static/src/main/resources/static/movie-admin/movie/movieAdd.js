@@ -64,7 +64,7 @@ $(function () {
     initUploadImg();
 
 });
-
+//提交表单
 function submitMovie() {
     var $form = $('#movieForm');
     $form.ajaxSubmit({
@@ -84,7 +84,7 @@ function submitMovie() {
         }
     });
 }
-
+//图片裁剪
 function initUploadImg() {
     var console = window.console || {
             log: function () {
@@ -107,15 +107,15 @@ function initUploadImg() {
 
     // Cropper
     $image.on({
-        ready: function (e) {
-            console.log(e.type);
-        },
-        crop: function (e) {
-            console.log(e.type);
-        },
-        zoom: function (e) {
-            console.log(e.type, e.detail.ratio);
-        }
+        // ready: function (e) {
+        //     console.log(e.type);
+        // },
+        // crop: function (e) {
+        //     console.log(e.type);
+        // },
+        // zoom: function (e) {
+        //     console.log(e.type, e.detail.ratio);
+        // }
     }).cropper(options);
 
     // Import image
@@ -153,7 +153,7 @@ function initUploadImg() {
                         onDeny: function () {
                         },
                         onApprove: function () {
-                            //开始上传
+                            //开始上传图片
                             var canvas = $image.cropper('getCroppedCanvas', {width: 200, height: 200});
                             var data = canvas.toDataURL();
                             $.ajax({
@@ -162,7 +162,7 @@ function initUploadImg() {
                                 type: "POST",
                                 data: {
                                     "imgData": data.toString(),
-                                    "filename": 'cover'+uploadedImageType
+                                    "filename": 'cover.'+uploadedImageType.substring(6)
                                 },
                                 success: function (data) {
                                     if (!data) {

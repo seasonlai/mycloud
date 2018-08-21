@@ -39,6 +39,17 @@ public class WebFileUtils {
         return getDirectory(uploadPath.trim());
 
     }
+    public static File getVideoFileDir(HttpServletRequest request) {
+        //根目录下新建文件夹upload，存放上传图片
+        String uploadPath = String.valueOf(request.getServletContext()
+                .getAttribute("_diskVideoPath"));
+        if (StringUtils.isEmpty(uploadPath)) {
+            logger.warn("保存视频文件路径没初始化");
+            return null;
+        }
+        return getDirectory(uploadPath.trim());
+
+    }
 
     public static File getDirectory(String filePath){
         File file = new File(filePath);

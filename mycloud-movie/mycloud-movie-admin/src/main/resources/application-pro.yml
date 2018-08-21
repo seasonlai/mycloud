@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: dao
+    include: dao-dev
   redis:
     host: 127.0.0.1
     password: ENC(W9Fdtjzo7LH1xPfw6ygkKnrJx5TR1yDy)

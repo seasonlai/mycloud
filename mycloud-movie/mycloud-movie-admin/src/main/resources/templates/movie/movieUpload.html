@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:include="index::header('影片列表',~{})">
-
 </head>
 <body>
-
 <div th:replace="index::conteWrap('movie','movieUpload',~{::mainContent})">
     <th:block th:fragment="mainContent">
         <div class="sixteen wide tablet sixteen wide computer column">
@@ -15,12 +13,43 @@
                     </h5>
                 </div>
                 <div class="ui segment">
-                    <div class="ui top attached tabular menu stackable">
+                    <div id="tabHead" class="ui top attached tabular menu stackable">
+                        <a class="item" data-tab="zero">新建任务</a>
                         <a class="item active" data-tab="one">未完成</a>
                         <a class="item" data-tab="two">已完成</a>
                         <a class="item" data-tab="three">垃圾箱</a>
                     </div>
-                    <div class="ui bottom attached tab segment active" data-tab="one">
+                    <div id="tabPage" class="ui bottom attached tab segment" data-tab="zero">
+                        <form class="ui form" id="videoForm" onsubmit="return false;">
+                            <div class="two fields">
+                                <div class="field">
+                                    <label>视频名称</label>
+                                    <input type="text" id="videoName">
+                                </div>
+                                <div class="field">
+                                    <label>视频文件</label>
+                                    <input type="file" name="videoFile" id="videoFile">
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <label>视频质量</label>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input type="radio" name="videoQuality" checked="checked">
+                                        <label>高清</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <textarea placeholder="视频描述,80字以内" id="videoDesc" maxlength="80"></textarea>
+                            </div>
+                            <div style="text-align: right;padding-top: 10px">
+                                <div class="ui button clear">重置</div>
+                                <div class="ui blue button submit ">确定</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="ui bottom attached tab segment active" id="task_unFinish" data-tab="one">
                         <div class="ui middle aligned divided list">
                             <div class="item">
                                 <div class="content">
@@ -35,27 +64,6 @@
                                     <div class="description" style="padding: 5px 10px;clear: both;">
                                         <div class="ui active progress blue" style="height: 11px" data-percent="61"
                                              id="example2">
-                                            <div class="bar"
-                                                 style="transition-duration: 300ms; width: 61%;height: 11px">
-                                                <div class="progress">61%</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="content">
-                                    <div class="header" style="padding: 10px 15px 5px;">
-                                        <span style="font-size: 14px;">一出好戏</span>
-                                        <div class="right floated content">
-                                            <i style="cursor: pointer"
-                                               class="upload icon large pause circle outline">
-                                            </i>
-                                        </div>
-                                    </div>
-                                    <div class="description" style="padding: 5px 10px;clear: both;">
-                                        <div class="ui progress red" style="height: 11px" data-percent="61"
-                                             id="example">
                                             <div class="bar"
                                                  style="transition-duration: 300ms; width: 61%;height: 11px">
                                                 <div class="progress">61%</div>
@@ -80,52 +88,65 @@
     </th:block>
 </div>
 
-<div style="position: fixed;right: 5px;bottom: 10px">
-    <button class="ui circular icon button huge green" onclick="showMovieAdd()">
-        <i class="plus icon white"></i>
-    </button>
-</div>
+<!--<div style="position: fixed;right: 5px;bottom: 10px">-->
+<!--<button class="ui circular icon button huge green" onclick="showMovieAdd()">-->
+<!--<i class="plus icon white"></i>-->
+<!--</button>-->
+<!--</div>-->
 
-<div class="ui fullscreen modal" id="videoForm">
-    <i class="close icon"></i>
-    <div class="header">
-        Update Your Settings
-    </div>
-    <div class="content">
-        <div class="ui form">
-            <h4 class="ui dividing header">Give us your feedback</h4>
-            <div class="field">
-                <label>Feedback</label>
-                <textarea></textarea>
-            </div>
-            <div class="field">
-                <div class="ui checkbox">
-                    <input type="checkbox" checked="checked" name="contact-me">
-                    <label>It's okay to contact me.</label>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="actions">
-        <div class="ui button deny">取消</div>
-        <div class="ui green button deny">确定</div>
-    </div>
-</div>
-
+<!--<div class="ui modal" id="videoForm">-->
+<!--<i class="close icon"></i>-->
+<!--<div class="header">-->
+<!--填写视频信息-->
+<!--</div>-->
+<!--<div class="content">-->
+<!--<div class="ui form" onsubmit="return false;">-->
+<!--<div class="two fields">-->
+<!--<div class="field">-->
+<!--<label>视频名称</label>-->
+<!--<input type="text" id="videoName">-->
+<!--</div>-->
+<!--<div class="field">-->
+<!--<label>视频文件</label>-->
+<!--<input type="file" style="height: 32px" id="videoFile">-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="inline fields">-->
+<!--<label>视频质量</label>-->
+<!--<div class="field">-->
+<!--<div class="ui radio checkbox">-->
+<!--<input type="radio" name="videoQuality" checked="checked">-->
+<!--<label>高清</label>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="field">-->
+<!--<textarea placeholder="视频描述,80字以内" id="videoDesc" maxlength="80"></textarea>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="actions">-->
+<!--<div class="ui button deny">取消</div>-->
+<!--<div class="ui green button submit ">确定</div>-->
+<!--</div>-->
+<!--</div>-->
 
 
 </body>
 
 
-<th:block th:include="index::script"/>
+<script th:replace="index::js_jquery"></script>
 
-<!-- jquery file upload相关 -->
+ <!--jquery file upload相关-->
 <script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/vendor/jquery.ui.widget.js'"></script>
 <script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.iframe-transport.js'"></script>
 <script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload.js'"></script>
 <script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload-process.js'"></script>
 <script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload-validate.js'"></script>
-<!-- jquery file upload相关 -->
+ <!--jquery file upload相关-->
 
+<script th:replace="index::js_basic"></script>
+
+<script th:src="${application._staticPath}+'movie-admin/movie/movieUpload.js'"></script>
 
 </html>

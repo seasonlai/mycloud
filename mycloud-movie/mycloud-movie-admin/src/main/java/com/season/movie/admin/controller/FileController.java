@@ -1,5 +1,6 @@
 package com.season.movie.admin.controller;
 
+import com.season.common.base.BaseException;
 import com.season.common.base.BaseResult;
 import com.season.common.model.ResultCode;
 import com.season.common.web.util.WebFileUtils;
@@ -19,10 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Created by Administrator on 2018/8/18.
@@ -45,6 +43,9 @@ public class FileController extends BaseController {
         if (Objects.isNull(file)) {
             return new BaseResult(ResultCode.IO_ERROR, "获取临时路径失败");
         }
+        if (!filename.contains(".")) {
+            return new BaseResult(ResultCode.IO_ERROR, "文件格式不对");
+        }
         filename = WebFileUtils.getFileNameWithTimestamp(filename);
         file = new File(tmpFileDir, filename);
         String base64 = imgData.substring(imgData.indexOf(",") + 1);
@@ -61,22 +62,37 @@ public class FileController extends BaseController {
 
     }
 
-    @RequestMapping("/uploadFilePair")
-    public BaseResult upload(HttpServletRequest request, PrintWriter writer,
-                       HttpServletResponse response) throws Exception {
+    @PostMapping("/uploadFilePair")
+    public BaseResult upload(HttpServletRequest request,
+                             @RequestParam(value = "fileName", required = false) String fileName,
+                             HttpServletResponse response) throws Exception {
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         // 获取传入文件
         multipartRequest.setCharacterEncoding("utf-8");
+        Iterator<String> fileNames = multipartRequest.getFileNames();
         MultipartFile file = multipartRequest.getFile("file");
 
-        this.SaveAs("uploadDemo/" + file.getOriginalFilename(), file, request,
-                response);
+        if (Objects.isNull(file)) {
+            throw new BaseException(ResultCode.VALIDATE_ERROR, "文件内容为空");
+        }
+        //生成文件名
+        if (Objects.isNull(fileName)) {
+            String originName = file.getOriginalFilename();
+            String suffix = originName.substring(originName.lastIndexOf("."));
+            fileName = WebFileUtils.getFileNameWithTimestamp(UUID.randomUUID().toString() + suffix);
+        }
+
+        File videoFileDir = WebFileUtils.getVideoFileDir(request);
+        if (Objects.isNull(videoFileDir)) {
+            throw new BaseException(ResultCode.SERVICE_ERROR, "文件保存路径获取失败");
+        }
+        this.SaveAs(new File(videoFileDir, fileName), file, request, response);
         // 设置返回值
-        return BaseResult.successData(file.getOriginalFilename());
+        return BaseResult.successData(fileName);
     }
 
-    private void SaveAs(String saveFilePath, MultipartFile file,
+    private void SaveAs(File saveFile, MultipartFile file,
                         HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         long lStartPos = 0;
@@ -91,7 +107,7 @@ public class FileController extends BaseController {
             new File("uploadDemo").mkdirs();
         }
         if (contentRange == null) {
-            FileUtils.writeByteArrayToFile(new File(saveFilePath),
+            FileUtils.writeByteArrayToFile(saveFile,
                     file.getBytes());
 
         } else {
@@ -106,13 +122,13 @@ public class FileController extends BaseController {
             }
 
             //判断所上传文件是否已经存在，若存在则返回存在文件的大小
-            if (new File(saveFilePath).exists()) {
-                fs = new FileOutputStream(saveFilePath, true);
-                FileInputStream fi = new FileInputStream(saveFilePath);
+            if (saveFile.exists()) {
+                fs = new FileOutputStream(saveFile, true);
+                FileInputStream fi = new FileInputStream(saveFile);
                 lStartPos = fi.available();
                 fi.close();
             } else {
-                fs = new FileOutputStream(saveFilePath);
+                fs = new FileOutputStream(saveFile);
                 lStartPos = 0;
             }
 

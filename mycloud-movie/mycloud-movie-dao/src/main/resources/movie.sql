@@ -159,12 +159,18 @@ CREATE TABLE task (
 -- 增加视频表
 DROP TABLE IF EXISTS video;
 CREATE TABLE video (
-  id      BIGINT  AUTO_INCREMENT
+  id          BIGINT    AUTO_INCREMENT
   COMMENT '视频id',
-  name    VARCHAR(200) COMMENT '视频名称',
-  quality VARCHAR(50) COMMENT '质量: 高清，标清...',
-  status  TINYINT DEFAULT 0
-  COMMENT '状态：可用、不存在、侵权',
+  name        VARCHAR(100) NOT NULL
+  COMMENT '视频名称',
+  code        VARCHAR(100) NOT NULL
+  COMMENT '视频码/文件名',
+  description VARCHAR(100) COMMENT '描述',
+  quality     VARCHAR(50) COMMENT '质量: 高清，标清...',
+  status      TINYINT   DEFAULT 0
+  COMMENT '状态：可用、不存在、侵权...',
+  create_time TIMESTAMP DEFAULT current_timestamp
+  COMMENT '创建时间',
   PRIMARY KEY (id),
   KEY (name)
 )
