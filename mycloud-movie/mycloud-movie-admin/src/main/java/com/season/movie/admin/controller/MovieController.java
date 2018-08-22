@@ -7,8 +7,12 @@ import com.season.common.web.util.WebFileUtils;
 import com.season.movie.admin.form.MovieForm;
 import com.season.movie.dao.entity.Kind;
 import com.season.movie.dao.entity.Movie;
+import com.season.movie.dao.entity.Quality;
+import com.season.movie.dao.entity.Task;
 import com.season.movie.service.service.KindServcie;
 import com.season.movie.service.service.MovieService;
+import com.season.movie.service.service.QualityService;
+import com.season.movie.service.service.TaskService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileUtils;
@@ -41,6 +45,10 @@ public class MovieController extends BaseController {
     KindServcie kindServcie;
     @Autowired
     MovieService movieService;
+    @Autowired
+    QualityService qualityService;
+    @Autowired
+    TaskService taskService;
 
     @ApiOperation(value = "影片列表页面", httpMethod = "GET")
     @GetMapping("/movieList")
@@ -60,8 +68,10 @@ public class MovieController extends BaseController {
     @GetMapping("/movieUpload")
     public ModelAndView movieUpload() {
         ModelAndView mav = new ModelAndView("movie/movieUpload");
-        List<Kind> kinds = kindServcie.listAll();
-        mav.addObject("kinds", kinds);
+        List<Quality> qualities = qualityService.listAll();
+        mav.addObject("qualities", qualities);
+        Object tasks = taskService.listAll();
+        mav.addObject("tasks",tasks);
         return mav;
     }
 
@@ -77,7 +87,6 @@ public class MovieController extends BaseController {
 
     }
 
-
     @ApiOperation("分页查询电影")
     @PostMapping("/movieList")
     public BaseResult movieListPage(Movie movie
@@ -85,6 +94,7 @@ public class MovieController extends BaseController {
             , @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         return BaseResult.successData(movieService.listAll(movie, pageNum, pageSize));
     }
+
 
 //    @ApiOperation(value = "上传影片封面", httpMethod = "POST")
 //    @PostMapping("/uploadImg")

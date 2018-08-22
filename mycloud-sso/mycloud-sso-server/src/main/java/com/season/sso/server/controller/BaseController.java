@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by Administrator on 2018/6/2.
  */
-public class BaseController{
+public class BaseController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
 
@@ -71,7 +71,7 @@ public class BaseController{
             result = new BaseResult(-1, exception.getMessage());
         }
 
-
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         if (HttpUtils.isAjaxRequest(request)) {
             HttpUtils.writeJson(result, response);
         } else {

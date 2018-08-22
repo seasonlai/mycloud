@@ -99,6 +99,7 @@ public class SSOController extends BaseController {
     @GetMapping("/login")
     public ModelAndView login(HttpServletRequest request, HttpServletResponse response) {
         //是否是mycloud应用的重定位
+
         Object appCode = request.getParameter("appCode");
         if (Objects.isNull(appCode)) {
             throw new BaseException(ResultCode.VALIDATE_ERROR, "非法访问");

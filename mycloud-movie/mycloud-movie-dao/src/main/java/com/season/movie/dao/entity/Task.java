@@ -3,6 +3,7 @@ package com.season.movie.dao.entity;
 import com.season.movie.dao.enums.TaskStatus;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 public class Task {
     /**
@@ -31,7 +32,12 @@ public class Task {
     /**
      * 进度（断点续传）
      */
-    private Long process;
+    private Long progress;
+
+    /**
+     * 百分比
+     */
+    private BigDecimal percent;
 
     /**
      * 状态
@@ -42,6 +48,17 @@ public class Task {
      * 类型: 0-上传 1-下载
      */
     private Byte kind;
+
+    /**
+     * 用户id
+     */
+    @Column(name = "user_id")
+    private Long userId;
+    /**
+     * 目标id
+     */
+    @Column(name = "target_id")
+    private Long targetId;
 
     /**
      * 获取id
@@ -118,19 +135,19 @@ public class Task {
     /**
      * 获取进度（断点续传）
      *
-     * @return process - 进度（断点续传）
+     * @return progress - 进度（断点续传）
      */
-    public Long getProcess() {
-        return process;
+    public Long getProgress() {
+        return progress;
     }
 
     /**
      * 设置进度（断点续传）
      *
-     * @param process 进度（断点续传）
+     * @param progress 进度（断点续传）
      */
-    public void setProcess(Long process) {
-        this.process = process;
+    public void setProgress(Long progress) {
+        this.progress = progress;
     }
 
     /**
@@ -167,5 +184,30 @@ public class Task {
      */
     public void setKind(Byte kind) {
         this.kind = kind;
+    }
+
+
+    public BigDecimal getPercent() {
+        return percent;
+    }
+
+    public void setPercent(BigDecimal percent) {
+        this.percent = percent;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(Long targetId) {
+        this.targetId = targetId;
     }
 }

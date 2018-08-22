@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传test</title>
+</head>
+<body>
+<form id="uploadForm" onsubmit="return false;">
+    <input type="file" name="file">
+    <!--<input type="button" id="startBtn" onclick="startUpload()" value="开始">-->
+    <!--<input type="button" onclick="cancelUpload()" value="取消"/>-->
+</form>
+<input type="file" name="file" id="testInput">
+<button id="addBtn" onclick="addFile()">添加</button>
+<!--<div style="width: 200px;background-color: gray;height: 10px;">-->
+<!--<div style="position:relative;width: 0;background: green;height: 100%" id="progress"></div>-->
+<!--</div>-->
+</body>
+
+<script th:replace="index::js_jquery"></script>
+
+<!--jquery file upload相关-->
+<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/vendor/jquery.ui.widget.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.iframe-transport.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload-process.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload-validate.js'"></script>
+
+<script>
+    var jqXHR;
+    var dataObj;
+    var fileName;
+    var taskList = [];
+    //    var that;
+    $("#uploadForm").fileupload({
+        url: '/file/uploadFilePair',
+        paramName: "file",//文件的名称，此处是变量名称，不是文件的原名称只是后台接收的参数
+        limitConcurrentUploads: 1,
+        sequentialUploads: true,
+        formData: {fileName: 'caoNim.mp4'},
+        progressInterval: 100,
+        maxChunkSize: 100000, //设置上传片段大小，不设置则为整个文件上传
+        dataType: "json",
+        autoUpload: false,
+        add: function (e, data) {
+            var that = this;
+            addTask(data, this, e);
+        }, done: function (e, data) {
+            alert('完成文件上传 - ' + data.formData.fileName);
+        }
+    }).bind('fileuploadprogress', function (e, data) {
+        var progress = parseInt(data.loaded / data.total * 100, 10) - 1;
+        //更新进度条
+        var index = data.formData.index;
+        $('#progress_' + index).css('width', progress + "%");
+//        console.log(progress);
+    }).bind('fileuploaddone', function (e, data) {
+        //更新完成后的状态
+
+    }).bind('fileuploadpaste', function (e, data) {
+
+    }).bind('fileuploadchunkfail', function (e, data) {
+//        cancelUpload();
+    }).bind('fileuploadchunksend', function (e, data) {
+//        data.formData = {fileName: fileName}
+    }).bind('fileuploadchunkdone', function (e, data) {
+        var result = data.result;
+
+        if (result.code !== 0) {
+//            cancelUpload();
+            alert(result.msg);
+            return;
+        }
+    });
+
+    var i = 0;
+    function addTask(data, context, e) {
+        data.formData = {fileName: 'file_' + i, index: i};
+        $('<div id="item_' + i + '"><div style="width: 200px;display:inline-block;background-color: gray;height: 10px;">'
+            + '<div style="position:relative;width: 0;background: green;height: 100%" index="' + i + '" id="progress_' + i + '"></div>'
+            + '</div></div>').appendTo(document.body);
+        $('<button/>').text('开始').attr('id', "start_" + i)
+            .attr('fileName', 'file_' + i)
+            .attr('index', i)
+            .appendTo($('#item_' + i))
+            .click(function () {
+                var index = $(this).attr('index');
+                var $btn = $(this);
+                $.getJSON('/file/getFileOffset', {fileName: $(this).attr('fileName')}, function (result) {
+                    var task = getTask(index);
+                    if (task) {
+                        if (result.code === 0) {
+                            task.data.uploadedBytes = result.data;
+                            $.blueimp.fileupload.prototype
+                                .options.add.call(task.context, task.e, task.data);
+                        }
+                        task.jqXHR = task.data.submit();
+                        $btn.prop('disabled', true);
+                    }
+                });
+            });
+        $('<button/>').text('取消').attr('id', "stop_" + i)
+            .attr('fileName', 'file_' + i)
+            .attr('index', i)
+            .appendTo($('#item_' + i)).click(function () {
+            $('#start_' + $(this).attr('index')).prop('disabled', false);
+            var task = getTask($(this).attr('index'));
+            task.jqXHR.abort();
+        });
+        taskList.push({'data': data, 'index': '' + i, 'context': context, 'e': e});
+        i = i + 1;
+    }
+    function getTask(index) {
+        for (var i in taskList) {
+            var task = taskList[i];
+            if (task.index == index)
+                return task;
+        }
+    }
+
+    function addFile() {
+        var filesList = $('#testInput').prop("files");
+        $("#uploadForm").fileupload('add', {files: filesList});
+    }
+</script>
+
+</html>

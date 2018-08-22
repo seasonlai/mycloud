@@ -36,6 +36,12 @@ public class Video {
     private String description;
 
     /**
+     * 用户id
+     */
+    @Column(name = "user_id")
+    private Long userId;
+
+    /**
      * 创建、上传时间
      */
     @Column(name = "create_time")
@@ -145,5 +151,13 @@ public class Video {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

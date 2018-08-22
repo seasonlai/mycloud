@@ -67,4 +67,8 @@ public class BaseResult{
     public static BaseResult success(){
         return new BaseResult(ResultCode.SUCCESS,"成功",null);
     }
+
+    public static BaseResult result(int code, String msg) {
+        return new BaseResult(code,msg);
+    }
 }

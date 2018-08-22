@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="index::header('影片列表',~{})">
+<head th:include="index::header('上传影片',~{})">
 </head>
+<!--
+业务
+- 新建任务：填写完信息后，点击确认，向后台添加一个视频上传信息和任务信息 -> 跳到未完成TAB页，增加一个任务条目
+- 未完成：页面一进来就加载好条目，每个条目可以开始、停止、删除、彻底删除
+- 已完成：页面一进来就加载好条目，每个条目可以删除
+- 垃圾箱：页面一进来就加载好条目，每个条目可以删除、重新开始
+-->
 <body>
 <div th:replace="index::conteWrap('movie','movieUpload',~{::mainContent})">
     <th:block th:fragment="mainContent">
@@ -12,14 +19,14 @@
                         任务列表
                     </h5>
                 </div>
-                <div class="ui segment">
+                <div class="ui segment" id="taskList">
                     <div id="tabHead" class="ui top attached tabular menu stackable">
                         <a class="item" data-tab="zero">新建任务</a>
                         <a class="item active" data-tab="one">未完成</a>
                         <a class="item" data-tab="two">已完成</a>
                         <a class="item" data-tab="three">垃圾箱</a>
                     </div>
-                    <div id="tabPage" class="ui bottom attached tab segment" data-tab="zero">
+                    <div class="ui bottom attached tab segment" data-tab="zero">
                         <form class="ui form" id="videoForm" onsubmit="return false;">
                             <div class="two fields">
                                 <div class="field">
@@ -28,15 +35,15 @@
                                 </div>
                                 <div class="field">
                                     <label>视频文件</label>
-                                    <input type="file" name="videoFile" id="videoFile">
+                                    <input type="file" style="height: 32px" name="videoFile" id="videoFile">
                                 </div>
                             </div>
                             <div class="inline fields">
                                 <label>视频质量</label>
-                                <div class="field">
+                                <div class="field" th:each="quality,index in ${qualities}">
                                     <div class="ui radio checkbox">
-                                        <input type="radio" name="videoQuality" checked="checked">
-                                        <label>高清</label>
+                                        <input th:value="${quality.name}" type="radio" name="videoQuality">
+                                        <label th:text="${quality.name}">高清</label>
                                     </div>
                                 </div>
                             </div>
@@ -51,10 +58,10 @@
                     </div>
                     <div class="ui bottom attached tab segment active" id="task_unFinish" data-tab="one">
                         <div class="ui middle aligned divided list">
-                            <div class="item">
+                            <div class="item" th:each="task,index in ${tasks.unfinish}">
                                 <div class="content">
                                     <div class="header" style="padding: 10px 15px 5px;">
-                                        <span style="font-size: 14px;">一出好戏</span>
+                                        <span style="font-size: 14px;" th:text="${task.name}">xxxx</span>
                                         <div class="right floated content">
                                             <i style="cursor: pointer"
                                                class="upload icon arrow large circle up outline">
@@ -62,16 +69,20 @@
                                         </div>
                                     </div>
                                     <div class="description" style="padding: 5px 10px;clear: both;">
-                                        <div class="ui active progress blue" style="height: 11px" data-percent="61"
-                                             id="example2">
+                                        <div class="ui active progress blue" style="height: 11px"
+                                             th:data-percent="${task.percent}"
+                                             th:id="'task_'+${task.id}">
                                             <div class="bar"
-                                                 style="transition-duration: 300ms; width: 61%;height: 11px">
-                                                <div class="progress">61%</div>
-                                            </div>
+                                                 th:style="'transition-duration: 300ms;height: 11px;width'+${task.percent}+'%'"
+                                            <div class="progress" th:text="${task.percent+'%'}">61%</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <!--上传隐藏的div-->
+                        <div id="uploadForm">
+
                         </div>
                     </div>
                     <div class="ui bottom attached tab segment" data-tab="two">
@@ -137,16 +148,25 @@
 
 <script th:replace="index::js_jquery"></script>
 
- <!--jquery file upload相关-->
+<!--jquery file upload相关-->
 <script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/vendor/jquery.ui.widget.js'"></script>
 <script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.iframe-transport.js'"></script>
 <script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload.js'"></script>
 <script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload-process.js'"></script>
 <script th:src="${application._staticPath}+'lib/jQuery-File-Upload/js/jquery.fileupload-validate.js'"></script>
- <!--jquery file upload相关-->
+<!--jquery file upload相关-->
 
 <script th:replace="index::js_basic"></script>
 
+<script th:src="${application._staticPath}+'/lib/jquery.form.js'"></script>
 <script th:src="${application._staticPath}+'movie-admin/movie/movieUpload.js'"></script>
-
+<script>
+    /*<![CDATA[*/
+    var tasks =
+    /*[[${tasks}]]*/
+    var task_unfinish = tasks.unfinish||[];
+    var task_done = tasks.done||[];
+    var task_trash = tasks.trash||[];
+    /*]]>*/
+</script>
 </html>

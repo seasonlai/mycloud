@@ -48,3 +48,5 @@ file:
     format: jpg|png|gif|bmp
   tmp:
     path: D:/mycloud/tmp/
+  video:
+    path: D:/mycloud/videos/

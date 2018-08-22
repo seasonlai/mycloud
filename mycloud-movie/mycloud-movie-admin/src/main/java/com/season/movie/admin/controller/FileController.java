@@ -10,12 +10,12 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +31,24 @@ import java.util.*;
 public class FileController extends BaseController {
 
     static Logger logger = LoggerFactory.getLogger(FileController.class);
+
+    @Deprecated
+    @ApiIgnore
+    @GetMapping("/upload")
+    public ModelAndView uploadTest() {
+        return new ModelAndView("uploadTest");
+    }
+
+    @Deprecated
+    @ApiIgnore
+    @GetMapping("/getFileOffset")
+    public BaseResult uploadOffset(String fileName, HttpServletRequest request) {
+        File file = new File(WebFileUtils.getVideoFileDir(request), fileName);
+        if (file.exists()) {
+            return BaseResult.successData(file.length());
+        }
+        return BaseResult.result(ResultCode.ERROR, "文件不存在");
+    }
 
     @ApiOperation(value = "上传图片", httpMethod = "POST")
     @PostMapping("/uploadImg")
@@ -62,6 +80,7 @@ public class FileController extends BaseController {
 
     }
 
+
     @PostMapping("/uploadFilePair")
     public BaseResult upload(HttpServletRequest request,
                              @RequestParam(value = "fileName", required = false) String fileName,
@@ -74,12 +93,21 @@ public class FileController extends BaseController {
         MultipartFile file = multipartRequest.getFile("file");
 
         if (Objects.isNull(file)) {
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             throw new BaseException(ResultCode.VALIDATE_ERROR, "文件内容为空");
         }
         //生成文件名
         if (Objects.isNull(fileName)) {
             String originName = file.getOriginalFilename();
-            String suffix = originName.substring(originName.lastIndexOf("."));
+//            if (StringUtils.isEmpty(originName) || !originName.contains(".")) {
+//                response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+//                throw new BaseException(ResultCode.VALIDATE_ERROR, "文件名格式不支持");
+//            }
+            int index = originName.lastIndexOf(".");
+            String suffix = "";
+            if (index >= 0) {
+                suffix = originName.substring(index);
+            }
             fileName = WebFileUtils.getFileNameWithTimestamp(UUID.randomUUID().toString() + suffix);
         }
 
@@ -92,8 +120,10 @@ public class FileController extends BaseController {
         return BaseResult.successData(fileName);
     }
 
+
     private void SaveAs(File saveFile, MultipartFile file,
-                        HttpServletRequest request, HttpServletResponse response) throws Exception {
+                        HttpServletRequest request,
+                        HttpServletResponse response) throws Exception {
 
         long lStartPos = 0;
         int startPosition = 0;

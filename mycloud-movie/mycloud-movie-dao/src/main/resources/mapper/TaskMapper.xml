@@ -9,8 +9,11 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="filePath" property="filepath" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="BIGINT" />
-    <result column="process" property="process" jdbcType="BIGINT" />
+    <result column="progress" property="progress" jdbcType="BIGINT" />
+    <result column="percent" property="percent" jdbcType="DECIMAL" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="kind" property="kind" jdbcType="TINYINT" />
+    <result column="userId" property="userId" jdbcType="BIGINT" />
+    <result column="targetId" property="targetId" jdbcType="BIGINT" />
   </resultMap>
 </mapper>
