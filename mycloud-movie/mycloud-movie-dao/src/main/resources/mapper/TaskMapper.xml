@@ -7,13 +7,14 @@
     -->
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="filePath" property="filepath" jdbcType="VARCHAR" />
+    <result column="file_path" property="filePath" jdbcType="VARCHAR" />
+    <result column="save_path" property="savePath" jdbcType="VARCHAR" />
     <result column="size" property="size" jdbcType="BIGINT" />
     <result column="progress" property="progress" jdbcType="BIGINT" />
     <result column="percent" property="percent" jdbcType="DECIMAL" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="kind" property="kind" jdbcType="TINYINT" />
-    <result column="userId" property="userId" jdbcType="BIGINT" />
-    <result column="targetId" property="targetId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="target_id" property="targetId" jdbcType="BIGINT" />
   </resultMap>
 </mapper>

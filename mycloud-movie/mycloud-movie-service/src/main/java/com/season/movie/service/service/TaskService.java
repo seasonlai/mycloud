@@ -27,15 +27,19 @@ public class TaskService extends BaseService {
         tasks.forEach(task -> {
             List<Task> taskList = null;
             boolean toAdd = true;
+            String key = null;
             switch (task.getStatus()) {
                 case TRASH:
-                    taskList = taskMap.get("trash");
+                    key = "trash";
+                    taskList = taskMap.get(key);
                     break;
                 case DONE:
-                    taskList = taskMap.get("done");
+                    key = "done";
+                    taskList = taskMap.get(key);
                     break;
                 case UNFINISH:
-                    taskList = taskMap.get("unfinish");
+                    key = "unfinish";
+                    taskList = taskMap.get(key);
                     break;
                 default:
                     toAdd = false;
@@ -43,6 +47,7 @@ public class TaskService extends BaseService {
             if (toAdd) {
                 if (Objects.isNull(taskList)) {
                     taskList = new ArrayList<>();
+                    taskMap.put(key, taskList);
                 }
                 taskList.add(task);
             }
@@ -51,7 +56,7 @@ public class TaskService extends BaseService {
         return taskMap;
     }
 
-    public void add(Task task){
+    public void add(Task task) {
         throwExceptionIfExistNull(task);
         taskMapper.insert(task);
     }

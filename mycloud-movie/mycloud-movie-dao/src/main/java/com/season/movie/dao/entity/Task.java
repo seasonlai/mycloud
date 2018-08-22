@@ -21,8 +21,14 @@ public class Task {
     /**
      * 文件路径
      */
-    @Column(name = "filePath")
-    private String filepath;
+    @Column(name = "file_path")
+    private String filePath;
+
+    /**
+     * 文件路径
+     */
+    @Column(name = "save_path")
+    private String savePath;
 
     /**
      * 文件大小
@@ -101,8 +107,8 @@ public class Task {
      *
      * @return filePath - 文件路径
      */
-    public String getFilepath() {
-        return filepath;
+    public String getFilePath() {
+        return filePath;
     }
 
     /**
@@ -110,8 +116,16 @@ public class Task {
      *
      * @param filepath 文件路径
      */
-    public void setFilepath(String filepath) {
-        this.filepath = filepath;
+    public void setFilePath(String filepath) {
+        this.filePath = filepath;
+    }
+
+    public String getSavePath() {
+        return savePath;
+    }
+
+    public void setSavePath(String savePath) {
+        this.savePath = savePath;
     }
 
     /**

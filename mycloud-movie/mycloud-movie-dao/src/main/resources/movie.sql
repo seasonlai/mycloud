@@ -138,9 +138,9 @@ CREATE TABLE task (
   COMMENT 'id',
   name      VARCHAR(200) NOT NULL
   COMMENT '任务名称',
-  filePath  VARCHAR(200) NOT NULL
+  file_path  VARCHAR(200)
   COMMENT '文件路径',
-  savePath  VARCHAR(200) NOT NULL
+  save_path  VARCHAR(200)
   COMMENT '保存文件名称/路径',
   size      BIGINT        DEFAULT 0
   COMMENT '文件大小',

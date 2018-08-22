@@ -40,7 +40,7 @@
                             </div>
                             <div class="inline fields">
                                 <label>视频质量</label>
-                                <div class="field" th:each="quality,index in ${qualities}">
+                                <div class="field" th:each="quality,stat : ${qualities}">
                                     <div class="ui radio checkbox">
                                         <input th:value="${quality.name}" type="radio" name="videoQuality">
                                         <label th:text="${quality.name}">高清</label>
@@ -57,29 +57,29 @@
                         </form>
                     </div>
                     <div class="ui bottom attached tab segment active" id="task_unFinish" data-tab="one">
-                        <div class="ui middle aligned divided list">
-                            <div class="item" th:each="task,index in ${tasks.unfinish}">
-                                <div class="content">
-                                    <div class="header" style="padding: 10px 15px 5px;">
-                                        <span style="font-size: 14px;" th:text="${task.name}">xxxx</span>
-                                        <div class="right floated content">
-                                            <i style="cursor: pointer"
-                                               class="upload icon arrow large circle up outline">
-                                            </i>
-                                        </div>
-                                    </div>
-                                    <div class="description" style="padding: 5px 10px;clear: both;">
-                                        <div class="ui active progress blue" style="height: 11px"
-                                             th:data-percent="${task.percent}"
-                                             th:id="'task_'+${task.id}">
-                                            <div class="bar"
-                                                 th:style="'transition-duration: 300ms;height: 11px;width'+${task.percent}+'%'"
-                                            <div class="progress" th:text="${task.percent+'%'}">61%</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!--<div class="ui middle aligned divided list">-->
+                            <!--<div class="item" th:each="task,stat : ${tasks.unfinish}">-->
+                                <!--<div class="content">-->
+                                    <!--<div class="header" style="padding: 10px 15px 5px;">-->
+                                        <!--<span style="font-size: 14px;" th:text="${task.name}">xxxx</span>-->
+                                        <!--<div class="right floated content">-->
+                                            <!--<i style="cursor: pointer"-->
+                                               <!--class="upload icon arrow large circle up outline">-->
+                                            <!--</i>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="description" style="padding: 5px 10px;clear: both;">-->
+                                        <!--<div class="ui active progress blue" style="height: 11px"-->
+                                             <!--th:data-percent="${task.percent}"-->
+                                             <!--th:id="'task_'+${task.id}">-->
+                                            <!--<div class="bar"-->
+                                                 <!--th:style="'transition-duration: 300ms;height: 11px;width'+${task.percent}+'%'"></div>-->
+                                            <!--<div class="progress" th:text="${task.percent+'%'}">61%</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
                         <!--上传隐藏的div-->
                         <div id="uploadForm">
 
@@ -164,9 +164,9 @@
     /*<![CDATA[*/
     var tasks =
     /*[[${tasks}]]*/
-    var task_unfinish = tasks.unfinish||[];
-    var task_done = tasks.done||[];
-    var task_trash = tasks.trash||[];
+    var task_unfinish = tasks.unfinish || [];
+    var task_done = tasks.done || [];
+    var task_trash = tasks.trash || [];
     /*]]>*/
 </script>
 </html>
