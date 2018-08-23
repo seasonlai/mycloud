@@ -18,13 +18,12 @@ function initUpload() {
         var progress = parseInt(data.loaded / data.total * 100, 10);
         //更新进度条
         updateProgress(data.formData.name, progress);
-
     }).bind('fileuploaddone', function (e, data) {
         //更新完成后的状态
-        alert('完成文件上传2 - ' + data.formData.fileName);
-    }).bind('fileuploadpaste', function (e, data) {
-        alert('fileuploadpaste ');
+        var result = data.result;
+        taskFinish(data.formData.name, result.data);
     }).bind('fileuploadchunkfail', function (e, data) {
+        alert('上传失败');
         cancelUpload(data.formData.name)
     }).bind('fileuploadchunkdone', function (e, data) {
         var result = data.result;
@@ -38,24 +37,47 @@ function initUpload() {
 function startUpload(taskName) {
     var task = getTask(taskName);
     if (task) {
-        $.getJSON('/file/getFileOffset', {fileName: task.filePath}, function (result) {
-            if (result.code === 0) {
-                task.data.uploadedBytes = result.data;
-                $.blueimp.fileupload.prototype
-                    .options.add.call(task.context, task.e, task.data);
-            }
-            task.jqXHR = task.data.submit(); //更改按钮为停止
-            updateProgressStatus(taskName,true);
-            $('#uploadBtn_' + task.id)
-                .removeClass("arrow")
-                .removeClass('up')
-                .addClass('pause')
-                .unbind()
-                .click(function () {
-                    cancelUpload(taskName);
-                });
-        }).fail(function () {
-            alert('请求资源失败');
+
+        $('#uploadBtn_' + task.id).after('<div>正在计算MD5...<span id="md5progress_'+task.id+'"></span></div>').hide();
+        var tmpMd5;
+        getFileMd5({
+            file: task.data.files[0],
+            chunkSize:1000000
+        }).progress(function (progress) {
+            $('#md5progress_'+task.id).html(progress+'%');
+        }).success(function (md5) {
+            tmpMd5 = md5;
+        }).always(function () {
+            $.getJSON('/file/getFileOffset', {fileName: task.filePath, md5: tmpMd5}, function (result) {
+                if (commonResultHandle(result)) {
+                    if (result.data == -2) {
+                        //已经上传过了
+                        task.filePath = result.msg;
+                        taskFinish(task.name);
+                        return;
+                    } else if (result.data > 0) {
+                        task.data.uploadedBytes = result.data;
+                        $.blueimp.fileupload.prototype
+                            .options.add.call(task.context, task.e, task.data);
+                    }
+                    task.jqXHR = task.data.submit(); //更改按钮为停止
+                    updateProgressStatus(taskName, true);
+                    $('#uploadBtn_' + task.id)
+                        .removeClass("arrow")
+                        .removeClass('up')
+                        .addClass('pause')
+                        .unbind()
+                        .click(function () {
+                            cancelUpload(taskName);
+                        })
+                        .show()
+                        .siblings()
+                        .remove();
+                }
+            }).error(function () {
+                alert('请求资源失败');
+            });
+
         });
 
     }
@@ -70,7 +92,7 @@ function cancelUpload(taskName) {
     var task = getTask(taskName);
     if (task) {
         task.jqXHR.abort();
-        updateProgressStatus(taskName,false);
+        updateProgressStatus(taskName, false);
         //更改为上传按钮
         $('#uploadBtn_' + task.id)
             .addClass("arrow")
@@ -91,7 +113,7 @@ function getTask(taskName) {
     }
 }
 //更新进度条
-function updateProgress(taskName, progress, switchStatus) {
+function updateProgress(taskName, progress) {
     var task = getTask(taskName);
     if (task) {
         $('#progress_' + task.id).attr('data-percent', progress)
@@ -100,7 +122,7 @@ function updateProgress(taskName, progress, switchStatus) {
     }
 }
 //更新进度条状态
-function updateProgressStatus(taskName,status) {
+function updateProgressStatus(taskName, status) {
     var task = getTask(taskName);
     if (!task) {
         return;
@@ -137,7 +159,8 @@ function addTaskItem(data, e, context) {
                     kind: 0,//类型为上传
                     targetId: targetId,
                     name: $('#videoName').val(),
-                    filePath: $('#videoFile').val()
+                    filePath: $('#videoFile').val(),
+                    size: data.files[0].size
                 }, function (result) {
                     if (commonResultHandle(result)) {
                         var task = result.data;
@@ -167,7 +190,7 @@ function addTaskItem(data, e, context) {
 function addTaskItemUI(task) {
     if (!task)
         return;
-    var item = '<div class="item" id="task_'+task.id+'">'
+    var item = '<div class="item" id="task_' + task.id + '">'
         + '<div class="content">'
         + '<div class="header" style="padding: 10px 15px 5px;">'
         + '<span style="font-size: 14px;">' + task.name + '</span>'
@@ -188,12 +211,44 @@ function addTaskItemUI(task) {
     $('#task_unFinish').append(item);
 }
 
-function taskFinish(taskName) {
+function taskFinish(taskName, filePath) {
     var task = getTask(taskName);
     if (!task) {
         return;
     }
+    updateProgress(task.name, 100);
+    //
+    $.post('/video/update', {
+        id: task.targetId,
+        code: filePath || task.filePath,
+        status: 0//可用
+    }, function (result) {
+        //把其从未完成列表移到已完成列表
+        if (commonResultHandle(result)) {
+            $('#task_' + task.id).remove();
+            addFinishItem(task);
+        }
+    }, 'json').error(function () {
+        //提交信息失败
+        alert("请求失败");
+    });
 
+}
+
+function addFinishItem(task) {
+    if (!task)
+        return;
+    var item = '<div class="item" id="finish_' + task.id + '">'
+        + '<div class="content">'
+        + '<div class="header" style="padding: 10px 15px 5px;">'
+        + '<span style="font-size: 14px;">' + task.name + '</span>'
+        + '</div>'
+        + '<div class="description" style="padding: 5px 10px;clear: both;">'
+        + '<span>文件大小：' + getBetterFileSize(task.size) + '</span>'
+        + '</div>'
+        + '</div>'
+        + '</div>';
+    $('#task_finish').append(item);
 }
 
 

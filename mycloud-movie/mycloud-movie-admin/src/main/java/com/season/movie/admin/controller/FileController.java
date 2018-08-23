@@ -3,13 +3,16 @@ package com.season.movie.admin.controller;
 import com.season.common.base.BaseException;
 import com.season.common.base.BaseResult;
 import com.season.common.model.ResultCode;
+import com.season.common.util.FileMd5Util;
 import com.season.common.web.util.WebFileUtils;
+import com.season.movie.dao.entity.FileInfo;
+import com.season.movie.service.service.FileInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +35,8 @@ public class FileController extends BaseController {
 
     static Logger logger = LoggerFactory.getLogger(FileController.class);
 
+    @Autowired
+    FileInfoService fileInfoService;
 
     @Deprecated
     @ApiIgnore
@@ -43,12 +48,21 @@ public class FileController extends BaseController {
     @Deprecated
     @ApiIgnore
     @GetMapping("/getFileOffset")
-    public BaseResult uploadOffset(String fileName, HttpServletRequest request) {
+    public BaseResult getFileInfo(@RequestParam("fileName") String fileName,
+                                  HttpServletRequest request,
+                                  @RequestParam(value = "md5", required = false) String md5) {
+
+        if (!StringUtils.isEmpty(md5)) {
+            FileInfo info = fileInfoService.findByMd5(md5);
+            if (!Objects.isNull(info)) {
+                return BaseResult.success(info.getName(), -2);//文件已上传过了
+            }
+        }
         File file = new File(WebFileUtils.getVideoFileDir(request), fileName);
         if (file.exists()) {
             return BaseResult.successData(file.length());
         }
-        return BaseResult.result(ResultCode.ERROR, "文件不存在");
+        return BaseResult.successData(-1);
     }
 
     @ApiOperation(value = "上传图片", httpMethod = "POST")
@@ -85,12 +99,12 @@ public class FileController extends BaseController {
     @PostMapping("/uploadFilePair")
     public BaseResult upload(HttpServletRequest request,
                              @RequestParam(value = "fileName", required = false) String fileName,
+                             @RequestParam(value = "md5", required = false) String md5,
                              HttpServletResponse response) throws Exception {
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         // 获取传入文件
         multipartRequest.setCharacterEncoding("utf-8");
-        Iterator<String> fileNames = multipartRequest.getFileNames();
         MultipartFile file = multipartRequest.getFile("file");
 
         if (Objects.isNull(file)) {
@@ -116,33 +130,47 @@ public class FileController extends BaseController {
         if (Objects.isNull(videoFileDir)) {
             throw new BaseException(ResultCode.SERVICE_ERROR, "文件保存路径获取失败");
         }
-        this.SaveAs(new File(videoFileDir, fileName), file, request);
+        File saveFile = new File(videoFileDir, fileName);
+        boolean finish = this.saveFile(saveFile, file, request);
+        //完成上传就记录文件的MD5
+        if (finish
+                && (!StringUtils.isEmpty(md5)
+                || !(StringUtils.isEmpty(md5 = FileMd5Util.getFileMD5(saveFile))))) {
+
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setMd5(md5);
+            fileInfo.setName(fileName);
+            fileInfoService.add(fileInfo);
+        }
         // 设置返回值
         return BaseResult.successData(fileName);
     }
 
 
-    private void SaveAs(File saveFile, MultipartFile file,
-                        HttpServletRequest request) throws Exception {
+    private boolean saveFile(File saveFile, MultipartFile file,
+                             HttpServletRequest request) throws Exception {
 
         long lStartPos = 0;
         long startPosition = 0;
         long endPosition = 0;
+        long totalSize = 0;
         String contentRange = request.getHeader("Content-Range");
         if (logger.isDebugEnabled()) {
             logger.debug("上传文件：{} - {}", saveFile.getName(), contentRange);
         }
         if (StringUtils.isEmpty(contentRange)) {
             FileUtils.copyInputStreamToFile(file.getInputStream(), saveFile);
+            return true;
         } else {
             // bytes 10000-19999/1157632     将获取到的数据进行处理截取出开始跟结束位置
             contentRange = contentRange.replace("bytes", "").trim();
-            contentRange = contentRange.substring(0,
-                    contentRange.indexOf("/"));
-            String[] ranges = contentRange.split("-");
+            int splitIndex = contentRange.indexOf("/");
+            String rangeStr = contentRange.substring(0, splitIndex);
+            String totalStr = contentRange.substring(splitIndex+1);
+            String[] ranges = rangeStr.split("-");
             startPosition = Integer.parseInt(ranges[0]);
             endPosition = Integer.parseInt(ranges[1]);
-
+            totalSize = Integer.parseInt(totalStr);
             //判断所上传文件是否已经存在，若存在则返回存在文件的大小
             RandomAccessFile accessFile = new RandomAccessFile(saveFile, "rw");
             lStartPos = accessFile.length();
@@ -150,7 +178,7 @@ public class FileController extends BaseController {
             //判断所上传文件片段是否存在，若存在则直接返回
             if (lStartPos > endPosition) {
                 accessFile.close();
-                return;
+                return false;
             }
             //要写文件
             long needRead;
@@ -165,12 +193,16 @@ public class FileController extends BaseController {
             byte[] data = new byte[(int) needRead];
             try {
                 int count = file.getInputStream().read(data);
-                if(count!=-1){
+                if (count != -1) {
                     accessFile.write(data, 0, count);
                 }
             } finally {
                 accessFile.close();
             }
+
+            //
+            return endPosition == totalSize-1;
+
         }
 
     }

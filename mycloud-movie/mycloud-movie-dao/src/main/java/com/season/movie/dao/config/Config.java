@@ -1,27 +1,22 @@
 package com.season.movie.dao.config;
 
 import com.season.movie.dao.base.BaseEnum;
-import com.season.movie.dao.handler.AutoEnumTypeHandler;
+import com.season.movie.dao.handler.BaseEnumTypeHandler;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import tk.mybatis.spring.annotation.MapperScan;
 
 import javax.sql.DataSource;
-import java.awt.image.BufferedImage;
 
 /**
  * Created by season on 2018/8/19.
  */
-@Configuration
-@MapperScan("com.season.movie.dao.mapper")
+//@Configuration
 public class Config {
 
     //
@@ -47,7 +42,7 @@ public class Config {
         TypeHandlerRegistry typeHandlerRegistry = sqlSessionFactory.getConfiguration()
                 .getTypeHandlerRegistry();
         // 注册默认枚举转换器
-        typeHandlerRegistry.register(BaseEnum.class, AutoEnumTypeHandler.class);
+        typeHandlerRegistry.setDefaultEnumTypeHandler();
         return sqlSessionFactory;
 
     }

@@ -138,9 +138,9 @@ CREATE TABLE task (
   COMMENT 'id',
   name      VARCHAR(200) NOT NULL
   COMMENT '任务名称',
-  file_path  VARCHAR(200)
+  file_path VARCHAR(200)
   COMMENT '文件路径',
-  save_path  VARCHAR(200)
+  save_path VARCHAR(200)
   COMMENT '保存文件名称/路径',
   size      BIGINT        DEFAULT 0
   COMMENT '文件大小',
@@ -174,7 +174,7 @@ CREATE TABLE video (
   COMMENT '视频码/文件名',
   description VARCHAR(100) COMMENT '描述',
   quality     VARCHAR(50) COMMENT '质量: 高清，标清...',
-  status      TINYINT   DEFAULT 0
+  status      TINYINT   DEFAULT -100
   COMMENT '状态：可用、不存在、侵权...',
   create_time TIMESTAMP DEFAULT current_timestamp
   COMMENT '创建时间',
@@ -194,9 +194,29 @@ CREATE TABLE quality (
   PRIMARY KEY (id)
 )
   ENGINE = InnoDB
-  DEFAULT CHARSET utf8
+  DEFAULT CHARSET = utf8
   COMMENT '质量表';
+ALTER TABLE movie_detail
+  ADD COLUMN video_id BIGINT DEFAULT NULL
+COMMENT '视频id';
 -- 给表movieDetail添加视频源列
 ALTER TABLE movie_detail
   ADD COLUMN video_id BIGINT DEFAULT NULL
 COMMENT '视频id';
+
+-- 2018-08-23更新---------
+-- 增加文件表
+DROP TABLE IF EXISTS file_info;
+CREATE TABLE file_info (
+  id   INT AUTO_INCREMENT
+  COMMENT '文件ID',
+  name VARCHAR(100) NOT NULL
+  COMMENT '文件名',
+  md5  VARCHAR(100) UNIQUE NOT NULL
+  COMMENT 'MD5的值',
+  KEY (id),
+  INDEX (md5)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COMMENT '文件表';

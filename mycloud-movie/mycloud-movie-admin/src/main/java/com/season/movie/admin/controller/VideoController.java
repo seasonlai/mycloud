@@ -30,7 +30,7 @@ public class VideoController {
     @Autowired
     VideoService videoService;
 
-    @ApiOperation(value = "添加视频", httpMethod = "POST",notes = "返回视频ID")
+    @ApiOperation(value = "添加视频", httpMethod = "POST", notes = "返回视频ID")
     @PostMapping("/add")
     public Object addVideo(@Validated VideoForm videoForm) {
 
@@ -51,5 +51,11 @@ public class VideoController {
         return BaseResult.successData(video.getId());
     }
 
+    @ApiOperation(value = "更新视频", httpMethod = "POST")
+    @PostMapping("/update")
+    public Object updateVideo(Video video) {
+        videoService.update(video);
+        return BaseResult.successData(video);
+    }
 
 }

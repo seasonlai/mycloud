@@ -9,6 +9,7 @@ spring:
 mybatis:
   type-aliases-package: com.season.movie.dao.entity
   mapper-locations: classpath:mapper/*.xml
+  type-handlers-package: com.season.movie.dao.handler
 mapper:
   mappers: com.season.movie.dao.MyMapper
   not-empty: false

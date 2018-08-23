@@ -12,6 +12,6 @@
     <result column="quality" property="quality" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="userId" property="userId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
   </resultMap>
 </mapper>

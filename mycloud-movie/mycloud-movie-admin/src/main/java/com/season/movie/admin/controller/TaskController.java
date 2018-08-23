@@ -34,25 +34,22 @@ public class TaskController {
 
     @ApiOperation(value = "添加任务", httpMethod = "POST")
     @PostMapping("/add")
-    public Object add(@RequestParam("kind") Byte kind
-            , @RequestParam("targetId") Long targetId
-            , @RequestParam("name") String name
-            , @RequestParam(value = "filePath", required = false) String filePath) {
+    public Object add(Task task) {
         LoginUser loginUser = SSOClientUtil.getLoginUser();
         if (Objects.isNull(loginUser)) {
             throw new BaseException(ResultCode.SERVICE_ERROR, "获取用户失败");
         }
-        Task task = new Task();
-        task.setTargetId(targetId);
-        task.setKind(kind);
+//        Task task = new Task();
+//        task.setTargetId(targetId);
+//        task.setKind(kind);
         task.setUserId(loginUser.getId());
-        task.setName(name);
+//        task.setName(name);
         task.setStatus(TaskStatus.UNFINISH);
         String rPath = UUID.randomUUID().toString();
-        if (!StringUtils.isEmpty(filePath)) {
-            int index = filePath.lastIndexOf(".");
+        if (!StringUtils.isEmpty(task.getFilePath())) {
+            int index = task.getFilePath().lastIndexOf(".");
             if (index > 0) {//等于0也太奇怪了吧
-                rPath += filePath.substring(index);
+                rPath += task.getFilePath().substring(index);
             }
         }
         task.setFilePath(rPath);

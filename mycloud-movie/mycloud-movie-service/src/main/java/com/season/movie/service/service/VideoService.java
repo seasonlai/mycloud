@@ -21,4 +21,7 @@ public class VideoService extends BaseService {
         videoMapper.insert(video);
     }
 
+    public void update(Video video) {
+        videoMapper.updateByPrimaryKeySelective(video);
+    }
 }
