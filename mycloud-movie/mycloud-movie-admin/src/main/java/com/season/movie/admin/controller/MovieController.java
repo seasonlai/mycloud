@@ -47,8 +47,6 @@ public class MovieController extends BaseController {
     MovieService movieService;
     @Autowired
     QualityService qualityService;
-    @Autowired
-    TaskService taskService;
 
     @ApiOperation(value = "影片列表页面", httpMethod = "GET")
     @GetMapping("/movieList")
@@ -70,8 +68,6 @@ public class MovieController extends BaseController {
         ModelAndView mav = new ModelAndView("movie/movieUpload");
         List<Quality> qualities = qualityService.listAll();
         mav.addObject("qualities", qualities);
-        Object tasks = taskService.listAll();
-        mav.addObject("tasks",tasks);
         return mav;
     }
 

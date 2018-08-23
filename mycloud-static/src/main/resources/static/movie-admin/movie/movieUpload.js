@@ -1,3 +1,4 @@
+var task_unfinish = [];
 function initUpload() {
     var context;
     $("#uploadForm").fileupload({
@@ -12,27 +13,23 @@ function initUpload() {
         add: function (e, data) {
             context = this;
             addTaskItem(data, e, context);
-        }, done: function (e, data) {
-            alert('完成文件上传 - ' + data.formData.fileName);
         }
     }).bind('fileuploadprogress', function (e, data) {
-        var progress = parseInt(data.loaded / data.total * 100, 10) - 1;
+        var progress = parseInt(data.loaded / data.total * 100, 10);
         //更新进度条
-        updateProgress(data.files[0].name, progress);
+        updateProgress(data.formData.name, progress);
 
     }).bind('fileuploaddone', function (e, data) {
         //更新完成后的状态
         alert('完成文件上传2 - ' + data.formData.fileName);
     }).bind('fileuploadpaste', function (e, data) {
-
+        alert('fileuploadpaste ');
     }).bind('fileuploadchunkfail', function (e, data) {
-        cancelUpload(data.formData.fileName)
-    }).bind('fileuploadchunksend', function (e, data) {
-        // data.formData={fileName}
+        cancelUpload(data.formData.name)
     }).bind('fileuploadchunkdone', function (e, data) {
         var result = data.result;
         if (!commonResultHandle(result)) {
-            cancelUpload(data.formData.fileName)
+            cancelUpload(data.formData.name)
         }
     });
 
@@ -48,6 +45,7 @@ function startUpload(taskName) {
                     .options.add.call(task.context, task.e, task.data);
             }
             task.jqXHR = task.data.submit(); //更改按钮为停止
+            updateProgressStatus(taskName,true);
             $('#uploadBtn_' + task.id)
                 .removeClass("arrow")
                 .removeClass('up')
@@ -70,8 +68,9 @@ function getFiles(filePath) {
 //取消上传
 function cancelUpload(taskName) {
     var task = getTask(taskName);
-    if (task){
+    if (task) {
         task.jqXHR.abort();
+        updateProgressStatus(taskName,false);
         //更改为上传按钮
         $('#uploadBtn_' + task.id)
             .addClass("arrow")
@@ -92,14 +91,27 @@ function getTask(taskName) {
     }
 }
 //更新进度条
-function updateProgress(taskName, progress) {
+function updateProgress(taskName, progress, switchStatus) {
     var task = getTask(taskName);
     if (task) {
-        $('#task_' + task.id).attr('data-percent', progress)
+        $('#progress_' + task.id).attr('data-percent', progress)
             .find('.bar').css('width', progress + '%')
-            .end().find('progress').html(progress + '%');
+            .end().find('.progress').html(progress + '%');
     }
 }
+//更新进度条状态
+function updateProgressStatus(taskName,status) {
+    var task = getTask(taskName);
+    if (!task) {
+        return;
+    }
+    if (status) {
+        $('#progress_' + task.id).addClass('active');
+    } else {
+        $('#progress_' + task.id).removeClass('active');
+    }
+}
+
 //切换tab
 function changeTab(tag) {
     var $taskList = $('#taskList');
@@ -108,15 +120,14 @@ function changeTab(tag) {
 }
 //添加任务
 function addTaskItem(data, e, context) {
-    var $form = $('#videoForm');
     $.ajax({
         url: '/video/add',
         dataType: 'json',
-        type:'post',
-        data:{
-            videoName:$('#videoName').val(),
-            videoDesc:$('#videoDesc').val(),
-            videoQuality:'高清'//$('#videoQuality').val()
+        type: 'post',
+        data: {
+            videoName: $('#videoName').val(),
+            videoDesc: $('#videoDesc').val(),
+            videoQuality: '高清'//$('#videoQuality').val()
         },
         success: function (result) {
             if (commonResultHandle(result)) {
@@ -131,7 +142,7 @@ function addTaskItem(data, e, context) {
                     if (commonResultHandle(result)) {
                         var task = result.data;
                         //添加表单信息
-                        data.formData = {fileName: task.filePath};
+                        data.formData = {fileName: task.filePath, name: task.name};
                         task.data = data;
                         task.e = e;
                         task.context = context;
@@ -140,6 +151,7 @@ function addTaskItem(data, e, context) {
                         addTaskItemUI(task);
                         //切换TAB
                         changeTab('one');
+                        startUpload(task.name);
                     }
                 }, 'json');
             }
@@ -155,28 +167,35 @@ function addTaskItem(data, e, context) {
 function addTaskItemUI(task) {
     if (!task)
         return;
-    var item = '<div class="ui middle aligned divided list">'
-        + '<div class="item">'
+    var item = '<div class="item" id="task_'+task.id+'">'
         + '<div class="content">'
         + '<div class="header" style="padding: 10px 15px 5px;">'
         + '<span style="font-size: 14px;">' + task.name + '</span>'
         + '<div class="right floated content">'
-        + '<i style="cursor: pointer" id="uploadBtn_"' + task.id + ' class="upload icon arrow large circle up outline">'
+        + '<i style="cursor: pointer" id="uploadBtn_' + task.id + '" class="upload icon arrow large circle up outline">'
         + '</i>'
         + '</div>'
         + '</div>'
         + '<div class="description" style="padding: 5px 10px;clear: both;">'
-        + '<div class="ui active progress blue" style="height: 11px" data-percent="0" '
+        + '<div class="ui progress blue" style="height: 11px" data-percent="0" '
         + 'id="progress_' + task.id + '">'
         + '<div class="bar"  style="transition-duration: 300ms; width: 0;height: 11px">'
         + '<div class="progress">0%</div>'
         + '</div>'
         + '</div>'
         + '</div>'
-        + '</div>'
         + '</div>';
     $('#task_unFinish').append(item);
 }
+
+function taskFinish(taskName) {
+    var task = getTask(taskName);
+    if (!task) {
+        return;
+    }
+
+}
+
 
 $('#videoForm').form({
     inline: true,
@@ -212,6 +231,11 @@ $('#videoForm').form({
 });
 //提交视频
 function submitVideo() {
+    var task = getTask($('#videoName').val());
+    if (task) {
+        alert('任务已存在');
+        return;
+    }
     //添加一个video
     $('#uploadForm').fileupload('add', {files: $('#videoFile').prop('files')});
 }

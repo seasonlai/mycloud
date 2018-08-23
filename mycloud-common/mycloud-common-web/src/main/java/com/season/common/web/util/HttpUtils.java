@@ -2,6 +2,8 @@ package com.season.common.web.util;
 
 import com.season.common.util.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +20,7 @@ import java.util.Map;
  */
 public class HttpUtils {
 
+    static Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 
     /**
      * 移除url中的code、username参数
@@ -115,7 +118,7 @@ public class HttpUtils {
             out = response.getWriter();
             out.write(JsonUtils.parseBeanToJson(data));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.info("写json数据失败，连接已关闭?");
         } finally {
             if (out != null) {
                 out.close();

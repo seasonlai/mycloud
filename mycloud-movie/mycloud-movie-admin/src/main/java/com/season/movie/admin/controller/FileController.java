@@ -32,6 +32,7 @@ public class FileController extends BaseController {
 
     static Logger logger = LoggerFactory.getLogger(FileController.class);
 
+
     @Deprecated
     @ApiIgnore
     @GetMapping("/upload")
@@ -115,83 +116,61 @@ public class FileController extends BaseController {
         if (Objects.isNull(videoFileDir)) {
             throw new BaseException(ResultCode.SERVICE_ERROR, "文件保存路径获取失败");
         }
-        this.SaveAs(new File(videoFileDir, fileName), file, request, response);
+        this.SaveAs(new File(videoFileDir, fileName), file, request);
         // 设置返回值
         return BaseResult.successData(fileName);
     }
 
 
     private void SaveAs(File saveFile, MultipartFile file,
-                        HttpServletRequest request,
-                        HttpServletResponse response) throws Exception {
+                        HttpServletRequest request) throws Exception {
 
         long lStartPos = 0;
-        int startPosition = 0;
-        int endPosition = 0;
-        int fileLength = 100000;
-        OutputStream fs = null;
-
+        long startPosition = 0;
+        long endPosition = 0;
         String contentRange = request.getHeader("Content-Range");
-        System.out.println(contentRange);
-        if (!new File("uploadDemo").exists()) {
-            new File("uploadDemo").mkdirs();
+        if (logger.isDebugEnabled()) {
+            logger.debug("上传文件：{} - {}", saveFile.getName(), contentRange);
         }
-        if (contentRange == null) {
-            FileUtils.writeByteArrayToFile(saveFile,
-                    file.getBytes());
-
+        if (StringUtils.isEmpty(contentRange)) {
+            FileUtils.copyInputStreamToFile(file.getInputStream(), saveFile);
         } else {
             // bytes 10000-19999/1157632     将获取到的数据进行处理截取出开始跟结束位置
-            if (contentRange != null && contentRange.length() > 0) {
-                contentRange = contentRange.replace("bytes", "").trim();
-                contentRange = contentRange.substring(0,
-                        contentRange.indexOf("/"));
-                String[] ranges = contentRange.split("-");
-                startPosition = Integer.parseInt(ranges[0]);
-                endPosition = Integer.parseInt(ranges[1]);
-            }
+            contentRange = contentRange.replace("bytes", "").trim();
+            contentRange = contentRange.substring(0,
+                    contentRange.indexOf("/"));
+            String[] ranges = contentRange.split("-");
+            startPosition = Integer.parseInt(ranges[0]);
+            endPosition = Integer.parseInt(ranges[1]);
 
             //判断所上传文件是否已经存在，若存在则返回存在文件的大小
-            if (saveFile.exists()) {
-                fs = new FileOutputStream(saveFile, true);
-                FileInputStream fi = new FileInputStream(saveFile);
-                lStartPos = fi.available();
-                fi.close();
-            } else {
-                fs = new FileOutputStream(saveFile);
-                lStartPos = 0;
-            }
+            RandomAccessFile accessFile = new RandomAccessFile(saveFile, "rw");
+            lStartPos = accessFile.length();
 
             //判断所上传文件片段是否存在，若存在则直接返回
             if (lStartPos > endPosition) {
-                fs.close();
+                accessFile.close();
                 return;
-            } else if (lStartPos < startPosition) {
-                byte[] nbytes = new byte[fileLength];
-                int nReadSize = 0;
-                file.getInputStream().skip(startPosition);
-                nReadSize = file.getInputStream().read(nbytes, 0, fileLength);
-                if (nReadSize > 0) {
-                    fs.write(nbytes, 0, nReadSize);
-                    nReadSize = file.getInputStream().read(nbytes, 0,
-                            fileLength);
-                }
-            } else if (lStartPos > startPosition && lStartPos < endPosition) {
-                byte[] nbytes = new byte[fileLength];
-                int nReadSize = 0;
-                file.getInputStream().skip(lStartPos);
-                int end = (int) (endPosition - lStartPos);
-                nReadSize = file.getInputStream().read(nbytes, 0, end);
-                if (nReadSize > 0) {
-                    fs.write(nbytes, 0, nReadSize);
-                    nReadSize = file.getInputStream().read(nbytes, 0, end);
-                }
             }
-        }
-        if (fs != null) {
-            fs.flush();
-            fs.close();
-            fs = null;
+            //要写文件
+            long needRead;
+            if (lStartPos < startPosition) {
+                accessFile.seek(startPosition);
+                needRead = endPosition - startPosition;
+            } else {
+                accessFile.seek(lStartPos);
+                file.getInputStream().skip(lStartPos);
+                needRead = endPosition - lStartPos;
+            }
+            byte[] data = new byte[(int) needRead];
+            try {
+                int count = file.getInputStream().read(data);
+                if(count!=-1){
+                    accessFile.write(data, 0, count);
+                }
+            } finally {
+                accessFile.close();
+            }
         }
 
     }

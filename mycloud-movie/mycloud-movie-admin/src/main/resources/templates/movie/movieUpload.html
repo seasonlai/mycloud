@@ -56,8 +56,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="ui bottom attached tab segment active" id="task_unFinish" data-tab="one">
-                        <!--<div class="ui middle aligned divided list">-->
+                    <div class="ui bottom attached tab segment active" data-tab="one">
+                        <div class="ui middle aligned divided list" id="task_unFinish" >
                             <!--<div class="item" th:each="task,stat : ${tasks.unfinish}">-->
                                 <!--<div class="content">-->
                                     <!--<div class="header" style="padding: 10px 15px 5px;">-->
@@ -79,7 +79,7 @@
                                     <!--</div>-->
                                 <!--</div>-->
                             <!--</div>-->
-                        <!--</div>-->
+                        </div>
                         <!--上传隐藏的div-->
                         <div id="uploadForm">
 
@@ -161,12 +161,12 @@
 <script th:src="${application._staticPath}+'/lib/jquery.form.js'"></script>
 <script th:src="${application._staticPath}+'movie-admin/movie/movieUpload.js'"></script>
 <script>
-    /*<![CDATA[*/
-    var tasks =
-    /*[[${tasks}]]*/
-    var task_unfinish = tasks.unfinish || [];
-    var task_done = tasks.done || [];
-    var task_trash = tasks.trash || [];
-    /*]]>*/
+//    /*<![CDATA[*/
+//    var tasks =
+//    /*[[${tasks}]]*/
+//    var task_unfinish = tasks.unfinish || [];
+//    var task_done = tasks.done || [];
+//    var task_trash = tasks.trash || [];
+//    /*]]>*/
 </script>
 </html>
