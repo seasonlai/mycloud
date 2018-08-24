@@ -44,7 +44,8 @@ public class VideoController {
         video.setName(videoForm.getVideoName());
         video.setDescription(videoForm.getVideoDesc());
         video.setUserId(loginUser.getId());
-        video.setQuality(videoForm.getVideoQuality());
+        video.setQualityId(videoForm.getVideoQuality().getId());
+        video.setQualityName(videoForm.getVideoQuality().getName());
 
         videoService.addVideo(video);
 

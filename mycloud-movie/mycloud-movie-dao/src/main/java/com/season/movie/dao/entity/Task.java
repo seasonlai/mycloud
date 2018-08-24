@@ -4,6 +4,7 @@ import com.season.movie.dao.enums.TaskStatus;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class Task {
     /**
@@ -48,6 +49,7 @@ public class Task {
     /**
      * 状态
      */
+    @Column
     private TaskStatus status;
 
     /**
@@ -65,6 +67,8 @@ public class Task {
      */
     @Column(name = "target_id")
     private Long targetId;
+
+    private Date createTime;
 
     /**
      * 获取id
@@ -223,5 +227,13 @@ public class Task {
 
     public void setTargetId(Long targetId) {
         this.targetId = targetId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

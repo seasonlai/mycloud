@@ -9,7 +9,8 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="description" property="description" jdbcType="VARCHAR" />
-    <result column="quality" property="quality" jdbcType="VARCHAR" />
+    <result column="quality_id" property="qualityId" jdbcType="TINYINT" />
+    <result column="quality_name" property="qualityName" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />

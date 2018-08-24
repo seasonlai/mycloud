@@ -28,4 +28,12 @@ public enum VideoStatus implements BaseEnum<VideoStatus> {
     public String getValue() {
         return desc;
     }
+
+    @Override
+    public String toString() {
+        return "VideoStatus{" +
+                "code=" + code +
+                ", desc='" + desc + '\'' +
+                '}';
+    }
 }

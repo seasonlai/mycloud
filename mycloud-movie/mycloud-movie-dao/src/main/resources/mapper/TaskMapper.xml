@@ -16,5 +16,6 @@
     <result column="kind" property="kind" jdbcType="TINYINT" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="target_id" property="targetId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
 </mapper>

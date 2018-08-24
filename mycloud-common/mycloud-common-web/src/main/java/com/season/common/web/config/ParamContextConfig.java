@@ -18,18 +18,18 @@ public class ParamContextConfig implements ServletContextListener {
 
     static Logger logger = LoggerFactory.getLogger(ParamContextConfig.class);
 
-    @Value("${mycloud.static.url:\"\"}")
+    @Value("${mycloud.static.url:}")
     private String static_path;
-    @Value("${mycloud.static.image.url:\"\"}")
+    @Value("${mycloud.static.image.url:}")
     private String static_img_path;
-    @Value("${mycloud.static.tmp.url:\"\"}")
+    @Value("${mycloud.static.tmp.url:}")
     private String static_tmp_path;
 
-    @Value("${file.image.path:\"\"}")
+    @Value("${file.image.path:}")
     private String disk_img_path;
-    @Value("${file.tmp.path:\"\"}")
+    @Value("${file.tmp.path:}")
     private String disk_tmp_path;
-    @Value("${file.video.path:\"\"}")
+    @Value("${file.video.path:}")
     private String disk_video_path;
 
     @Autowired

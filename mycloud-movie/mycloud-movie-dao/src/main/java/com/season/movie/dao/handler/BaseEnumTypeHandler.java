@@ -14,21 +14,24 @@ import com.season.movie.dao.enums.VideoStatus;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @MappedTypes({VideoStatus.class, TaskStatus.class})
-public class BaseEnumTypeHandler<E extends Enum<?> & BaseEnum> extends BaseTypeHandler<E> {
+public class BaseEnumTypeHandler<E extends Enum<E> & BaseEnum> extends BaseTypeHandler<E> {
+    static Logger logger = LoggerFactory.getLogger(BaseEnumTypeHandler.class);
     private Class<E> type;
 
     public BaseEnumTypeHandler() {
     }
 
     public BaseEnumTypeHandler(Class<E> type) {
+        logger.info("调用BaseEnumTypeHandler构造方法 -  参数：{}", type.getSimpleName());
         if (type == null) {
             throw new IllegalArgumentException("Type argument cannot be null");
         } else {
             this.type = type;
         }
-
     }
 
     @Override
@@ -58,7 +61,8 @@ public class BaseEnumTypeHandler<E extends Enum<?> & BaseEnum> extends BaseTypeH
         try {
             return this.codeOf(this.type, code);
         } catch (Exception var3) {
-            throw new IllegalArgumentException("Cannot convert " + code + " to " + this.type.getSimpleName() + " by code value.", var3);
+            throw new IllegalArgumentException("Cannot convert " + code + " to "
+                    + this.type.getSimpleName() + " by code value.", var3);
         }
     }
 

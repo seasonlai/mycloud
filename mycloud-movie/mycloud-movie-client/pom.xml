@@ -33,7 +33,7 @@
 
         <dependency>
             <groupId>com.season.movie</groupId>
-            <artifactId>mycloud-movie-dao</artifactId>
+            <artifactId>mycloud-movie-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

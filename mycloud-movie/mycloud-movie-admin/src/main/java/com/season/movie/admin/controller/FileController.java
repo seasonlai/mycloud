@@ -6,7 +6,9 @@ import com.season.common.model.ResultCode;
 import com.season.common.util.FileMd5Util;
 import com.season.common.web.util.WebFileUtils;
 import com.season.movie.dao.entity.FileInfo;
+import com.season.movie.dao.enums.TaskStatus;
 import com.season.movie.service.service.FileInfoService;
+import com.season.movie.service.service.TaskService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileUtils;
@@ -37,6 +39,8 @@ public class FileController extends BaseController {
 
     @Autowired
     FileInfoService fileInfoService;
+    @Autowired
+    TaskService taskService;
 
     @Deprecated
     @ApiIgnore
@@ -68,9 +72,9 @@ public class FileController extends BaseController {
     @ApiOperation(value = "上传图片", httpMethod = "POST")
     @PostMapping("/uploadImg")
     public BaseResult uploadMovieImg(@RequestParam("imgData") String imgData,
+                                     @RequestParam(value = "imgData2", required = false) String imgData2,
                                      @RequestParam("filename") String filename,
                                      HttpServletRequest request) {
-        String url = null;
         File tmpFileDir = WebFileUtils.getTmpFileDir(request);
         File file = WebFileUtils.getTmpFileDir(request);
         if (Objects.isNull(file)) {
@@ -80,26 +84,40 @@ public class FileController extends BaseController {
             return new BaseResult(ResultCode.IO_ERROR, "文件格式不对");
         }
         filename = WebFileUtils.getFileNameWithTimestamp(filename);
-        file = new File(tmpFileDir, filename);
-        String base64 = imgData.substring(imgData.indexOf(",") + 1);
-        byte[] decoderBytes = Base64.getDecoder().decode(base64);
         try {
-            FileUtils.writeByteArrayToFile(file, decoderBytes);
+            //写第一张图片
+            writeBase64Image(new File(tmpFileDir, filename), imgData);
         } catch (IOException e) {
-            logger.error("写文件失败", e);
+            logger.error("写图片失败"+filename, e);
             return new BaseResult(ResultCode.IO_ERROR, "上传文件失败");
         }
+        if (!StringUtils.isEmpty(imgData2)) {
+            //写第二张图片
+            filename = WebFileUtils.appendFilename(filename,"_detail");
+            try {
+                writeBase64Image(new File(tmpFileDir, filename), imgData2);
+            } catch (IOException e) {
+                logger.error("写第二张图片失败" + filename, e);
+            }
+        }
+
         //返回图片访问路径
-        url = request.getSession().getServletContext().getAttribute("_tmpPath") + filename;
+        String url = request.getSession().getServletContext().getAttribute("_tmpPath") + filename;
         return BaseResult.successData(url);
 
     }
 
+    private void writeBase64Image(File file, String imgData) throws IOException {
+        String base64 = imgData.substring(imgData.indexOf(",") + 1);
+        byte[] decoderBytes = Base64.getDecoder().decode(base64);
+        FileUtils.writeByteArrayToFile(file, decoderBytes);
+    }
 
     @PostMapping("/uploadFilePair")
     public BaseResult upload(HttpServletRequest request,
                              @RequestParam(value = "fileName", required = false) String fileName,
                              @RequestParam(value = "md5", required = false) String md5,
+                             @RequestParam(value = "taskId", required = false) Long taskId,
                              HttpServletResponse response) throws Exception {
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -133,14 +151,18 @@ public class FileController extends BaseController {
         File saveFile = new File(videoFileDir, fileName);
         boolean finish = this.saveFile(saveFile, file, request);
         //完成上传就记录文件的MD5
-        if (finish
-                && (!StringUtils.isEmpty(md5)
-                || !(StringUtils.isEmpty(md5 = FileMd5Util.getFileMD5(saveFile))))) {
+        if (finish) {
+            if ((!StringUtils.isEmpty(md5)
+                    || !(StringUtils.isEmpty(md5 = FileMd5Util.getFileMD5(saveFile))))) {
 
-            FileInfo fileInfo = new FileInfo();
-            fileInfo.setMd5(md5);
-            fileInfo.setName(fileName);
-            fileInfoService.add(fileInfo);
+                FileInfo fileInfo = new FileInfo();
+                fileInfo.setMd5(md5);
+                fileInfo.setName(fileName);
+                fileInfoService.add(fileInfo);
+            }
+            if (taskId != null) {
+                taskService.updateStatus(taskId, TaskStatus.DONE);
+            }
         }
         // 设置返回值
         return BaseResult.successData(fileName);
@@ -166,7 +188,7 @@ public class FileController extends BaseController {
             contentRange = contentRange.replace("bytes", "").trim();
             int splitIndex = contentRange.indexOf("/");
             String rangeStr = contentRange.substring(0, splitIndex);
-            String totalStr = contentRange.substring(splitIndex+1);
+            String totalStr = contentRange.substring(splitIndex + 1);
             String[] ranges = rangeStr.split("-");
             startPosition = Integer.parseInt(ranges[0]);
             endPosition = Integer.parseInt(ranges[1]);
@@ -201,7 +223,7 @@ public class FileController extends BaseController {
             }
 
             //
-            return endPosition == totalSize-1;
+            return endPosition == totalSize - 1;
 
         }
 

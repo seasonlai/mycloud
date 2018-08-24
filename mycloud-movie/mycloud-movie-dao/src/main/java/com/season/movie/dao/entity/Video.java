@@ -26,11 +26,17 @@ public class Video {
     /**
      * 质量: 高清，标清...
      */
-    private String quality;
+    private String qualityName;
 
+
+    /**
+     * 质量id
+     */
+    private Byte qualityId;
     /**
      * 状态：可用、不存在、侵权...
      */
+    @Column//对于枚举类型，这个注解要加上，不然不被当字段来处理
     private VideoStatus status;
 
     private String description;
@@ -104,19 +110,27 @@ public class Video {
     /**
      * 获取质量: 高清，标清...
      *
-     * @return quality - 质量: 高清，标清...
+     * @return qualityName - 质量: 高清，标清...
      */
-    public String getQuality() {
-        return quality;
+    public String getQualityName() {
+        return qualityName;
     }
 
     /**
      * 设置质量: 高清，标清...
      *
-     * @param quality 质量: 高清，标清...
+     * @param qualityName 质量: 高清，标清...
      */
-    public void setQuality(String quality) {
-        this.quality = quality;
+    public void setQualityName(String qualityName) {
+        this.qualityName = qualityName;
+    }
+
+    public Byte getQualityId() {
+        return qualityId;
+    }
+
+    public void setQualityId(Byte qualityId) {
+        this.qualityId = qualityId;
     }
 
     /**

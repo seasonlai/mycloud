@@ -3,6 +3,7 @@ package com.season.movie.service.service;
 import com.season.common.web.base.BaseService;
 import com.season.movie.dao.entity.Quality;
 import com.season.movie.dao.entity.Task;
+import com.season.movie.dao.enums.TaskStatus;
 import com.season.movie.dao.mapper.TaskMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,14 @@ public class TaskService extends BaseService {
     public void add(Task task) {
         throwExceptionIfExistNull(task);
         taskMapper.insert(task);
+    }
+
+    public void updateStatus(Long taskId, TaskStatus status) {
+        throwExceptionIfExistNull(taskId, status);
+        Task task = new Task();
+        task.setId(taskId);
+        task.setStatus(status);
+        taskMapper.updateByPrimaryKeySelective(task);
     }
 
 }

@@ -1,8 +1,8 @@
 package com.season.movie.client.controller;
 
 import com.season.common.base.BaseResult;
-import com.season.movie.client.service.MovieService;
 import com.season.movie.dao.entity.Movie;
+import com.season.movie.service.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

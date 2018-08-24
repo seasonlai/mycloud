@@ -14,7 +14,6 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @ServletComponentScan
-@MapperScan("com.season.movie.dao.mapper")
 public class MycloudMovieClientApplication {
 
 	public static void main(String[] args) {

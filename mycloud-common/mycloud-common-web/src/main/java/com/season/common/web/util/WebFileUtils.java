@@ -16,7 +16,7 @@ public class WebFileUtils {
 
 
     static Logger logger = LoggerFactory.getLogger(WebFileUtils.class);
-    
+
     public static File getTmpFileDir(HttpServletRequest request) {
         //根目录下新建文件夹upload，存放上传图片
         String uploadPath = String.valueOf(request.getServletContext()
@@ -39,6 +39,7 @@ public class WebFileUtils {
         return getDirectory(uploadPath.trim());
 
     }
+
     public static File getVideoFileDir(HttpServletRequest request) {
         //根目录下新建文件夹upload，存放上传图片
         String uploadPath = String.valueOf(request.getServletContext()
@@ -51,7 +52,7 @@ public class WebFileUtils {
 
     }
 
-    public static File getDirectory(String filePath){
+    public static File getDirectory(String filePath) {
         File file = new File(filePath);
         if (!file.exists() && !file.mkdirs()) {
             logger.warn("创建目录失败:{}", filePath);
@@ -69,12 +70,28 @@ public class WebFileUtils {
      *
      * @return 文件名
      */
-    public static String getFileNameWithTimestamp(String filename) {
+    public static String getFileNameWithTimestamp(String filename, String... patternArg) {
         int suffixIndex = filename.lastIndexOf(".");
         String fileName = filename.substring(0, suffixIndex);
         String suffix = filename.substring(suffixIndex);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String pattern = "yyyyMMddHHmmss";
+        if (patternArg != null && patternArg.length > 0)
+            pattern = patternArg[0];
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         String timeStr = sdf.format(new Date());
         return fileName + "_" + timeStr + suffix;
+    }
+
+    public static String appendFilename(String filename, String appendStr) {
+        if (StringUtils.isEmpty(filename)
+                ||StringUtils.isEmpty((filename=filename.trim()))) {
+            return null;
+        }
+        int suffixIndex = filename.lastIndexOf(".");
+        if (suffixIndex == -1) {
+            return filename + appendStr;
+        }
+        String suffix = filename.substring(suffixIndex);
+        return filename.substring(0, suffixIndex) + appendStr + suffix;
     }
 }

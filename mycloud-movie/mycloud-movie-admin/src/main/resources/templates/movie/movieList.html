@@ -8,13 +8,29 @@
 <body>
 <div th:replace="index::conteWrap('movie','movieList',~{::mainContent})">
     <th:block th:fragment="mainContent">
-        <div class="item ui colhidden">
+        <div class="ui" style="padding: 15px;">
+            影片列表
+        </div>
+        <div class="item ui colhidden" style="padding: 0 10px;text-align: right">
+            <div class="ui dropdown selection" tabindex="0">
+                <select name="movieKind">
+                    <option value="">选择类别</option>
+                    <option th:each="item,index:${kinds}"
+                            th:value="${item.id}"
+                            th:text="${item.name}">
+                    </option>
+                </select><i class="dropdown icon"></i>
+                <div class="default text">选择类别</div>
+                <div class="menu" tabindex="-1">
+                    <div th:each="item,index:${kinds}" class="item" th:data-value="${item.id}" th:text="${item.name}">
+                    </div>
+                </div>
+            </div>
             <div class="ui icon input">
-                <input type="text" placeholder="Search...">
+                <input type="text" placeholder="搜索影片...">
                 <i class="search icon"></i>
             </div>
         </div>
-
         <div class="ui equal width left aligned padded grid stackable">
             <div class="row">
                 <div class="column">
@@ -45,7 +61,10 @@
 <script th:inline="javascript">
 
     /*<![CDATA[*/
-    var imgUrl  = /*[[${application._imgPath}]]*/
+    var imgUrl =
+    /*[[${application._imgPath}]]*/
+    var kinds =
+    /*[[${kinds}]]*/
     /*]]>*/
 </script>
 

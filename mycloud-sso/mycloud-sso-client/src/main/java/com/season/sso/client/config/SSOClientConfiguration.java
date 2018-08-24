@@ -53,7 +53,7 @@ public class SSOClientConfiguration {
     private int port;
     @Value("${spring.redis.timeout:2000}")
     private int timeout;
-    @Value("${spring.redis.password:\"\"}")
+    @Value("${spring.redis.password:}")
     private String password;
 
     //----------shiro 配置-----------------

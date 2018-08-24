@@ -98,4 +98,14 @@ public class FileMd5Util {
         return isSameMd5(file1, file2);
     }
 
+    public static void main(String... args) {
+
+        String fileMD5 = getFileMD5(
+                new File("D:\\mycloud\\videos\\91cb3abe-854b-4e6c-81a0-f41bcd01592f.mp4"));
+        System.out.println(fileMD5);
+        fileMD5 = getFileMD5(
+                new File("D:\\mycloud\\tmp\\cover_20180821175241.png"));
+        System.out.println(fileMD5);
+    }
+
 }

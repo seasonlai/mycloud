@@ -134,26 +134,27 @@ ALTER TABLE movie
 -- 增加文件任务表
 DROP TABLE IF EXISTS task;
 CREATE TABLE task (
-  id        BIGINT        AUTO_INCREMENT
+  id          BIGINT        AUTO_INCREMENT
   COMMENT 'id',
-  name      VARCHAR(200) NOT NULL
+  name        VARCHAR(200) NOT NULL
   COMMENT '任务名称',
-  file_path VARCHAR(200)
+  file_path   VARCHAR(200)
   COMMENT '文件路径',
-  save_path VARCHAR(200)
+  save_path   VARCHAR(200)
   COMMENT '保存文件名称/路径',
-  size      BIGINT        DEFAULT 0
+  size        BIGINT        DEFAULT 0
   COMMENT '文件大小',
-  progress  BIGINT        DEFAULT 0
+  progress    BIGINT        DEFAULT 0
   COMMENT '进度（断点续传）',
-  percent   DECIMAL(4, 2) DEFAULT 0
+  percent     DECIMAL(4, 2) DEFAULT 0
   COMMENT '百分比',
-  status    TINYINT       DEFAULT 0
+  status      TINYINT       DEFAULT 0
   COMMENT '状态',
-  kind      TINYINT       DEFAULT 0
+  kind        TINYINT       DEFAULT 0
   COMMENT '类型: 0-上传 1-下载',
-  user_id   BIGINT COMMENT '任务所属用户id',
-  target_id BIGINT COMMENT '任务对应的目标id',
+  user_id     BIGINT COMMENT '任务所属用户id',
+  target_id   BIGINT COMMENT '任务对应的目标id',
+  create_time TIMESTAMP     DEFAULT current_timestamp,
   PRIMARY KEY (id),
   KEY (name),
   KEY (target_id)
@@ -173,7 +174,8 @@ CREATE TABLE video (
   code        VARCHAR(100)
   COMMENT '视频码/文件名',
   description VARCHAR(100) COMMENT '描述',
-  quality     VARCHAR(50) COMMENT '质量: 高清，标清...',
+  quality_id  TINYINT COMMENT '质量ID',
+  quality_name VARCHAR (50) COMMENT '质量: 高清，标清...',
   status      TINYINT   DEFAULT -100
   COMMENT '状态：可用、不存在、侵权...',
   create_time TIMESTAMP DEFAULT current_timestamp
@@ -210,7 +212,7 @@ DROP TABLE IF EXISTS file_info;
 CREATE TABLE file_info (
   id   INT AUTO_INCREMENT
   COMMENT '文件ID',
-  name VARCHAR(100) NOT NULL
+  name VARCHAR(100)        NOT NULL
   COMMENT '文件名',
   md5  VARCHAR(100) UNIQUE NOT NULL
   COMMENT 'MD5的值',

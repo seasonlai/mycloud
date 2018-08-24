@@ -51,7 +51,10 @@ public class MovieController extends BaseController {
     @ApiOperation(value = "影片列表页面", httpMethod = "GET")
     @GetMapping("/movieList")
     public ModelAndView movieList() {
-        return new ModelAndView("movie/movieList");
+        ModelAndView modelAndView = new ModelAndView("movie/movieList");
+        List<Kind> kinds = kindServcie.listAll();
+        modelAndView.addObject("kinds",kinds);
+        return modelAndView;
     }
 
     @ApiOperation(value = "影片添加页面", httpMethod = "GET")

@@ -5,12 +5,15 @@ spring:
     name: mycloud-movie-client
   profiles:
     active: dev
-    include: dao,service
+    include: service
   thymeleaf:
     cache: false
   mvc:
     favicon:
       enabled: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 
 ########## 自定义 ###########
 

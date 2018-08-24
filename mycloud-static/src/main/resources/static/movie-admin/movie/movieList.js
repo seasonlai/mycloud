@@ -1,3 +1,5 @@
+kinds = kinds || [];
+
 function queryList(pageNum, pageSize, init) {
     $.ajax({
         url: '/admin/movieList',
@@ -21,28 +23,27 @@ function queryList(pageNum, pageSize, init) {
                     }
                     cardsWrap.append('<div class="ui card">'
                         + '<div class="image">'
-                        + '<img src="' + imgUrl + (movie.cover?movie.cover:'image.png') + '"'
-                        // + 'style="width: 150px;height: 150px"'
+                        + '<img src="' + imgUrl + (movie.cover ? movie.cover : 'image.png') + '"'
                         + 'class="transition visible">'
-                        // + 'onerror="this.src="'+imgUrl+'image.png'+'";this.onerror=null"'
-                        + '<div class="content">'
-                        + '<a class="header">' + movie.name + '</a>'
-                        + '<div class="meta">'
-                        + '<span class="date">' + movie.showYear + '</span>'
+                        + '<div class="content" style="padding: 5px 5px;">'
+                        + '片名：<a class="header">' + movie.name + '</a>'
+                        + '<div class="description">类型：'
+                        + getKindName(movie.kinds)
                         + '</div>'
                         + '<div class="description">'
-                        + 'xxx'
-                        + '</div>' + '</div>'
-                        + '<div class="extra content">'
-                        + '<a>'
-                        + '<i class="user icon"></i> 185 Friends'
-                        + '</a>'
+                        + '<div>'
+                        + '价格：￥' + movie.price
+                        + '</div>'
+                        + '</div>'
+                        + '<div class="description">'
+                        + '上映时间：' + formatDate(movie.showYear)
+                        + '</div>'
                         + '</div>'
                         + '</div>'
                         + '</div>'
                     )
                 }
-                if (cardsWrap.children().length > 0) {
+                if (cardsWrap && cardsWrap.children().length > 0) {
                     $movieList.append(cardsWrap);
                 }
             }
@@ -51,7 +52,26 @@ function queryList(pageNum, pageSize, init) {
             alert('请求失败');
         }
     })
+}
 
+function formatDate(date) {
+    if (!date)
+        return '--';
+    return date.substring(0, date.indexOf(' '));
+}
+
+function getKindName(key) {
+
+    var result = '';
+    if (key) {
+        for (var i in kinds) {
+            var kind = kinds[i];
+            if (key.indexOf(kind.id) >= 0) {
+                result += kind.name + ',';
+            }
+        }
+    }
+    return result == '' ? '--' : result.substring(0, result.length - 1);
 }
 
 $(function () {

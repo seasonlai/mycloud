@@ -6,6 +6,8 @@ import com.season.movie.dao.mapper.VideoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2018/8/22.
  */
@@ -15,6 +17,10 @@ public class VideoService extends BaseService {
     @Autowired
     VideoMapper videoMapper;
 
+
+    public List<Video> listAll() {
+        return videoMapper.selectAll();
+    }
 
     public void addVideo(Video video) {
         throwExceptionIfExistNull(video);

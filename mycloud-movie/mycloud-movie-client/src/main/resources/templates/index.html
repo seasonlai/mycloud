@@ -26,19 +26,19 @@
                 <div class="slider">
                     <div class="slider-wrapper theme-default">
                         <div id="slider" class="nivoSlider">
-                            <a href="/play?id=234123">
+                            <a href="/play/234123">
                                 <img th:src="${application._imgPath}+'1.jpg'" data-thumb="" alt=""/>
                             </a>
-                            <a href="/play?id=234123">
-                                <img th:src="${application._imgPath}+'2.jpg'"  alt=""/>
+                            <a href="/play/234123">
+                                <img th:src="${application._imgPath}+'2.jpg'" alt=""/>
                             </a>
-                            <a href="/play?id=234123">
+                            <a href="/play/234123">
                                 <img th:src="${application._imgPath}+'3.jpg'" alt=""/>
                             </a>
-                            <a href="/play?id=234123">
+                            <a href="/play/234123">
                                 <img th:src="${application._imgPath}+'4.jpg'" alt=""/>
                             </a>
-                            <a href="/play?id=234123">
+                            <a href="/play/234123">
                                 <img th:src="${application._imgPath}+'5.jpg'" data-thumb="" alt=""/>
                             </a>
                         </div>
@@ -62,8 +62,8 @@
             </div>
             <div class="section group">
                 <div class="grid_1_of_5 images_1_of_5" th:each="movie,state:${newList}">
-                    <a th:href="@{/movie/detail(id=${movie.id})}">
-                        <img th:src="${application._imgPath}+${movie.cover}" alt=""/>
+                    <a th:href="@{'/detail/'+${movie.id}}">
+                        <img th:src="${application._imgPath}+(${movie.cover}!=''?${movie.cover}:'image.png')" alt=""/>
                     </a>
                     <h2><a href="detail.html" th:text="${movie.name}"></a></h2>
                     <div class="price-details">
@@ -84,7 +84,10 @@
             </div>
             <div class="section group">
                 <div class="grid_1_of_5 images_1_of_5" th:each="movie,state:${classicList}">
-                    <a href="detail.html"><img th:src="${application._imgPath}+${movie.cover}" alt=""/></a>
+                    <a th:href="@{'/detail/'+${movie.id}}">
+                        <img th:src="${application._imgPath}+(${movie.cover}!=''?${movie.cover}:'image.png')"
+                             alt=""/>
+                    </a>
                     <h2><a href="detail.html" th:text="${movie.name}"></a></h2>
                     <div class="price-details">
                         <div class="price-number">

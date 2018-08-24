@@ -22,8 +22,8 @@ public class FileInfoService extends BaseService {
 
     public FileInfo findByMd5(String md5) {
         Weekend<FileInfo> weekend = Weekend.of(FileInfo.class);
-        WeekendCriteria<FileInfo, Object> criteria = weekend.createCriteriaAddOn();
-        criteria.andEqualTo("md5", md5);
+        WeekendCriteria<FileInfo, Object> criteria = weekend.weekendCriteria();
+        criteria.andEqualTo(FileInfo::getMd5, md5);
         return fileInfoMapper.selectOneByExample(weekend);
     }
 

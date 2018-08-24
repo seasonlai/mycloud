@@ -1,5 +1,7 @@
 package com.season.movie.admin.form;
 
+import com.season.movie.dao.entity.Quality;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -11,7 +13,7 @@ public class VideoForm {
     private String videoName;
     private String videoDesc;
     @NotNull
-    private String videoQuality;
+    private Quality videoQuality;
 
 
     public VideoForm() {
@@ -33,11 +35,11 @@ public class VideoForm {
         this.videoDesc = videoDesc;
     }
 
-    public String getVideoQuality() {
+    public Quality getVideoQuality() {
         return videoQuality;
     }
 
-    public void setVideoQuality(String videoQuality) {
+    public void setVideoQuality(Quality videoQuality) {
         this.videoQuality = videoQuality;
     }
 }

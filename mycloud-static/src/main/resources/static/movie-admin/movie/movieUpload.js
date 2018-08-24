@@ -38,13 +38,13 @@ function startUpload(taskName) {
     var task = getTask(taskName);
     if (task) {
 
-        $('#uploadBtn_' + task.id).after('<div>正在计算MD5...<span id="md5progress_'+task.id+'"></span></div>').hide();
+        $('#uploadBtn_' + task.id).after('<div>正在计算MD5...<span id="md5progress_' + task.id + '"></span></div>').hide();
         var tmpMd5;
         getFileMd5({
             file: task.data.files[0],
-            chunkSize:1000000
+            chunkSize: 1000000
         }).progress(function (progress) {
-            $('#md5progress_'+task.id).html(progress+'%');
+            $('#md5progress_' + task.id).html(progress + '%');
         }).success(function (md5) {
             tmpMd5 = md5;
         }).always(function () {
@@ -149,7 +149,8 @@ function addTaskItem(data, e, context) {
         data: {
             videoName: $('#videoName').val(),
             videoDesc: $('#videoDesc').val(),
-            videoQuality: '高清'//$('#videoQuality').val()
+            'videoQuality.id': 1,
+            'videoQuality.name': '高清'//$('#videoQuality').val()
         },
         success: function (result) {
             if (commonResultHandle(result)) {
@@ -165,7 +166,11 @@ function addTaskItem(data, e, context) {
                     if (commonResultHandle(result)) {
                         var task = result.data;
                         //添加表单信息
-                        data.formData = {fileName: task.filePath, name: task.name};
+                        data.formData = {
+                            fileName: task.filePath,
+                            name: task.name,
+                            taskId: task.id
+                        };
                         task.data = data;
                         task.e = e;
                         task.context = context;

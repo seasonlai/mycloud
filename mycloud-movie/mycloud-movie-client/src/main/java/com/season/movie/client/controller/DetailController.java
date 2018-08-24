@@ -1,10 +1,11 @@
 package com.season.movie.client.controller;
 
-import com.season.movie.client.service.DetailService;
+import com.season.movie.service.service.DetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,8 +19,8 @@ public class DetailController {
     @Autowired
     DetailService detailService;
 
-    @GetMapping
-    public String detailPage(@RequestParam("id") Long id, Model model) {
+    @GetMapping("/{id}")
+    public String detailPage(@PathVariable("id") Long id, Model model) {
         model.addAttribute("movie", detailService.getDetail(id));
         return "detail";
     }

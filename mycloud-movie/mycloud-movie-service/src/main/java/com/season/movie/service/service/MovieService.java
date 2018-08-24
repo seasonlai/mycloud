@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.season.common.base.BaseException;
 import com.season.common.model.ResultCode;
+import com.season.common.web.util.WebFileUtils;
 import com.season.movie.dao.entity.Movie;
 import com.season.movie.dao.entity.MovieDetail;
 import com.season.movie.dao.mapper.MovieDetailMapper;
@@ -76,7 +77,7 @@ public class MovieService {
                 if (goalFile.exists()) {
                     logger.warn("将会覆盖图片：{}", goalFile.getAbsoluteFile());
                 }
-                movie.setCover(movieImg);
+//                movie.setCover(movieImg);
             }
         }
         //开始插入movie
@@ -95,8 +96,19 @@ public class MovieService {
             try {
                 FileUtils.copyFile(srcFile, goalFile);
             } catch (IOException e) {
-                logger.error("拷贝文件失败", e);
+                logger.error("拷贝文件失败" + srcFile.getAbsolutePath(), e);
                 throw new BaseException(ResultCode.SERVICE_ERROR, "添加电影封面时失败");
+            }
+            //拷贝详情页图片
+            String detailImg = WebFileUtils.appendFilename(movieImg, "_detail");
+            srcFile = new File(tmpFileDir, detailImg);
+            if (srcFile.exists()) {
+                File detailFile = new File(goalFile, detailImg);
+                try {
+                    FileUtils.copyFile(srcFile, detailFile);
+                } catch (IOException e) {
+                    logger.error("拷贝文件失败" + srcFile.getAbsolutePath(), e);
+                }
             }
         }
     }
@@ -105,12 +117,12 @@ public class MovieService {
         //设好分页
         Page<Object> page = PageHelper.startPage(pageNum, pageSize);
         List<Movie> movies = movieMapper.selectAll();
-        Map<String,Object> map = new HashMap<>(4);
-        map.put("list",movies);
-        map.put("total",page.getTotal());
-        map.put("pages",page.getPages());
-        map.put("pageNum",page.getPageNum());
-        map.put("pageSize",page.getPageSize());
+        Map<String, Object> map = new HashMap<>(4);
+        map.put("list", movies);
+        map.put("total", page.getTotal());
+        map.put("pages", page.getPages());
+        map.put("pageNum", page.getPageNum());
+        map.put("pageSize", page.getPageSize());
         return map;
     }
 }
