@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by Administrator on 2018/8/1.
@@ -59,6 +60,13 @@ public class MovieService {
         return movieMapper.selectByExampleAndRowBounds(weekend, new RowBounds(offset, limit));
     }
 
+    /**
+     * 添加电影
+     * @param movie 电影
+     * @param movieDetail 电影详情
+     * @param tmpFileDir 临时路径
+     * @param goalFileDir 视频目的路径
+     */
     @Transactional
     public void addMovie(Movie movie, MovieDetail movieDetail, File tmpFileDir, File goalFileDir) {
         String movieImg = movie.getCover();
@@ -77,7 +85,7 @@ public class MovieService {
                 if (goalFile.exists()) {
                     logger.warn("将会覆盖图片：{}", goalFile.getAbsoluteFile());
                 }
-//                movie.setCover(movieImg);
+                movie.setCover(movieImg);
             }
         }
         //开始插入movie
@@ -124,5 +132,14 @@ public class MovieService {
         map.put("pageNum", page.getPageNum());
         map.put("pageSize", page.getPageSize());
         return map;
+    }
+
+    public Movie findById(Long movieId) {
+        if(Objects.isNull(movieId)){
+            return null;
+        }
+        Movie movie= new Movie();
+        movie.setId(movieId);
+        return movieMapper.selectByPrimaryKey(movieId);
     }
 }

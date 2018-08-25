@@ -37,17 +37,17 @@ $('#movieForm').form({
             }]
         }
     },
-    onSuccess:function (e) {
+    onSuccess: function (e) {
         //阻止表单的提交
         e.preventDefault();
 
         submitMovie();
     },
-    onValid: function(){
+    onValid: function () {
         //
         console.log('onValid');
     },
-    onFailure: function(){
+    onFailure: function () {
         //
         console.log('onFailure');
     }
@@ -140,6 +140,12 @@ function initUploadImg() {
                 if (/^image\/\w+$/.test(file.type)) {
                     uploadedImageName = file.name;
                     uploadedImageType = file.type;
+                    var suffixIndex = uploadedImageName.lastIndexOf(".");
+                    if (suffixIndex >= 0) {
+                        uploadedImageType = uploadedImageName.substring(suffixIndex + 1);
+                    } else {
+                        uploadedImageType = uploadedImageType.substring(6);
+                    }
                     if (uploadedImageURL) {
                         URL.revokeObjectURL(uploadedImageURL);
                     }
@@ -155,18 +161,19 @@ function initUploadImg() {
                         onApprove: function () {
                             //开始上传图片
                             var canvas = $image.cropper('getCroppedCanvas', {width: 200, height: 200});
-                            var canvas2= $image.cropper('getCroppedCanvas', {width: 386, height: 200});
+                            var canvas2 = $image.cropper('getCroppedCanvas', {width: 386, height: 200});
                             var data = canvas.toDataURL();
                             var data2 = canvas2.toDataURL();
                             $.ajax({
                                 url: '/file/uploadImg',
                                 dataType: 'json',
                                 type: "POST",
-                                data: {
+                                contentType: 'application/json; charset=UTF-8',
+                                data: JSON.stringify({
                                     "imgData": data.toString(),
                                     'imgData2': data2.toString(),
-                                    "filename": 'cover.'+uploadedImageType.substring(6)
-                                },
+                                    "fileName": 'cover.' + uploadedImageType
+                                }),
                                 success: function (data) {
                                     if (!data) {
                                         alert("上传失败");

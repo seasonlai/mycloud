@@ -1,10 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="index::header('影片属性',~{})">
+
 </head>
 <body>
 
+<div th:replace="index::conteWrap('movie','movieList',~{::mainContent})">
+    <th:block th:fragment="mainContent">
+        <div class="ui segment">
+            <div class="ui medium breadcrumb">
+                <a class="section" href="/admin/movieList">影片列表</a>
+                <i class="right angle icon divider"></i>
+                <div class="active section">影片属性</div>
+            </div>
+        </div>
+
+        <div class="ui equal width left aligned padded grid stackable">
+            <div class="sixteen wide tablet two wide computer column">
+                <div class="ui vertical secondary pointing fluid tabular menu">
+                    <a class="item active" data-tab="profile">
+                        影片封面
+                    </a>
+                    <a class="item" data-tab="settings">
+                        影片信息
+                    </a>
+                </div>
+            </div>
+            <div class="sixteen wide tablet fourteen wide computer column">
+                <div class="ui segment">
+                    <div class="ui tab active" data-tab="profile">
+                        <div class="ui small image" style="width:100%">
+                            <img id="uploadImg" class="ui middle aligned small image "
+                                 th:src="${movie.cover}?${application._imgPath}+${movie.cover}
+                                 :${application._imgPath}+'image.png'">
+                            <div class="fileBtn" id="uploadImgBtn"
+                                 style="display:inherit;margin-left: 5px;width: 10%;">
+                                <!--label包裹input，点了label相当于点了input-->
+                                <label style="cursor: pointer">更改图片
+                                    <input id="inputImg" type="file" name="uploadImg" hidden>
+                                </label>
+                            </div>
+                            <!--<div id="progress" style="width: 15%;display: none">-->
+                            <!--<div class="bar" style="width: 0%;"></div>-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+                    <div class="ui tab" data-tab="settings">
+                        <form class="ui form segment">
+                            <h3 class="ui header">
+                                Account Settings
+                            </h3>
+                            <div class="ui hidden divider"></div>
+                            <div class="field">
+                                <label>Client ID</label>
+                                <input placeholder="Client ID" value="567yznQZng9BMtmb3S0A9LAQN6IT9Dug" name="name"
+                                       type="text">
+                            </div>
+                            <div class="field">
+                                <label>Secret ID</label>
+                                <input placeholder="Secret ID" value="x978LzQBmN2qt4AO6TjS84HO0ohdzP1x" name="name"
+                                       type="text">
+                            </div>
+                            <div class="field">
+                                <label>App Name</label>
+                                <input placeholder="App Name" name="name" type="text">
+                            </div>
+                            <div class="field">
+                                <label>App URL</label>
+                                <input placeholder="http://example.com" name="name" type="text">
+                            </div>
+
+                            <div class="ui blue submit button">Update</div>
+                            <div class="ui error message"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </th:block>
+</div>
 </body>
+<th:block th:include="index::script"/>
+
 </html>

@@ -8,8 +8,10 @@
 <body>
 <div th:replace="index::conteWrap('movie','movieList',~{::mainContent})">
     <th:block th:fragment="mainContent">
-        <div class="ui" style="padding: 15px;">
-            影片列表
+        <div class="ui segment">
+            <div class="ui medium breadcrumb">
+                <div class="active section">影片列表</div>
+            </div>
         </div>
         <div class="item ui colhidden" style="padding: 0 10px;text-align: right">
             <div class="ui dropdown selection" tabindex="0">
@@ -22,7 +24,8 @@
                 </select><i class="dropdown icon"></i>
                 <div class="default text">选择类别</div>
                 <div class="menu" tabindex="-1">
-                    <div th:each="item,index:${kinds}" class="item" th:data-value="${item.id}" th:text="${item.name}">
+                    <div th:each="item,index:${kinds}" class="item"
+                         th:data-value="${item.id}" th:text="${item.name}">
                     </div>
                 </div>
             </div>

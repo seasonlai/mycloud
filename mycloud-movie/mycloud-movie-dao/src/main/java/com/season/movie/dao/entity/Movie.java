@@ -52,7 +52,10 @@ public class Movie {
      */
     @Column(name = "create_time")
     private Date createTime;
-
+    /**
+     * 视频ID
+     */
+    private Long videoId;
     /**
      * 获取电影id
      *
@@ -196,5 +199,13 @@ public class Movie {
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Long getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(Long videoId) {
+        this.videoId = videoId;
     }
 }

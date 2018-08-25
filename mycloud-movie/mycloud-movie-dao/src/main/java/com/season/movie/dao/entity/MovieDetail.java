@@ -39,6 +39,7 @@ public class MovieDetail {
      */
     private String description;
 
+
     /**
      * 获取详细内容id
      *
@@ -147,4 +148,5 @@ public class MovieDetail {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

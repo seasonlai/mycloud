@@ -6,12 +6,15 @@ import com.season.common.web.base.BaseService;
 import com.season.movie.dao.entity.Kind;
 import com.season.movie.dao.entity.Movie;
 import com.season.movie.dao.entity.MovieDetail;
+import com.season.movie.dao.entity.Video;
 import com.season.movie.dao.mapper.KindMapper;
 import com.season.movie.dao.mapper.MovieDetailMapper;
 import com.season.movie.dao.mapper.MovieMapper;
+import com.season.movie.dao.mapper.VideoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.weekend.Weekend;
+import tk.mybatis.mapper.weekend.WeekendCriteria;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +36,8 @@ public class DetailService extends BaseService {
     @Autowired
     KindMapper kindMapper;
 
+    @Autowired
+    VideoMapper videoMapper;
 
     public Map getDetail(Long id) {
         throwExceptionIfExistNull(id);
@@ -47,13 +52,13 @@ public class DetailService extends BaseService {
             List<Integer> list = stringToIntList(kinds.split(","), "获取详细内容失败");
             Weekend<Kind> kindWeekend = Weekend.of(Kind.class);
             kindWeekend.orderBy("sort").asc();
-            kindWeekend.createCriteriaAddOn().andIn(Kind::getId, list);
+            WeekendCriteria<Kind, Object> criteria = kindWeekend.weekendCriteria();
+            criteria.andIn(Kind::getId, list);
             kindList = kindMapper.selectByExample(kindWeekend);
         }
 
         if (!Objects.isNull(movieDetail)) {
             movieDetail.getKeyword();
-
         }
 
         Map<String, Object> map = new HashMap<>(6);
@@ -62,4 +67,5 @@ public class DetailService extends BaseService {
         map.put("kinds", kindList);
         return map;
     }
+
 }

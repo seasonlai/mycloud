@@ -22,11 +22,12 @@ function queryList(pageNum, pageSize, init) {
                         cardsWrap = $('<div class="ui five stackable cards">');
                     }
                     cardsWrap.append('<div class="ui card">'
-                        + '<div class="image">'
+                        + '<a class="image" style="cursor: pointer" href="/admin/movieDetail/'+movie.id+'">'
                         + '<img src="' + imgUrl + (movie.cover ? movie.cover : 'image.png') + '"'
                         + 'class="transition visible">'
+                        + '</a>'
                         + '<div class="content" style="padding: 5px 5px;">'
-                        + '片名：<a class="header">' + movie.name + '</a>'
+                        + '片名：<a class="header" style="display: inline-block" href="/admin/movieDetail/'+movie.id+'">' + movie.name + '</a>'
                         + '<div class="description">类型：'
                         + getKindName(movie.kinds)
                         + '</div>'
@@ -37,7 +38,6 @@ function queryList(pageNum, pageSize, init) {
                         + '</div>'
                         + '<div class="description">'
                         + '上映时间：' + formatDate(movie.showYear)
-                        + '</div>'
                         + '</div>'
                         + '</div>'
                         + '</div>'

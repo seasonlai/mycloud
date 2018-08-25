@@ -198,12 +198,9 @@ CREATE TABLE quality (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   COMMENT '质量表';
-ALTER TABLE movie_detail
-  ADD COLUMN video_id BIGINT DEFAULT NULL
-COMMENT '视频id';
--- 给表movieDetail添加视频源列
-ALTER TABLE movie_detail
-  ADD COLUMN video_id BIGINT DEFAULT NULL
+-- 给表movie添加视频源字段
+ALTER TABLE movie
+  ADD COLUMN video_id BIGINT DEFAULT -1
 COMMENT '视频id';
 
 -- 2018-08-23更新---------

@@ -53,7 +53,7 @@ public class MovieController extends BaseController {
     public ModelAndView movieList() {
         ModelAndView modelAndView = new ModelAndView("movie/movieList");
         List<Kind> kinds = kindServcie.listAll();
-        modelAndView.addObject("kinds",kinds);
+        modelAndView.addObject("kinds", kinds);
         return modelAndView;
     }
 
@@ -65,12 +65,22 @@ public class MovieController extends BaseController {
         mav.addObject("kinds", kinds);
         return mav;
     }
+
     @ApiOperation(value = "影片上传页面", httpMethod = "GET")
     @GetMapping("/movieUpload")
     public ModelAndView movieUpload() {
         ModelAndView mav = new ModelAndView("movie/movieUpload");
         List<Quality> qualities = qualityService.listAll();
         mav.addObject("qualities", qualities);
+        return mav;
+    }
+
+    @ApiOperation("影片详情编辑页")
+    @GetMapping("/movieDetail/{movieId}")
+    public ModelAndView movieDetail(@PathVariable("movieId") Long movieId) {
+        ModelAndView mav = new ModelAndView("movie/movieDetail");
+        Movie movie = movieService.findById(movieId);
+        mav.addObject("movie", movie);
         return mav;
     }
 
@@ -93,33 +103,5 @@ public class MovieController extends BaseController {
             , @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         return BaseResult.successData(movieService.listAll(movie, pageNum, pageSize));
     }
-
-
-//    @ApiOperation(value = "上传影片封面", httpMethod = "POST")
-//    @PostMapping("/uploadImg")
-//    public BaseResult uploadMovieImg(@RequestParam("uploadImg") MultipartFile multipartFile,
-//                                     HttpServletRequest request) {
-//        String url = null;
-//        try {
-//            File file = getTmpFileDir(request);
-//            if (Objects.isNull(file)) {
-//                return new BaseResult(ResultCode.IO_ERROR, "获取临时路径失败");
-//            }
-//            //获取文件名称
-//            String filename = getFileNameWithTimestamp(multipartFile);
-//            //将文件上传的服务器根目录下的upload文件夹
-//            file = new File(file, filename);
-////            Thumbnails.of(multipartFile.getInputStream()).
-//            FileUtils.copyInputStreamToFile(multipartFile.getInputStream(), file);
-//            //返回图片访问路径
-//            url = request.getSession().getServletContext().getAttribute("_tmpPath") + filename;
-//        } catch (IOException e) {
-//            logger.error("写文件失败", e);
-//            return new BaseResult(ResultCode.IO_ERROR, "上传文件失败");
-//        }
-//        return BaseResult.successData(url);
-
-    //    }
-
 
 }

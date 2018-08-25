@@ -13,5 +13,6 @@
     <result column="play_count" jdbcType="BIGINT" property="playCount" />
     <result column="show_year" jdbcType="TIMESTAMP" property="showYear" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="video_id" jdbcType="BIGINT" property="videoId"/>
   </resultMap>
 </mapper>

@@ -5,6 +5,7 @@ import com.season.common.base.BaseResult;
 import com.season.common.model.ResultCode;
 import com.season.common.util.FileMd5Util;
 import com.season.common.web.util.WebFileUtils;
+import com.season.movie.admin.form.ImageForm;
 import com.season.movie.dao.entity.FileInfo;
 import com.season.movie.dao.enums.TaskStatus;
 import com.season.movie.service.service.FileInfoService;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -70,16 +72,17 @@ public class FileController extends BaseController {
     }
 
     @ApiOperation(value = "上传图片", httpMethod = "POST")
-    @PostMapping("/uploadImg")
-    public BaseResult uploadMovieImg(@RequestParam("imgData") String imgData,
-                                     @RequestParam(value = "imgData2", required = false) String imgData2,
-                                     @RequestParam("filename") String filename,
+    @PostMapping(value = "/uploadImg")
+    public BaseResult uploadMovieImg(@Validated @RequestBody ImageForm imageForm,
                                      HttpServletRequest request) {
         File tmpFileDir = WebFileUtils.getTmpFileDir(request);
         File file = WebFileUtils.getTmpFileDir(request);
         if (Objects.isNull(file)) {
             return new BaseResult(ResultCode.IO_ERROR, "获取临时路径失败");
         }
+        String filename = imageForm.getFileName();
+        String imgData = imageForm.getImgData();
+        String imgData2 = imageForm.getImgData2();
         if (!filename.contains(".")) {
             return new BaseResult(ResultCode.IO_ERROR, "文件格式不对");
         }
@@ -91,6 +94,9 @@ public class FileController extends BaseController {
             logger.error("写图片失败"+filename, e);
             return new BaseResult(ResultCode.IO_ERROR, "上传文件失败");
         }
+        //返回图片访问路径
+        String url = request.getSession().getServletContext().getAttribute("_tmpPath") + filename;
+
         if (!StringUtils.isEmpty(imgData2)) {
             //写第二张图片
             filename = WebFileUtils.appendFilename(filename,"_detail");
@@ -101,8 +107,6 @@ public class FileController extends BaseController {
             }
         }
 
-        //返回图片访问路径
-        String url = request.getSession().getServletContext().getAttribute("_tmpPath") + filename;
         return BaseResult.successData(url);
 
     }
@@ -172,10 +176,10 @@ public class FileController extends BaseController {
     private boolean saveFile(File saveFile, MultipartFile file,
                              HttpServletRequest request) throws Exception {
 
-        long lStartPos = 0;
-        long startPosition = 0;
-        long endPosition = 0;
-        long totalSize = 0;
+        long lStartPos;
+        long startPosition;
+        long endPosition;
+        long totalSize;
         String contentRange = request.getHeader("Content-Range");
         if (logger.isDebugEnabled()) {
             logger.debug("上传文件：{} - {}", saveFile.getName(), contentRange);

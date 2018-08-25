@@ -24,7 +24,11 @@
             <div class="cont-desc span_1_of_2">
                 <div class="product-details">
                     <div class="grid images_3_of_2">
-                        <img th:src="${application._imgPath}+(${movie.info.cover}!=''?${movie.info.cover}:'image.png')" alt=""/>
+                        <img th:src="${application._imgPath}+(${movie.info.cover}!=''?
+                        ${#strings.substring(movie.info.cover,0,#strings.indexOf(movie.info.cover,'.'))}
+                        + '_detail'
+                        + ${#strings.substring(movie.info.cover,#strings.indexOf(movie.info.cover,'.'))}
+                        :'image.png')" alt=""/>
                     </div>
                     <div class="desc span_3_of_2">
                         <h2 th:text="${movie.info.name}">--</h2>
@@ -59,7 +63,7 @@
                                 <p>更新日期: </p>
                                 <i th:text="${movie.info.createTime}?${#dates.format(movie.info.createTime,'yyyy-MM-dd')}:_">--</i>
                             </div>
-                            <div class="button"><span><a href="#">立即播放</a></span></div>
+                            <div class="button"><span><a th:href="@{'/play/'+${movie.info.id}}">立即播放</a></span></div>
                             <div class="clear"></div>
                         </div>
                         <div class="wish-list">
@@ -89,50 +93,6 @@
                     </div>
                     <div class="clear"></div>
                 </div>
-                <div class="special_movies">
-                    <div class="movie_poster">
-                        <a href="detail.html"><img src="images/Coraline.jpg" alt=""/></a>
-                    </div>
-                    <div class="movie_desc">
-                        <h3><a href="detail.html">Coraline</a></h3>
-                        <p><span>$620.87</span> &nbsp; $500.35</p>
-                        <span><a href="#">Add to Cart</a></span>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="special_movies">
-                    <div class="movie_poster">
-                        <a href="detail.html"><img src="images/Eclipse.jpg" alt=""/></a>
-                    </div>
-                    <div class="movie_desc">
-                        <h3><a href="detail.html">Eclipse</a></h3>
-                        <p><span>$620.87</span> &nbsp; $500.35</p>
-                        <span><a href="#">Add to Cart</a></span>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="special_movies">
-                    <div class="movie_poster">
-                        <a href="detail.html"><img src="images/Priest.jpg" alt=""/></a>
-                    </div>
-                    <div class="movie_desc">
-                        <h3><a href="detail.html">Priest 3D</a></h3>
-                        <p><span>$620.87</span> &nbsp; $500.35</p>
-                        <span><a href="#">Add to Cart</a></span>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="special_movies">
-                    <div class="movie_poster">
-                        <a href="detail.html"><img src="images/Sorority_Wars.jpg" alt=""/></a>
-                    </div>
-                    <div class="movie_desc">
-                        <h3><a href="detail.html">Sorority Wars</a></h3>
-                        <p><span>$620.87</span> &nbsp; $500.35</p>
-                        <span><a href="#">Add to Cart</a></span>
-                    </div>
-                    <div class="clear"></div>
-                </div>
             </div>
         </div>
     </div>
@@ -141,38 +101,6 @@
 
 
 <script th:replace="common::scripts"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $().UItoTop({easingType: 'easeOutQuart'});
-
-    });
-
-    function DropDown(el) {
-        this.dd = el;
-        this.initEvents();
-    }
-    DropDown.prototype = {
-        initEvents: function () {
-            var obj = this;
-
-            obj.dd.on('click', function (event) {
-                $(this).toggleClass('active');
-                event.stopPropagation();
-            });
-        }
-    }
-
-    $(function () {
-
-        var dd = new DropDown($('#dd'));
-
-        $(document).click(function () {
-            // all dropdowns
-            $('.wrapper-dropdown-2').removeClass('active');
-        });
-
-    });
-</script>
 
 <a href="#" id="toTop"><span id="toTopHover"> </span></a>
 

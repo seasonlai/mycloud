@@ -1,23 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>播放页面</title>
+<head th:replace="common::header('播放页面',~{::link})">
 
     <link href="https://vjs.zencdn.net/7.1.0/video-js.css" rel="stylesheet">
 
 </head>
 <body>
+<div class="header">
+    <div th:replace="common::headertop_desc"></div>
+    <div class="wrap">
+        <div th:replace="common::header_top">
+        </div>
+    </div>
+</div>
 
-<video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
-       th:poster="${application._staticPath}+'/images/2.jpg'" data-setup="{}">
-    <source src="/videos/oceans.webm" type='video/webm'>
-    <p class="vjs-no-js">
-        To view this video please enable JavaScript, and consider upgrading to a web browser that
-        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-    </p>
-</video>
+<div class="main">
+    <div class="wrap">
+        <div class="content_top">
+            <div class="back-links">
+                <p>正在播放：
+                    <a href="#" class="active" th:text="${movie}?${movie.name}:''">--</a>
+                </p>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
+               th:poster="${movie}?${application._imgPath}+${movie.cover}:${application._imgPath}+'image.png'"
+               data-setup="{}">
+            <source th:src="${video}!=null?${application._videoPath}+${video.code}:''" type='video/mp4'>
+            <p class="vjs-no-js">
+                播放此视频需要浏览器支持javascript, 最好
+                <a href="https://videojs.com/html5-video-support/" target="_blank">支持html5播放视频</a>
+            </p>
+        </video>
+    </div>
+</div>
 
+<a href="#" id="toTop"><span id="toTopHover"> </span></a>
+<div th:replace="common::footer"></div>
+<script th:replace="common::scripts"></script>
 <script src="https://vjs.zencdn.net/7.1.0/video.js"></script>
 </body>
 </html>
