@@ -4,10 +4,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.season.common.base.BaseException;
 import com.season.common.model.ResultCode;
+import com.season.common.web.base.BaseService;
 import com.season.common.web.util.WebFileUtils;
 import com.season.movie.dao.entity.Movie;
 import com.season.movie.dao.entity.MovieDetail;
+import com.season.movie.dao.entity.MovieKind;
 import com.season.movie.dao.mapper.MovieDetailMapper;
+import com.season.movie.dao.mapper.MovieKindMapper;
 import com.season.movie.dao.mapper.MovieMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.ibatis.session.RowBounds;
@@ -21,16 +24,13 @@ import tk.mybatis.mapper.weekend.Weekend;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Created by Administrator on 2018/8/1.
  */
 @Service
-public class MovieService {
+public class MovieService extends BaseService {
 
     static Logger logger = LoggerFactory.getLogger(MovieService.class);
 
@@ -38,6 +38,8 @@ public class MovieService {
     MovieMapper movieMapper;
     @Autowired
     MovieDetailMapper movieDetailMapper;
+    @Autowired
+    MovieKindMapper movieKindMapper;
 
 
     public List<Movie> listHot(int offset, int limit) {
@@ -62,13 +64,15 @@ public class MovieService {
 
     /**
      * 添加电影
-     * @param movie 电影
+     *
+     * @param movie       电影
      * @param movieDetail 电影详情
-     * @param tmpFileDir 临时路径
+     * @param movieKind
+     * @param tmpFileDir  临时路径
      * @param goalFileDir 视频目的路径
      */
     @Transactional
-    public void addMovie(Movie movie, MovieDetail movieDetail, File tmpFileDir, File goalFileDir) {
+    public void addMovie(Movie movie, MovieDetail movieDetail, String movieKind, File tmpFileDir, File goalFileDir) {
         String movieImg = movie.getCover();
         File srcFile = null, goalFile = null;
         boolean needCopy;
@@ -93,6 +97,16 @@ public class MovieService {
         if (count <= 0) {
             throw new BaseException(ResultCode.SERVICE_ERROR, "添加电影失败");
         }
+        //插入类型
+        List<Integer> kindIds = stringToIntList(movieKind.split(","));
+        List<MovieKind> movieKindList = new ArrayList<>(kindIds.size());
+        kindIds.forEach(kindId -> {
+            MovieKind kind = new MovieKind();
+            kind.setKindId(kindId);
+            kind.setMovieId(movie.getId());
+            movieKindList.add(kind);
+        });
+        movieKindMapper.insertList(movieKindList);
         //添加电影细节
         movieDetail.setMovieId(movie.getId());
         count = movieDetailMapper.insert(movieDetail);
@@ -135,10 +149,10 @@ public class MovieService {
     }
 
     public Movie findById(Long movieId) {
-        if(Objects.isNull(movieId)){
+        if (Objects.isNull(movieId)) {
             return null;
         }
-        Movie movie= new Movie();
+        Movie movie = new Movie();
         movie.setId(movieId);
         return movieMapper.selectByPrimaryKey(movieId);
     }

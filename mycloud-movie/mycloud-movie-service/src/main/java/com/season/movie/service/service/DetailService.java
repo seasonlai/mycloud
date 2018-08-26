@@ -46,7 +46,6 @@ public class DetailService extends BaseService {
             throw new BaseException(ResultCode.DAO_ERROR, "资源不存在");
         }
         MovieDetail movieDetail = detailMapper.selectByMovieId(id);
-        String kinds = movie.getKinds();
         List<Kind> kindList = null;
         if (!Objects.isNull(kinds)) {
             List<Integer> list = stringToIntList(kinds.split(","), "获取详细内容失败");

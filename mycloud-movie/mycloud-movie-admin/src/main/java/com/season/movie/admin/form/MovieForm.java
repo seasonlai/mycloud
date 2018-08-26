@@ -115,7 +115,6 @@ public class MovieForm {
         movie.setPrice(price);
         movie.setName(movieName);
         movie.setCover(movieImg);
-        movie.setKinds(movieKind);
         movie.setShowYear(showTime);
         return movie;
     }

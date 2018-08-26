@@ -8,11 +8,16 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="price" jdbcType="DECIMAL" property="price" />
-    <result column="kinds" jdbcType="VARCHAR" property="kinds" />
     <result column="cover" jdbcType="VARCHAR" property="cover" />
     <result column="play_count" jdbcType="BIGINT" property="playCount" />
     <result column="show_year" jdbcType="TIMESTAMP" property="showYear" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="video_id" jdbcType="BIGINT" property="videoId"/>
   </resultMap>
+  
+  
+  <resultMap id="movieKindMap" type="Movie" extends="BaseResultMap">
+
+  </resultMap>
+  
 </mapper>

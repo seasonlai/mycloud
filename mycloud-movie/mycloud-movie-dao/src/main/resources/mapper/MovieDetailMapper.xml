@@ -13,6 +13,8 @@
         <result column="description" jdbcType="LONGVARCHAR" property="description"/>
     </resultMap>
 
+    <resultMap id="MovieKindMap" type="m"
+
     <select id="selectByMovieId" resultMap="BaseResultMap">
         SELECT *
         FROM movie_detail

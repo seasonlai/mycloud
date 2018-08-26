@@ -91,7 +91,7 @@ public class MovieController extends BaseController {
         File tmpFileDir = WebFileUtils.getTmpFileDir(request);
         File goalFileDir = WebFileUtils.getImgFileDir(request);
         movieService.addMovie(movieForm.movie(),
-                movieForm.movieDetail(), tmpFileDir, goalFileDir);
+                movieForm.movieDetail(), movieForm.getMovieKind(), tmpFileDir, goalFileDir);
         return BaseResult.success();
 
     }

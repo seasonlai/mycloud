@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class Movie {
     /**
@@ -23,12 +24,6 @@ public class Movie {
      * 电影价格
      */
     private BigDecimal price;
-
-
-    /**
-     * 电影的多种类型，以逗号隔开
-     */
-    private String kinds;
 
     /**
      * 电影封面图
@@ -55,7 +50,10 @@ public class Movie {
     /**
      * 视频ID
      */
+    @Column(name = "video_id")
     private Long videoId;
+
+    List<Kind> kinds;
     /**
      * 获取电影id
      *
@@ -110,24 +108,6 @@ public class Movie {
         this.price = price;
     }
 
-
-    /**
-     * 获取电影的多种类型，以逗号隔开
-     *
-     * @return kinds - 电影的多种类型，以逗号隔开
-     */
-    public String getKinds() {
-        return kinds;
-    }
-
-    /**
-     * 设置电影的多种类型，以逗号隔开
-     *
-     * @param kinds 电影的多种类型，以逗号隔开
-     */
-    public void setKinds(String kinds) {
-        this.kinds = kinds;
-    }
 
     /**
      * 获取电影封面图
@@ -207,5 +187,13 @@ public class Movie {
 
     public void setVideoId(Long videoId) {
         this.videoId = videoId;
+    }
+
+    public List<Kind> getKinds() {
+        return kinds;
+    }
+
+    public void setKinds(List<Kind> kinds) {
+        this.kinds = kinds;
     }
 }

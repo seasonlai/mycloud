@@ -12,8 +12,6 @@ CREATE TABLE movie (
   COMMENT '电影价格',
   kind        INT          NOT NULL         DEFAULT 1
   COMMENT '电影主要类型',
-  kinds       VARCHAR(100) NOT NULL         DEFAULT '1'
-  COMMENT '电影的多种类型，以逗号隔开',
   cover       VARCHAR(255)                  DEFAULT NULL
   COMMENT '电影封面图',
   play_count  BIGINT       NOT NULL         DEFAULT 0
@@ -39,7 +37,7 @@ CREATE TABLE movie_hot (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
-  COMMENT '最热电影表，零时更新？';
+  COMMENT '最热电影表，零时更新？(到时候迁移到redis)';
 
 DROP TABLE IF EXISTS movie_detail;
 CREATE TABLE movie_detail (
@@ -93,6 +91,20 @@ CREATE TABLE kind (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   COMMENT '电影类别表';
+
+DROP TABLE IF EXISTS movie_kind;
+CREATE TABLE movie_kind (
+  id       BIGINT AUTO_INCREMENT
+  COMMENT 'id',
+  movie_id BIGINT NOT NULL
+  COMMENT '电影id',
+  kind_id  INT    NOT NULL
+  COMMENT '类型id',
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COMMENT '电影类别关联表';
 
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
@@ -167,20 +179,20 @@ CREATE TABLE task (
 -- 增加视频表
 DROP TABLE IF EXISTS video;
 CREATE TABLE video (
-  id          BIGINT    AUTO_INCREMENT
+  id           BIGINT    AUTO_INCREMENT
   COMMENT '视频id',
-  name        VARCHAR(100) NOT NULL
+  name         VARCHAR(100) NOT NULL
   COMMENT '视频名称',
-  code        VARCHAR(100)
+  code         VARCHAR(100)
   COMMENT '视频码/文件名',
-  description VARCHAR(100) COMMENT '描述',
-  quality_id  TINYINT COMMENT '质量ID',
-  quality_name VARCHAR (50) COMMENT '质量: 高清，标清...',
-  status      TINYINT   DEFAULT -100
+  description  VARCHAR(100) COMMENT '描述',
+  quality_id   TINYINT COMMENT '质量ID',
+  quality_name VARCHAR(50) COMMENT '质量: 高清，标清...',
+  status       TINYINT   DEFAULT -100
   COMMENT '状态：可用、不存在、侵权...',
-  create_time TIMESTAMP DEFAULT current_timestamp
+  create_time  TIMESTAMP DEFAULT current_timestamp
   COMMENT '创建时间',
-  user_id     BIGINT COMMENT '视频上传者id',
+  user_id      BIGINT COMMENT '视频上传者id',
   PRIMARY KEY (id),
   KEY (name)
 )
