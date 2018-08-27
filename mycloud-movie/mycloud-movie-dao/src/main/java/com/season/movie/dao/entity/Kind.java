@@ -73,4 +73,24 @@ public class Kind {
     public void setSort(Integer sort) {
         this.sort = sort;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Kind kind = (Kind) o;
+
+        if (id != null ? !id.equals(kind.id) : kind.id != null) return false;
+        if (name != null ? !name.equals(kind.name) : kind.name != null) return false;
+        return sort != null ? sort.equals(kind.sort) : kind.sort == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (sort != null ? sort.hashCode() : 0);
+        return result;
+    }
 }

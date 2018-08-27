@@ -15,6 +15,7 @@ import java.util.Date;
  */
 public class MovieForm {
 
+    private Long movieId;
     //封面
     private String movieImg;
     @NotBlank
@@ -27,16 +28,24 @@ public class MovieForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date showTime;
 
-    @Digits(integer = 99,fraction = 99)
+    @Digits(integer = 99, fraction = 99)
     private BigDecimal price;
 
     private String director;
 
-    private String actor;
+    private String actors;
 
     private String keyword;
     //简介
-    private String introduce;
+    private String description;
+
+    public Long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
+    }
 
     public String getMovieImg() {
         return movieImg;
@@ -86,12 +95,12 @@ public class MovieForm {
         this.director = director;
     }
 
-    public String getActor() {
-        return actor;
+    public String getActors() {
+        return actors;
     }
 
-    public void setActor(String actor) {
-        this.actor = actor;
+    public void setActors(String actors) {
+        this.actors = actors;
     }
 
     public String getKeyword() {
@@ -102,16 +111,17 @@ public class MovieForm {
         this.keyword = keyword;
     }
 
-    public String getIntroduce() {
-        return introduce;
+    public String getDescription() {
+        return description;
     }
 
-    public void setIntroduce(String introduce) {
-        this.introduce = introduce;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Movie movie(){
+    public Movie movie() {
         Movie movie = new Movie();
+        movie.setId(movieId);
         movie.setPrice(price);
         movie.setName(movieName);
         movie.setCover(movieImg);
@@ -119,10 +129,11 @@ public class MovieForm {
         return movie;
     }
 
-    public MovieDetail movieDetail(){
+    public MovieDetail movieDetail() {
         MovieDetail movieDetail1 = new MovieDetail();
-        movieDetail1.setActors(actor);
-        movieDetail1.setDescription(introduce);
+        movieDetail1.setMovieId(movieId);
+        movieDetail1.setActors(actors);
+        movieDetail1.setDescription(description);
         movieDetail1.setKeyword(keyword);
         movieDetail1.setDirector(director);
         return movieDetail1;

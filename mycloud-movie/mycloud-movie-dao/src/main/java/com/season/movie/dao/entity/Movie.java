@@ -53,6 +53,12 @@ public class Movie {
     @Column(name = "video_id")
     private Long videoId;
 
+    /**
+     * 地区ID
+     */
+    @Column(name = "area_id")
+    private Integer areaId;
+
     List<Kind> kinds;
     /**
      * 获取电影id
@@ -195,5 +201,13 @@ public class Movie {
 
     public void setKinds(List<Kind> kinds) {
         this.kinds = kinds;
+    }
+
+    public Integer getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(Integer areaId) {
+        this.areaId = areaId;
     }
 }

@@ -22,10 +22,6 @@ public class VideoServiceTest {
 
     @Test
     public void listAllTest() {
-        List<Video> videos = videoService.listAll();
-        videos.forEach(video -> {
-            System.out.println(video.getStatus());
-        });
     }
 
 

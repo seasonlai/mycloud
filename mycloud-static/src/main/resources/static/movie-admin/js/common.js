@@ -1,8 +1,8 @@
-function commonResultHandle(result){
-    if(!result){
+function commonResultHandle(result) {
+    if (!result) {
         return false;
     }
-    if(result.code!==0){
+    if (result.code !== 0) {
         alert(result.msg);
         return false;
     }
@@ -45,8 +45,8 @@ function numberFormat(number, decimals, dec_point, thousands_sep) {
  * @param urlData
  * @returns {*}
  */
-function convertBase64UrlToBlob(urlData){
-    var bytes=window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte
+function convertBase64UrlToBlob(urlData) {
+    var bytes = window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte
     //处理异常,将ascii码小于0的转换为大于0
     var ab = new ArrayBuffer(bytes.length);
     var ia = new Uint8Array(ab);
@@ -55,5 +55,28 @@ function convertBase64UrlToBlob(urlData){
         ia[i] = bytes.charCodeAt(i);
 
     }
-    return new Blob( [ab] , {type : 'image/png'});
+    return new Blob([ab], {type: 'image/png'});
+}
+
+
+// 防止打印不支持报错
+var console = window.console || {
+        log: function () {
+
+        }
+    };
+
+
+
+//获取图片地址
+function getFileUrl(file) {
+    var url = null;
+    if (window.createObjectURL != undefined) {
+        url = window.createObjectURL(file);
+    } else if (window.URL != undefined) {
+        url = window.URL.createObjectURL(file);
+    } else if (window.webkitURL != undefined) {
+        url = window.webkitURL.createObjectURL(file);
+    }
+    return url;
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.season.movie.dao.mapper.MovieKindMapper" >
+  <resultMap id="BaseResultMap" type="com.season.movie.dao.entity.MovieKind" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="movie_id" property="movieId" jdbcType="BIGINT" />
+    <result column="kind_id" property="kindId" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>

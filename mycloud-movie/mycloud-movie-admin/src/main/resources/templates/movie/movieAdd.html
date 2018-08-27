@@ -92,7 +92,7 @@
                         </div>
                         <div class="field">
                             <label>主演</label>
-                            <input type="text" name="actor">
+                            <input type="text" name="actors">
                         </div>
                     </div>
                     <div class="field">
@@ -101,7 +101,7 @@
                     </div>
                     <div class="field">
                         <label>简介</label>
-                        <textarea name="introduce" cols="5"></textarea>
+                        <textarea name="description" cols="5"></textarea>
                     </div>
 
                     <div style="text-align: right;padding: 5px;">
@@ -145,7 +145,7 @@
 
 <script th:replace="index::js_jquery"></script>
 
-<!--方法重名了，所以放在后面-->
+<!--方法重名了，所以放在前面-->
 <script th:src="${application._staticPath}+'movie-admin/js/jquery-ui.min.js'"></script>
 <script th:src="${application._staticPath}+'movie-admin/js/customjs/custom-datePicker-zh.js'"></script>
 

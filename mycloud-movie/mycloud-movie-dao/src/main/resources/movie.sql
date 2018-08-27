@@ -10,8 +10,8 @@ CREATE TABLE movie (
   COMMENT '电影名',
   price       DECIMAL(4, 2)                 DEFAULT 0
   COMMENT '电影价格',
-  kind        INT          NOT NULL         DEFAULT 1
-  COMMENT '电影主要类型',
+  area_id     INT                           DEFAULT NULL
+  COMMENT '电影地区',
   cover       VARCHAR(255)                  DEFAULT NULL
   COMMENT '电影封面图',
   play_count  BIGINT       NOT NULL         DEFAULT 0
@@ -92,6 +92,7 @@ CREATE TABLE kind (
   DEFAULT CHARSET = utf8
   COMMENT '电影类别表';
 
+
 DROP TABLE IF EXISTS movie_kind;
 CREATE TABLE movie_kind (
   id       BIGINT AUTO_INCREMENT
@@ -105,6 +106,20 @@ CREATE TABLE movie_kind (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   COMMENT '电影类别关联表';
+
+DROP TABLE IF EXISTS area;
+CREATE TABLE area (
+  id   INT         NOT NULL AUTO_INCREMENT
+  COMMENT '地区id',
+  name VARCHAR(50) NOT NULL
+  COMMENT '地区名',
+  sort INT         NOT NULL DEFAULT 0
+  COMMENT '排序号',
+  PRIMARY KEY (id)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
+  COMMENT '电影地区表';
 
 DROP TABLE IF EXISTS user;
 CREATE TABLE user (
@@ -126,19 +141,7 @@ CREATE TABLE user (
   DEFAULT CHARSET = utf8
   COMMENT '用户表';
 
-INSERT kind (name) VALUES ('动作'), ('爱情'), ('恐怖'), ('科幻');
-INSERT movie (name, play_count, cover) VALUES
-  ('我不是药神', 423412, 'avatar_movie.jpg'), ('侏罗纪世界', 3242, 'beauty_and_the_beast.jpg'),
-  ('邪不压正', 3245, 'black-swan.jpg'), ('金蝉脱壳', 2454, 'Coraline.jpg'),
-  ('西虹市首富', 2423454, 'Eclipse.jpg'), ('狄仁杰之四大天王', 254, 'end-game.jpg'),
-  ('死侍2', 2454, 'New-Moon-The-Score-cover-twilight.jpg'), ('狄仁杰之夺命天眼', 324, 'preview.jpg'),
-  ('复仇者联盟3', 235323, 'Priest.jpg'), ('阿凡达', 35324, 'Sorority_Wars.jpg'), ('不明身份', 23435, 'Unstoppable.jpg'),
-  ('超时空同居', 533234, 'caoshik.jpg'), ('蚁人2', 342532, 'yiren2.jpg');
-
 --  2018-08-18更新 --------
--- 删除movie的kind字段
-ALTER TABLE movie
-  DROP COLUMN kind;
 -- 修改movie的play_count可以为空
 ALTER TABLE movie
   MODIFY COLUMN play_count BIGINT DEFAULT 0
@@ -231,3 +234,8 @@ CREATE TABLE file_info (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8
   COMMENT '文件表';
+
+-- 2018-08-27更新--
+-- 增加video表的user_name冗余字段
+ALTER TABLE video
+  ADD COLUMN user_name VARCHAR(30) COMMENT '所属用户名';

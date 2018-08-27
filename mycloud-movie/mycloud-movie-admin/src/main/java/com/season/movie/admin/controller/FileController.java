@@ -97,6 +97,10 @@ public class FileController extends BaseController {
         //返回图片访问路径
         String url = request.getSession().getServletContext().getAttribute("_tmpPath") + filename;
 
+        Map<String,Object> resultMap=new HashMap<>();
+        resultMap.put("url",url);
+        resultMap.put("fileName",filename);
+
         if (!StringUtils.isEmpty(imgData2)) {
             //写第二张图片
             filename = WebFileUtils.appendFilename(filename,"_detail");
@@ -106,8 +110,7 @@ public class FileController extends BaseController {
                 logger.error("写第二张图片失败" + filename, e);
             }
         }
-
-        return BaseResult.successData(url);
+        return BaseResult.successData(resultMap);
 
     }
 

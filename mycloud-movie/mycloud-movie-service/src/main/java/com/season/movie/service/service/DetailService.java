@@ -33,37 +33,17 @@ public class DetailService extends BaseService {
     @Autowired
     MovieDetailMapper detailMapper;
 
-    @Autowired
-    KindMapper kindMapper;
-
-    @Autowired
-    VideoMapper videoMapper;
-
     public Map getDetail(Long id) {
         throwExceptionIfExistNull(id);
-        Movie movie = movieMapper.selectByPrimaryKey(id);
+        Movie movie = movieMapper.selectByMovieIdWithKind(id);
         if (Objects.isNull(movie)) {
             throw new BaseException(ResultCode.DAO_ERROR, "资源不存在");
         }
         MovieDetail movieDetail = detailMapper.selectByMovieId(id);
-        List<Kind> kindList = null;
-        if (!Objects.isNull(kinds)) {
-            List<Integer> list = stringToIntList(kinds.split(","), "获取详细内容失败");
-            Weekend<Kind> kindWeekend = Weekend.of(Kind.class);
-            kindWeekend.orderBy("sort").asc();
-            WeekendCriteria<Kind, Object> criteria = kindWeekend.weekendCriteria();
-            criteria.andIn(Kind::getId, list);
-            kindList = kindMapper.selectByExample(kindWeekend);
-        }
-
-        if (!Objects.isNull(movieDetail)) {
-            movieDetail.getKeyword();
-        }
 
         Map<String, Object> map = new HashMap<>(6);
         map.put("info", movie);
         map.put("detail", movieDetail);
-        map.put("kinds", kindList);
         return map;
     }
 

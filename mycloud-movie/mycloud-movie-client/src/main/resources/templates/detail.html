@@ -47,11 +47,11 @@
                                     <i th:text="${movie.detail}?${movie.detail.actors}:_">--</i>
                                 </li>
                                 <li><span>类型:</span>&nbsp;
-                                    <i th:each="kind,state:${movie.kinds}">
+                                    <i th:each="kind,state:${movie.info.kinds}">
                                         <th:block th:if="${state.index} gt 0">,</th:block>
                                         <th:block th:text="${kind.name}?:_">--</th:block>
                                     </i>
-                                    <i th:if="${#lists.isEmpty(movie.kinds)}">--</i>
+                                    <i th:if="${#lists.isEmpty(movie.info   .kinds)}">--</i>
                                 </li>
                                 <li><span>地区:</span>&nbsp;
                                     --

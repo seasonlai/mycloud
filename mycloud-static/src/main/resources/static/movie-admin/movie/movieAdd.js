@@ -86,10 +86,6 @@ function submitMovie() {
 }
 //图片裁剪
 function initUploadImg() {
-    var console = window.console || {
-            log: function () {
-            }
-        };
     var URL = window.URL || window.webkitURL;
 
     var $image = $('#movieCropImg');
@@ -183,8 +179,8 @@ function initUploadImg() {
                                         alert(data.msg);
                                         return;
                                     }
-                                    $("#uploadImg").attr("src", data.data);
-                                    $('#movieImg').val(data.data);
+                                    $("#uploadImg").attr("src", data.data.url);
+                                    $('#movieImg').val(data.data.fileName);
                                     $(".ui.actionmodal").modal('hide');
                                 },
                                 error: function () {
@@ -203,16 +199,3 @@ function initUploadImg() {
     }
 }
 
-//
-// //获取图片地址
-// function getUrl(file) {
-//     var url = null;
-//     if (window.createObjectURL != undefined) {
-//         url = window.createObjectURL(file);
-//     } else if (window.URL != undefined) {
-//         url = window.URL.createObjectURL(file);
-//     } else if (window.webkitURL != undefined) {
-//         url = window.webkitURL.createObjectURL(file);
-//     }
-//     return url;
-// }

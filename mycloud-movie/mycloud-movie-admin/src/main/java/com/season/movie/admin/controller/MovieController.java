@@ -5,14 +5,8 @@ import com.season.common.base.BaseResult;
 import com.season.common.model.ResultCode;
 import com.season.common.web.util.WebFileUtils;
 import com.season.movie.admin.form.MovieForm;
-import com.season.movie.dao.entity.Kind;
-import com.season.movie.dao.entity.Movie;
-import com.season.movie.dao.entity.Quality;
-import com.season.movie.dao.entity.Task;
-import com.season.movie.service.service.KindServcie;
-import com.season.movie.service.service.MovieService;
-import com.season.movie.service.service.QualityService;
-import com.season.movie.service.service.TaskService;
+import com.season.movie.dao.entity.*;
+import com.season.movie.service.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.io.FileUtils;
@@ -29,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -47,13 +42,15 @@ public class MovieController extends BaseController {
     MovieService movieService;
     @Autowired
     QualityService qualityService;
+    @Autowired
+    DetailService detailService;
+    @Autowired
+    VideoService videoService;
 
     @ApiOperation(value = "影片列表页面", httpMethod = "GET")
     @GetMapping("/movieList")
     public ModelAndView movieList() {
         ModelAndView modelAndView = new ModelAndView("movie/movieList");
-        List<Kind> kinds = kindServcie.listAll();
-        modelAndView.addObject("kinds", kinds);
         return modelAndView;
     }
 
@@ -79,8 +76,21 @@ public class MovieController extends BaseController {
     @GetMapping("/movieDetail/{movieId}")
     public ModelAndView movieDetail(@PathVariable("movieId") Long movieId) {
         ModelAndView mav = new ModelAndView("movie/movieDetail");
-        Movie movie = movieService.findById(movieId);
-        mav.addObject("movie", movie);
+        //查询详情
+        Map detail = detailService.getDetail(movieId);
+        //查询类型
+        List<Kind> kinds = kindServcie.listAll();
+        Object info = detail.get("info");
+        if (info instanceof Movie) {
+            kinds.removeAll(((Movie) info).getKinds());//剩下的未选中的kinds
+        }
+        //查询关联的视频
+        if (info instanceof Movie) {
+            Video video = videoService.findById(((Movie) info).getVideoId());
+            mav.addObject("video", video);
+        }
+        mav.addObject("kinds", kinds);
+        mav.addObject("movie", detail);
         return mav;
     }
 
@@ -94,6 +104,31 @@ public class MovieController extends BaseController {
                 movieForm.movieDetail(), movieForm.getMovieKind(), tmpFileDir, goalFileDir);
         return BaseResult.success();
 
+    }
+
+    @ApiOperation("更新电影封面")
+    @PostMapping("/updateCover")
+    public Object updateCover(Movie movie, HttpServletRequest request) {
+        String fileName = movieService.updateCover(movie,
+                WebFileUtils.getTmpFileDir(request),
+                WebFileUtils.getImgFileDir(request));
+        return BaseResult.successData(fileName);
+    }
+
+    @ApiOperation("更新电影封面")
+    @PostMapping("/updateMovie")
+    public Object updateMovie(@Validated MovieForm movieForm) {
+        movieService.updateMovie(movieForm.movie(),
+                movieForm.movieDetail(), movieForm.getMovieKind());
+        return BaseResult.success();
+    }
+
+    @ApiOperation("更新电影的关联视频")
+    @PostMapping("/updateMV")
+    public Object updateMovieVideo(@RequestParam("movieId") Long movieId
+            , @RequestParam("videoId") Long videoId) {
+        movieService.updateMovieVideo(movieId, videoId);
+        return BaseResult.success();
     }
 
     @ApiOperation("分页查询电影")

@@ -42,10 +42,16 @@ public class Video {
     private String description;
 
     /**
-     * 用户id
+     * 所属用户id
      */
     @Column(name = "user_id")
     private Long userId;
+
+    /**
+     * 所属用户名
+     */
+    @Column(name = "user_name")
+    private String userName;
 
     /**
      * 创建、上传时间
@@ -173,5 +179,13 @@ public class Video {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

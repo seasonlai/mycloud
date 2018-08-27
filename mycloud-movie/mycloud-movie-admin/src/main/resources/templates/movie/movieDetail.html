@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="index::header('影片属性',~{})">
-
+<head th:include="index::header('影片属性',~{::link})">
+    <link th:href="${application._staticPath}+'movie-admin/css/jquery-ui.min.css'" rel="stylesheet">
+    <link th:href="${application._staticPath}+'lib/jQuery-cropper/css/cropper.min.css'" rel="stylesheet">
+    <link href="https://vjs.zencdn.net/7.1.0/video-js.css" rel="stylesheet">
 </head>
 <body>
 
@@ -9,7 +11,7 @@
     <th:block th:fragment="mainContent">
         <div class="ui segment">
             <div class="ui medium breadcrumb">
-                <a class="section" href="/admin/movieList">影片列表</a>
+                <a class="section" th:href="@{/admin/movieList}">影片列表</a>
                 <i class="right angle icon divider"></i>
                 <div class="active section">影片属性</div>
             </div>
@@ -24,6 +26,9 @@
                     <a class="item" data-tab="settings">
                         影片信息
                     </a>
+                    <a class="item" data-tab="video">
+                        关联视频
+                    </a>
                 </div>
             </div>
             <div class="sixteen wide tablet fourteen wide computer column">
@@ -31,56 +36,208 @@
                     <div class="ui tab active" data-tab="profile">
                         <div class="ui small image" style="width:100%">
                             <img id="uploadImg" class="ui middle aligned small image "
-                                 th:src="${movie.cover}?${application._imgPath}+${movie.cover}
+                                 th:src="${movie.info.cover}?${application._imgPath}+${movie.info.cover}
                                  :${application._imgPath}+'image.png'">
                             <div class="fileBtn" id="uploadImgBtn"
                                  style="display:inherit;margin-left: 5px;width: 10%;">
                                 <!--label包裹input，点了label相当于点了input-->
-                                <label style="cursor: pointer">更改图片
+                                <label style="cursor: pointer">更换封面
                                     <input id="inputImg" type="file" name="uploadImg" hidden>
                                 </label>
                             </div>
-                            <!--<div id="progress" style="width: 15%;display: none">-->
-                            <!--<div class="bar" style="width: 0%;"></div>-->
-                            <!--</div>-->
                         </div>
                     </div>
                     <div class="ui tab" data-tab="settings">
-                        <form class="ui form segment">
-                            <h3 class="ui header">
-                                Account Settings
-                            </h3>
-                            <div class="ui hidden divider"></div>
+                        <form class="ui form segment movieForm" id="movieForm" onsubmit="return false;">
+                            <div class="two fields">
+                                <div class="field">
+                                    <label>名称</label>
+                                    <input th:value="${movie.info.name}" placeholder="电影名称" name="movieName"
+                                           type="text">
+                                    <input hidden th:value="${movie.info.id}" name='movieId'>
+                                </div>
+                                <div class="field">
+                                    <label>类型</label>
+                                    <div class="ui dropdown selection multiple" tabindex="0">
+                                        <select name="movieKind" multiple="">
+                                            <option value="">选择类别</option>
+                                            <option th:each="item,index:${kinds}"
+                                                    th:value="${item.id}"
+                                                    th:text="${item.name}">
+                                            </option>
+                                            <option th:each="item,index:${movie.info.kinds}"
+                                                    th:value="${item.id}"
+                                                    selected=''
+                                                    th:text="${item.name}">
+                                            </option>
+                                        </select><i class="dropdown icon"></i>
+                                        <a class="ui label transition visible"
+                                           th:each="item,index:${movie.info.kinds}"
+                                           th:data-value="${item.id}"
+                                           th:utext="${item.name}+'<i class=\'delete icon\'></i>'"
+                                           style="display: inline-block !important;">
+                                        </a>
+                                        <div class="default text">选择类别</div>
+                                        <div class="menu" tabindex="-1">
+                                            <div class="item active filtered"
+                                                 th:each="item,index:${movie.info.kinds}"
+                                                 th:data-value="${item.id}"
+                                                 th:text="${item.name}">
+                                            </div>
+                                            <div th:each="item,index:${kinds}"
+                                                 class="item"
+                                                 th:data-value="${item.id}"
+                                                 th:text="${item.name}">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="two fields">
+                                <div class="field">
+                                    <label>上映时间</label>
+                                    <div class="ui input left icon">
+                                        <i class="calendar icon"></i>
+                                        <input th:value="${#dates.format(movie.info.showYear,'yyyy-MM-dd')}"
+                                               type="text" id="datepicker"
+                                               name="showTime" size="30" placeholder="日期">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label>电影价格</label>
+                                    <div class="ui right labeled fluid input">
+                                        <div class="ui label">￥</div>
+                                        <input th:value="${movie.info.price}" type="number" name="price">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="two fields">
+                                <div class="field">
+                                    <label>导演</label>
+                                    <input th:value="${movie.detail.director}" name="director" type="text">
+                                </div>
+                                <div class="field">
+                                    <label>主演</label>
+                                    <input th:value="${movie.detail.actors}" type="text" name="actors">
+                                </div>
+                            </div>
                             <div class="field">
-                                <label>Client ID</label>
-                                <input placeholder="Client ID" value="567yznQZng9BMtmb3S0A9LAQN6IT9Dug" name="name"
+                                <label>关键字</label>
+                                <input th:value="${movie.detail.keyword}" placeholder="如热血、青春、惊悚等" name="keyword"
                                        type="text">
                             </div>
                             <div class="field">
-                                <label>Secret ID</label>
-                                <input placeholder="Secret ID" value="x978LzQBmN2qt4AO6TjS84HO0ohdzP1x" name="name"
-                                       type="text">
-                            </div>
-                            <div class="field">
-                                <label>App Name</label>
-                                <input placeholder="App Name" name="name" type="text">
-                            </div>
-                            <div class="field">
-                                <label>App URL</label>
-                                <input placeholder="http://example.com" name="name" type="text">
+                                <label>简介</label>
+                                <textarea th:text="${movie.detail.description}" name="description" cols="5"></textarea>
                             </div>
 
-                            <div class="ui blue submit button">Update</div>
-                            <div class="ui error message"></div>
+                            <div style="text-align: right;padding: 5px;">
+                                <div class="ui blue submit button">确定</div>
+                            </div>
                         </form>
+                    </div>
+                    <div class="ui tab" data-tab="video">
+                        <h4>当前关联视频：
+                            <a id="joinVideo" onclick="previeVideo(video)" th:text="${video}?${video.name}:'--'"></a>
+                        </h4>
+                        <div>
+                            <div class="ui button primary" onclick="submitMovieVideo()">确定</div>
+                            <div style="float: right;display: inline-block">
+                                <button class="ui button icon">
+                                    <i class="icon refresh"></i>
+                                </button>
+                                <div class="ui input ">
+                                    <input class="datepicker" placeholder="起始日期">
+                                    &nbsp;_&nbsp;
+                                    <input class="datepicker" placeholder="终止日期">
+                                </div>
+                                <div class="ui icon input">
+                                    <input type="text" placeholder="搜索视频...">
+                                    <i class="search icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="ui single line table tablet stackable" id="videoTb">
+                            <thead>
+                            <tr>
+                                <th>选择</th>
+                                <th>名称</th>
+                                <th>质量</th>
+                                <th>上传日期</th>
+                                <th>上传者</th>
+                            </tr>
+                            </thead>
+                            <tbody id="videoTbBody">
+
+                            </tbody>
+                            <tfoot class="hiddenui">
+                            <tr>
+                                <th colspan="5">
+                                    <div class="ui right floated pagination menu" id="pagination">
+                                    </div>
+                                </th>
+                            </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-
     </th:block>
 </div>
+
+<div th:replace="index::cropModal"></div>
+
+
+<div class="ui modal videomodal" >
+    <i class="close icon"></i>
+    <div class="header">
+        裁剪图片
+    </div>
+    <div class="content">
+        <video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
+               th:poster="${movie}?${application._imgPath}+${movie.cover}:${application._imgPath}+'image.png'"
+               data-setup="{}">
+            <source th:src="${video}!=null?${application._videoPath}+${video.code}:''" type='video/mp4'>
+            <p class="vjs-no-js">
+                播放此视频需要浏览器支持javascript, 最好
+                <a href="https://videojs.com/html5-video-support/" target="_blank">支持html5播放视频</a>
+            </p>
+        </video>
+    </div>
+</div>
+
+
 </body>
-<th:block th:include="index::script"/>
+
+<script th:replace="index::js_jquery"></script>
+
+<!--方法重名了，所以放在前面-->
+<script th:src="${application._staticPath}+'movie-admin/js/jquery-ui.min.js'"></script>
+<script th:src="${application._staticPath}+'movie-admin/js/customjs/custom-datePicker-zh.js'"></script>
+
+<script th:replace="index::js_basic"></script>
+
+<script th:src="${application._staticPath}+'/lib/jquery.form.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-cropper/js/cropper.min.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-cropper/js/jquery-cropper.min.js'"></script>
+
+<script th:src="${application._staticPath}+'movie-admin/js/img-upload-crop.js'"></script>
+<script th:src="${application._staticPath}+'movie-admin/movie/movieDetail.js'"></script>
+
+<script th:src="${application._staticPath}+'lib/jQuery-pagination/pagination.js'"></script>
+
+<script src="https://vjs.zencdn.net/7.1.0/video.js"></script>
+
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+    var imgUrl =
+    /*[[${application._imgPath}]]*/
+    var movieId =
+    /*[[${movie.info.id}]]*/
+    /*]]>*/
+</script>
 
 </html>

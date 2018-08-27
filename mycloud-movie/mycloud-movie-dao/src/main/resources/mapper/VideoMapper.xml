@@ -14,5 +14,7 @@
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
   </resultMap>
+
 </mapper>

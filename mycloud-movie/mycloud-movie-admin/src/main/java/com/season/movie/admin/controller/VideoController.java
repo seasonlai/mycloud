@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -44,6 +46,7 @@ public class VideoController {
         video.setName(videoForm.getVideoName());
         video.setDescription(videoForm.getVideoDesc());
         video.setUserId(loginUser.getId());
+        video.setUserName(loginUser.getName());
         video.setQualityId(videoForm.getVideoQuality().getId());
         video.setQualityName(videoForm.getVideoQuality().getName());
 
@@ -59,4 +62,24 @@ public class VideoController {
         return BaseResult.successData(video);
     }
 
+    /**
+     * 条件分页查询
+     *
+     * @param pageNum
+     * @param pageSize
+     * @param videoForm
+     * @return
+     */
+    @ApiOperation("查询列表")
+    @PostMapping("/queryPage")
+    public Object list(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+                       VideoForm videoForm) {
+        Video video = new Video();
+        if (!Objects.isNull(videoForm)) {
+            video.setName(videoForm.getVideoName());
+        }
+        return BaseResult.successData(videoService.listPage(pageNum,
+                pageSize, video));
+    }
 }

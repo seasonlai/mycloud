@@ -46,4 +46,18 @@ public class BaseService {
         }
     }
 
+    /**
+     * count小于等于0时，抛异常
+     *
+     * @param count
+     */
+    protected void updateCheckAndThrow(int count) {
+        updateCheckAndThrow(count, "更新数据库失败");
+    }
+
+    protected void updateCheckAndThrow(int count, String errMsg) {
+        if (count <= 0) {
+            throw new BaseException(ResultCode.SERVICE_ERROR, errMsg);
+        }
+    }
 }

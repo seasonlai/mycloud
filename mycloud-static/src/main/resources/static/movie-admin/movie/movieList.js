@@ -1,5 +1,3 @@
-kinds = kinds || [];
-
 function queryList(pageNum, pageSize, init) {
     $.ajax({
         url: '/admin/movieList',
@@ -22,12 +20,12 @@ function queryList(pageNum, pageSize, init) {
                         cardsWrap = $('<div class="ui five stackable cards">');
                     }
                     cardsWrap.append('<div class="ui card">'
-                        + '<a class="image" style="cursor: pointer" href="/admin/movieDetail/'+movie.id+'">'
+                        + '<a class="image" style="cursor: pointer" href="/admin/movieDetail/' + movie.id + '">'
                         + '<img src="' + imgUrl + (movie.cover ? movie.cover : 'image.png') + '"'
                         + 'class="transition visible">'
                         + '</a>'
                         + '<div class="content" style="padding: 5px 5px;">'
-                        + '片名：<a class="header" style="display: inline-block" href="/admin/movieDetail/'+movie.id+'">' + movie.name + '</a>'
+                        + '片名：<a class="header" style="display: inline-block" href="/admin/movieDetail/' + movie.id + '">' + movie.name + '</a>'
                         + '<div class="description">类型：'
                         + getKindName(movie.kinds)
                         + '</div>'
@@ -60,15 +58,13 @@ function formatDate(date) {
     return date.substring(0, date.indexOf(' '));
 }
 
-function getKindName(key) {
+function getKindName(kinds) {
 
     var result = '';
-    if (key) {
+    if (kinds) {
         for (var i in kinds) {
             var kind = kinds[i];
-            if (key.indexOf(kind.id) >= 0) {
-                result += kind.name + ',';
-            }
+            result += kind.name + ',';
         }
     }
     return result == '' ? '--' : result.substring(0, result.length - 1);
