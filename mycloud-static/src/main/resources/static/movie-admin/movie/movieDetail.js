@@ -152,7 +152,8 @@ function refreshTable(pageNum, pageSize, init) {
                 $videoTable.append(
                     '<tr>'
                     + '<td><input type="radio" name="videoCheck" value="' + video.id + '"></td>'
-                    + '<td><a onclick="previewVideo(video.code)">' + video.name + '</a></td>'
+                    + '<td><a style="cursor: pointer" onclick="previewVideo(\''+video.code+'\',\''+video.name+'\')">'
+                    + video.name + '</a></td>'
                     + '<td>' + video.qualityName + '</td>'
                     + '<td>' + video.createTime + '</td>'
                     + '<td>' + video.userName + '</td>'
@@ -199,11 +200,17 @@ function submitMovieVideo() {
             }, function (result) {
                 if (commonResultHandle(result)) {
                     alert('操作成功');
-                    $('#joinVideo').unbind()
+                    var $videoHref = $('<a></a>').html(video.name)
+                        .css('cursor','pointer')
                         .click(function () {
-                            previewVideo(video.code);
-                        })
-                        .text(video.name);
+                            previewVideo(video.code,video.name);
+                        });
+                    $('#joinVideo')
+                        .children()
+                        .unbind()
+                        .remove()
+                        .end()
+                        .append($videoHref);
                 }
             }).error(function () {
                 alert('请求失败')
@@ -212,7 +219,10 @@ function submitMovieVideo() {
         }
     }
 }
-
-function previewVideo(code) {
-    $('.ui.videomodal').modal('show');
+var video = new Video();
+function previewVideo(code,title) {
+    if (!code || code === '') {
+        return;
+    }
+    video.reload("/videos/" + code).title(title);
 }

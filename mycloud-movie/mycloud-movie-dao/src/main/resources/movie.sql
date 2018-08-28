@@ -239,3 +239,8 @@ CREATE TABLE file_info (
 -- 增加video表的user_name冗余字段
 ALTER TABLE video
   ADD COLUMN user_name VARCHAR(30) COMMENT '所属用户名';
+
+
+-- 2018-08-28更新
+ALTER TABLE file_info
+  ADD COLUMN pointer INT DEFAULT 1 COMMENT '视频被指向计数';

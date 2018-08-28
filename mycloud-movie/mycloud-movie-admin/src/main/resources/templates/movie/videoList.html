@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="index::header('视频管理',~{::link})">
+    <link th:href="${application._staticPath}+'movie-admin/css/jquery-ui.min.css'" rel="stylesheet">
+    <link th:href="${application._staticPath}+'lib/jQuery-cropper/css/cropper.min.css'" rel="stylesheet">
+    <link href="https://vjs.zencdn.net/7.1.0/video-js.min.css" rel="stylesheet">
+    <link th:href="${application._staticPath}+'movie/css/video.css'" rel="stylesheet">
+</head>
+<body>
+<div th:replace="index::conteWrap('movie','videoList',~{::mainContent})">
+    <th:block th:fragment="mainContent">
+        <div class="ui segment">
+            <div>
+                <div class="ui button icon" ><i class="ui icon edit"></i>修改</div>
+                <div class="ui button icon error"><i class="ui icon trash"></i>删除</div>
+                <div style="float: right;display: inline-block">
+                    <button class="ui button icon">
+                        <i class="icon refresh"></i>
+                    </button>
+                    <div class="ui input ">
+                        <input class="datepicker" placeholder="起始日期">
+                        &nbsp;_&nbsp;
+                        <input class="datepicker" placeholder="终止日期">
+                    </div>
+                    <div class="ui icon input">
+                        <input type="text" placeholder="搜索视频...">
+                        <i class="search icon"></i>
+                    </div>
+                </div>
+            </div>
+            <table class="ui single line table tablet stackable" id="videoTb">
+                <thead>
+                <tr>
+                    <th>选择</th>
+                    <th>名称</th>
+                    <th>质量</th>
+                    <th>上传日期</th>
+                    <th>上传者</th>
+                </tr>
+                </thead>
+                <tbody id="videoTbBody">
+
+                </tbody>
+                <tfoot class="hiddenui">
+                <tr>
+                    <th colspan="5">
+                        <div class="ui right floated pagination menu" id="pagination">
+                        </div>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </th:block>
+</div>
+<div th:replace="index::videoModal"></div>
+</body>
+
+<script th:replace="index::js_jquery"></script>
+
+<!--方法重名了，所以放在前面-->
+<script th:src="${application._staticPath}+'movie-admin/js/jquery-ui.min.js'"></script>
+<script th:src="${application._staticPath}+'movie-admin/js/customjs/custom-datePicker-zh.js'"></script>
+
+<script th:replace="index::js_basic"></script>
+
+<script th:src="${application._staticPath}+'/lib/jquery.form.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-cropper/js/cropper.min.js'"></script>
+<script th:src="${application._staticPath}+'lib/jQuery-cropper/js/jquery-cropper.min.js'"></script>
+
+<script th:src="${application._staticPath}+'movie-admin/js/img-upload-crop.js'"></script>
+
+<script th:src="${application._staticPath}+'lib/jQuery-pagination/pagination.js'"></script>
+
+<script src="https://vjs.zencdn.net/7.1.0/video.js"></script>
+<script th:src="${application._staticPath}+'movie-admin/js/video.js'"></script>
+
+<script th:src="${application._staticPath}+'movie-admin/movie/videoList.js'"></script>
+
+</html>

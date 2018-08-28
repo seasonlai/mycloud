@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="common::header('播放页面',~{::link})">
 
-    <link href="https://vjs.zencdn.net/7.1.0/video-js.css" rel="stylesheet">
-
+    <link href="https://vjs.zencdn.net/7.1.0/video-js.min.css" rel="stylesheet">
+    <link th:href="${application._staticPath}+'movie/css/video.css'" rel="stylesheet">
 </head>
 <body>
 <div class="header">
@@ -18,27 +18,28 @@
     <div class="wrap">
         <div class="content_top">
             <div class="back-links">
-                <p>正在播放：
-                    <a href="#" class="active" th:text="${movie}?${movie.name}:''">--</a>
-                </p>
+                正在播放：<span href="#" style="display: inline-block" class="active" th:text="${movie}?${movie.name}:''">--</span>
             </div>
             <div class="clear"></div>
         </div>
-        <video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
-               th:poster="${movie}?${application._imgPath}+${movie.cover}:${application._imgPath}+'image.png'"
-               data-setup="{}">
-            <source th:src="${video}!=null?${application._videoPath}+${video.code}:''" type='video/mp4'>
-            <p class="vjs-no-js">
-                播放此视频需要浏览器支持javascript, 最好
-                <a href="https://videojs.com/html5-video-support/" target="_blank">支持html5播放视频</a>
-            </p>
-        </video>
+        <div style="width: 680px;margin: 10px auto;">
+            <video id="my-video" class="video-js  vjs-big-play-centered" controls preload="auto" width="640"
+                   height="264"
+                   th:poster="${movie}?${application._imgPath}+${movie.cover}:${application._imgPath}+'image.png'"
+                   th:data-setup="${application._staticPath}+'movie/lang/zh-CN.json'">
+                <source th:src="${video}!=null?'/videos/'+${video.code}:''" type='video/mp4'>
+                <p class="vjs-no-js">
+                    播放此视频需要浏览器支持javascript, 最好
+                    <a href="https://videojs.com/html5-video-support/" target="_blank">支持html5播放视频</a>
+                </p>
+            </video>
+        </div>
     </div>
 </div>
 
 <a href="#" id="toTop"><span id="toTopHover"> </span></a>
 <div th:replace="common::footer"></div>
 <script th:replace="common::scripts"></script>
-<script src="https://vjs.zencdn.net/7.1.0/video.js"></script>
+<script src="https://vjs.zencdn.net/7.1.0/video.min.js"></script>
 </body>
 </html>

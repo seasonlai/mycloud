@@ -13,10 +13,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,6 +29,13 @@ public class VideoController {
 
     @Autowired
     VideoService videoService;
+
+    @ApiOperation(value = "视频列表页面", httpMethod = "GET")
+    @GetMapping("/list")
+    public ModelAndView listPage() {
+        return new ModelAndView("movie/videoList");
+    }
+
 
     @ApiOperation(value = "添加视频", httpMethod = "POST", notes = "返回视频ID")
     @PostMapping("/add")

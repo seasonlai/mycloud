@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head th:include="index::header('影片属性',~{::link})">
     <link th:href="${application._staticPath}+'movie-admin/css/jquery-ui.min.css'" rel="stylesheet">
     <link th:href="${application._staticPath}+'lib/jQuery-cropper/css/cropper.min.css'" rel="stylesheet">
     <link href="https://vjs.zencdn.net/7.1.0/video-js.css" rel="stylesheet">
+    <link th:href="${application._staticPath}+'movie/css/video.css'" rel="stylesheet">
 </head>
 <body>
 
@@ -138,8 +139,9 @@
                         </form>
                     </div>
                     <div class="ui tab" data-tab="video">
-                        <h4>当前关联视频：
-                            <a id="joinVideo" onclick="previeVideo(video)" th:text="${video}?${video.name}:'--'"></a>
+                        <h4 id="joinVideo">当前关联视频：
+                            <a style="cursor: pointer" th:onclick="'previewVideo(\''+(${video}?${video.code}:'')+'\',\''+(${video}?${video.name}:'')+'\')'"
+                               th:text="${video}?${video.name}:'--'"></a>
                         </h4>
                         <div>
                             <div class="ui button primary" onclick="submitMovieVideo()">确定</div>
@@ -188,26 +190,7 @@
 </div>
 
 <div th:replace="index::cropModal"></div>
-
-
-<div class="ui modal videomodal" >
-    <i class="close icon"></i>
-    <div class="header">
-        裁剪图片
-    </div>
-    <div class="content">
-        <video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
-               th:poster="${movie}?${application._imgPath}+${movie.cover}:${application._imgPath}+'image.png'"
-               data-setup="{}">
-            <source th:src="${video}!=null?${application._videoPath}+${video.code}:''" type='video/mp4'>
-            <p class="vjs-no-js">
-                播放此视频需要浏览器支持javascript, 最好
-                <a href="https://videojs.com/html5-video-support/" target="_blank">支持html5播放视频</a>
-            </p>
-        </video>
-    </div>
-</div>
-
+<div th:replace="index::videoModal"></div>
 
 </body>
 
@@ -224,11 +207,14 @@
 <script th:src="${application._staticPath}+'lib/jQuery-cropper/js/jquery-cropper.min.js'"></script>
 
 <script th:src="${application._staticPath}+'movie-admin/js/img-upload-crop.js'"></script>
-<script th:src="${application._staticPath}+'movie-admin/movie/movieDetail.js'"></script>
 
 <script th:src="${application._staticPath}+'lib/jQuery-pagination/pagination.js'"></script>
 
 <script src="https://vjs.zencdn.net/7.1.0/video.js"></script>
+<script th:src="${application._staticPath}+'movie-admin/js/video.js'"></script>
+
+
+<script th:src="${application._staticPath}+'movie-admin/movie/movieDetail.js'"></script>
 
 <script th:inline="javascript">
 
@@ -237,6 +223,8 @@
     /*[[${application._imgPath}]]*/
     var movieId =
     /*[[${movie.info.id}]]*/
+    var videoUrl =
+    /*[[${application._videoPath}]]*/
     /*]]>*/
 </script>
 

@@ -54,7 +54,11 @@
                 </a>
                 <a th:class="(${menu_small eq 'movieUpload'}?'active ':'')+(${menu_big eq 'movie'}?'transition visible ':'')+' item'"
                    th:href="@{/admin/movieUpload}">
-                    上传影片
+                    上传视频
+                </a>
+                <a th:class="(${menu_small eq 'videoList'}?'active ':'')+(${menu_big eq 'movie'}?'transition visible ':'')+' item'"
+                   th:href="@{/video/list}">
+                    视频管理
                 </a>
                 <a th:class="(${menu_small eq 'movieKind'}?'active ':'')+(${menu_big eq 'movie'}?'transition visible ':'')+' item'"
                    href="http://demo.cssmoban.com/cssthemes4/tpez_9_bcv/index.html">
@@ -747,6 +751,23 @@
         </div>
     </div>
 </div>
+
+<div class="ui modal videomodal" style="width: 680px;" th:fragment="videoModal">
+    <i class="close icon"></i>
+    <div class="header">
+        播放视频
+    </div>
+    <div class="content">
+        <video id="my-player" class="video-js vjs-big-play-centered" width="640" height="264">
+            <!--<source id="videoMP4" ></source>-->
+            <p class="vjs-no-js">
+                播放此视频需要浏览器支持javascript, 最好
+                <a href="https://videojs.com/html5-video-support/" target="_blank">支持html5播放视频</a>
+            </p>
+        </video>
+    </div>
+</div>
+
 
 
 <th:block th:fragment="script">

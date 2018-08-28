@@ -18,6 +18,10 @@ public class FileInfo {
      * MD5的值
      */
     private String md5;
+    /**
+     * 引用指向计数
+     */
+    private Integer pointer;
 
     /**
      * 获取文件ID
@@ -71,5 +75,13 @@ public class FileInfo {
      */
     public void setMd5(String md5) {
         this.md5 = md5;
+    }
+
+    public Integer getPointer() {
+        return pointer;
+    }
+
+    public void setPointer(Integer pointer) {
+        this.pointer = pointer;
     }
 }

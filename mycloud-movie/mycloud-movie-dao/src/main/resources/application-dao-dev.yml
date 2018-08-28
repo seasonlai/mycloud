@@ -19,3 +19,12 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
+
+
+###### 自定义 ######
+file:
+  image:
+    path: D:/mycloud/images/
+    format: jpg|png|gif|bmp
+  video:
+    path: D:/mycloud/videos/
