@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: service-dev
   jpa:
     database: mysql
     show-sql: true

@@ -5,7 +5,6 @@ spring:
     name: mycloud-sso
   profiles:
     active: dev
-    include: service
   #取消模板缓存
   thymeleaf:
     cache: false

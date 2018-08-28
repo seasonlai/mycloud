@@ -1,11 +1,11 @@
 spring:
   profiles:
-    include: dao-dev,service-dev
+    include: dao-pro,service-pro
   redis:
     host: 127.0.0.1
     password: 123456
     port: 6379
-    timeout: 0
+    timeout: 5000
     database: 0
     jedis:
       pool:
@@ -15,4 +15,5 @@ spring:
         max-wait: 6000
 logging:
   level:
-    com.season: debug
+#    root: debug
+    com.season: info

@@ -3,6 +3,8 @@ jasypt:
     password: mycloud-salt
 
 spring:
+  profiles:
+    include: service-pro
   jpa:
     database: mysql
     show-sql: true
@@ -11,7 +13,7 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:mysql://localhost/mycloud_sso?useSSL=false&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://120.79.12.83:3307/mycloud_sso?useSSL=false&useUnicode=true&characterEncoding=utf-8
     username: root
     password: ENC(W9Fdtjzo7LH1xPfw6ygkKnrJx5TR1yDy)
     type: com.alibaba.druid.pool.DruidDataSource
@@ -38,7 +40,7 @@ spring:
     # 通过connectProperties属性来打开mergeSql功能，慢SQL记录
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
   redis:
-    host: 127.0.0.1
+    host: 120.79.12.83
     password: ENC(W9Fdtjzo7LH1xPfw6ygkKnrJx5TR1yDy)
     port: 6379
     timeout: 5000

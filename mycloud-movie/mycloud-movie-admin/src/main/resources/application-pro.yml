@@ -1,8 +1,8 @@
 spring:
   profiles:
-    include: dao-dev
+    include: dao-pro,service-pro
   redis:
-    host: 127.0.0.1
+    host: 120.79.12.83
     password: ENC(W9Fdtjzo7LH1xPfw6ygkKnrJx5TR1yDy)
     port: 6379
     timeout: 0
