@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head th:replace="/admin/index::header('个人中心',~{})">
 </head>
 <body>
@@ -27,8 +27,10 @@
                 </ul>
 
                 <div class="tab-content">
-                    <div id="edit-basic"  class="tab-pane active">
-                        <h4><small>注册信息</small></h4>
+                    <div id="edit-basic" class="tab-pane active">
+                        <h4>
+                            <small>注册信息</small>
+                        </h4>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">登录名</label>
@@ -46,13 +48,16 @@
                             <label class="col-sm-3 control-label">注册时间</label>
 
                             <div class="col-sm-9">
-                                <label class="control-label" th:text="${#dates.format(user.createTime,'yyyy-MM-dd HH:mm:ss')}?:_">
+                                <label class="control-label"
+                                       th:text="${#dates.format(user.createTime,'yyyy-MM-dd HH:mm:ss')}?:_">
                                     --
                             </div>
                         </div>
 
                         <div class="space"></div>
-                        <h4><small>登录信息</small></h4>
+                        <h4>
+                            <small>登录信息</small>
+                        </h4>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">上次登录IP</label>
@@ -72,7 +77,8 @@
                             <label class="col-sm-3 control-label no-padding-right">上次登录时间</label>
 
                             <div class="col-sm-9">
-                                <label class="control-label" th:text="${#dates.format(user.lastTime,'yyyy-MM-dd HH:mm:ss')}?:_">
+                                <label class="control-label"
+                                       th:text="${#dates.format(user.lastTime,'yyyy-MM-dd HH:mm:ss')}?:_">
                                     --
                                 </label>
                             </div>
@@ -80,6 +86,17 @@
                     </div>
 
                     <div id="edit-password" class="tab-pane">
+                        <div class="space-10"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">原密码</label>
+
+                            <div class="col-sm-9">
+                                <div class="help-validate">
+                                    <input id="_oldPassword" name="oldPassword" type="password"/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="space-10"></div>
 
                         <div class="form-group">
@@ -109,11 +126,12 @@
 
                         <div class="form-actions">
                             <div class="col-md-offset-3 col-md-9">
-                                <button id="_submit" type="button" class="btn btn-info" data-loading-text="正在提交...">
+                                <button id="_submit" onclick="updatePassword()" type="button" class="btn btn-info"
+                                        data-loading-text="正在提交...">
                                     保存
                                 </button>
                                 &nbsp; &nbsp;
-                                <button id="_reset" class="btn btn-default" type="reset">
+                                <button id="_reset" onclick="resetForm()" class="btn btn-default" type="reset">
                                     重置
                                 </button>
                             </div>
@@ -126,5 +144,49 @@
 </div>
 
 <script th:replace="/admin/index::script"></script>
+
+<script>
+
+    function updatePassword() {
+        //判空
+        var validate = true;
+        $('#edit-password').find("input").each(function () {
+            var val = $(this).val();
+            if (!val || val == '') {
+                validate = false;
+                return false;
+            }
+        });
+
+        if (!validate) {
+            alert('信息不完整');
+            return;
+        }
+
+        var newPwd = $('#_newPassword').val();
+        var comfirmPwd = $('#_confirmPassword').val();
+        if (newPwd != comfirmPwd) {
+            alert('密码不一致');
+            return;
+        }
+
+        var oldPwd = $('#_oldPassword').val();
+
+        $.post('/admin/password', {
+            oldPwd:oldPwd,
+            newPwd:newPwd
+        }, function (result) {
+            if(!result)return;
+            alert(result.msg);
+        }).error(function () {
+            alert('请求失败')
+        })
+    }
+
+    function resetForm() {
+        $('#edit-password').find("input").val("");
+    }
+
+</script>
 </body>
 </html>

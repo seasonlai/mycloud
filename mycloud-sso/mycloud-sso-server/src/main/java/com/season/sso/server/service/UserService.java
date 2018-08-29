@@ -2,6 +2,7 @@ package com.season.sso.server.service;
 
 import com.season.common.base.BaseException;
 import com.season.common.model.ResultCode;
+import com.season.common.web.base.BaseService;
 import com.season.sso.client.model.LoginUser;
 import com.season.sso.client.util.ShiroUtil;
 import com.season.sso.client.constant.Constant;
@@ -30,7 +31,7 @@ import java.util.*;
  * Created by Administrator on 2018/6/1.
  */
 @Service
-public class UserService {
+public class UserService extends BaseService {
 
     @Autowired
     UserRepository userRepository;
@@ -174,5 +175,25 @@ public class UserService {
         u.setLastIp(request.getRemoteHost());
         u.setLastVisit(new Date());
         userRepository.updateIpAndVistById(u);
+    }
+
+    public void updatePassword(String oldPwd, String newPwd) {
+        throwExceptionIfExistNull(oldPwd, newPwd);
+        Subject subject = SecurityUtils.getSubject();
+        LoginUser loginUser = (LoginUser) subject.getPrincipal();
+
+        User user = userRepository.findById(loginUser.getId()).get();
+        //对密码进行加密
+        SimpleHash simpleHash = new SimpleHash(Constant.HASH_ALGORITHM, oldPwd);
+        simpleHash.setIterations(Constant.HASH_ITERATION);
+        if (Objects.equals(user.getPassword(), simpleHash.toHex())) {
+            //设置新密码
+            simpleHash = new SimpleHash(Constant.HASH_ALGORITHM, newPwd);
+            simpleHash.setIterations(Constant.HASH_ITERATION);
+            user.setPassword(simpleHash.toHex());
+            userRepository.updatePasswordById(user);
+        } else {
+            throw new BaseException(ResultCode.VALIDATE_ERROR, "原密码错误");
+        }
     }
 }
