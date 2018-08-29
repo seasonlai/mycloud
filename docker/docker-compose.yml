@@ -4,19 +4,29 @@ services:
     image: mycloud/mycloud-sso-0.0.1-SNAPSHOT
     ports:
       - "10000:10000"
-  mycloud-sso:
-    image: mycloud/mycloud-sso-0.0.1-SNAPSHOT
-    ports:
-      - "10003:10003"
+    environment:
+      - spring.profiles.active=pro
   mycloud-static:
     image: mycloud/mycloud-sso-0.0.1-SNAPSHOT
     ports:
       - "10009:10009"
+    environment:
+      - spring.profiles.active=pro
+  mycloud-sso:
+    image: mycloud/mycloud-sso-0.0.1-SNAPSHOT
+    ports:
+      - "10003:10003"
+    environment:
+      - spring.profiles.active=pro
   mycloud-movie-admin:
     image: mycloud/mycloud-movie-admin-0.0.1-SNAPSHOT
     ports:
       - "10006:10006"
+    environment:
+      - spring.profiles.active=pro
   mycloud-movie-client:
     image: mycloud/mycloud-movie-client-0.0.1-SNAPSHOT
     ports:
       - "10005:10005"
+    environment:
+      - spring.profiles.active=pro

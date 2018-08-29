@@ -1,9 +1,11 @@
 spring:
   activemq:
-    broker-url: tcp://120.79.12.83:61616
+    broker-url: tcp://120.79.12.83:8161
     in-memory: true
     pool:
       enabled: false
+    user: admin
+    password: ENC(W9Fdtjzo7LH1xPfw6ygkKnrJx5TR1yDy)
 
 eureka:
   client:
