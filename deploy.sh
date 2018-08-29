@@ -1,6 +1,6 @@
 #!/bin/bash
 
-### 基础jar包
+### 打包安装
 cd $PROJ_PATH/mycloud/
 mvn clean install package
 
