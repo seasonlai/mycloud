@@ -6,15 +6,14 @@
     <version>0.0.1-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.season</groupId>
+    <groupId>com.season.static</groupId>
     <artifactId>mycloud-static</artifactId>
 
     <packaging>jar</packaging>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter</artifactId>
-        <version>1.5.10.RELEASE</version>
-        <relativePath/>
+        <groupId>com.season</groupId>
+        <artifactId>mycloud</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -57,11 +56,28 @@
             </resource>
         </resources>
         <plugins>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <skipTests>true</skipTests>    <!--默认关掉单元测试 -->
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
@@ -74,8 +90,6 @@
                     <entryPoint>["java","-jar","/${project.build.finalName}.jar]</entryPoint>
                     <!-- docker远程服务器地址 -->
                     <dockerHost>http://120.79.12.83:2375</dockerHost>
-                    <!-- Dockerfile文件存放目录 -->
-                    <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>

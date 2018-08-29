@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>mycloud-movie</artifactId>
-        <groupId>com.season</groupId>
+        <groupId>com.season.movie</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
 
-    <groupId>com.season.movie</groupId>
     <artifactId>mycloud-movie-dao</artifactId>
 
     <dependencies> <!--mybatis相关-->
@@ -49,11 +49,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
             <!--代码生成插件-->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
