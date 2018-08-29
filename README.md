@@ -1,7 +1,7 @@
 # mycloud
 微服务应用
 
-**技术或框架**： SpringBoot、SpringCloud、Mybatis、JPA、Shiro、ActiveMQ、MySQL、Redis、Thymeleaf、Bootstrap、jQuery、Swagger2等
+**技术或框架**： SpringBoot、SpringCloud、Mybatis、JPA、Shiro、Quartz、ActiveMQ、MySQL、Redis、Thymeleaf、Bootstrap、jQuery、Swagger2、docker、jenkins等
 
 **应用**：
 
@@ -20,10 +20,10 @@
 
 - 电影客户端
 
-![详情界面]()
-![播放界面]()
+![详情界面](https://github.com/seasonlai/mycloud/blob/master/doc/movie_client.PNG)
+![播放界面](https://github.com/seasonlai/mycloud/blob/master/doc/movie_client2.PNG)
 
 - 电影管理端
 
-![上传界面]()
-![编辑界面]()
+![上传界面](https://github.com/seasonlai/mycloud/blob/master/doc/movie_admin.PNG)
+![编辑界面](https://github.com/seasonlai/mycloud/blob/master/doc/movie_admin2.PNG)
