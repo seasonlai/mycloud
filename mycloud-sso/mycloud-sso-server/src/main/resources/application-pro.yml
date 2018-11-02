@@ -13,9 +13,9 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:mysql://120.79.12.83:3307/mycloud_sso?useSSL=false&useUnicode=true&characterEncoding=utf-8
-    username: root
-    password: ENC(W9Fdtjzo7LH1xPfw6ygkKnrJx5TR1yDy)
+    url: jdbc:mysql://120.79.12.83:3306/mycloud_sso?useSSL=false&useUnicode=true&characterEncoding=utf-8
+    username: season
+    password: ENC(3aQyMf0tAKfF8ziExb60gMe1rrTDn0z7)
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
     # 初始化大小，最小，最大
@@ -41,7 +41,7 @@ spring:
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
   redis:
     host: 120.79.12.83
-    password: ENC(W9Fdtjzo7LH1xPfw6ygkKnrJx5TR1yDy)
+    password: ENC(3aQyMf0tAKfF8ziExb60gMe1rrTDn0z7)
     port: 6379
     timeout: 5000
     database: 0

@@ -1,4 +1,5 @@
 import com.season.MycloudSsoApplication;
+import org.jasypt.digest.StringDigester;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,9 +14,12 @@ public class JasyptTest {
     @Autowired
     StringEncryptor stringEncryptor;
 
+    StringDigester digester;
+
     @Test
     public void encryptPwd() {
-        String result = stringEncryptor.encrypt("123456");
+        String result = stringEncryptor.encrypt("789654123");
         System.out.println(result);
+        System.out.println(digester.digest(result));
     }
 }

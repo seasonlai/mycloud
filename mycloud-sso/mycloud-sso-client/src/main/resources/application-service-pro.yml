@@ -1,6 +1,6 @@
 spring:
   activemq:
-    broker-url: tcp://120.79.12.83:8161
+    broker-url: tcp://120.79.12.83:61616
     in-memory: true
     pool:
       enabled: false

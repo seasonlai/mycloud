@@ -57,3 +57,6 @@ logging:
 #    org.crazycake.shiro: debug
 
 
+jasypt:
+  encryptor:
+    password: mycloud-salt

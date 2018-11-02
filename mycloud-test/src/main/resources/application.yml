@@ -1,0 +1,7 @@
+my:
+  val: ENC(3aQyMf0tAKfF8ziExb60gMe1rrTDn0z7)
+
+
+jasypt:
+  encryptor:
+    password: mycloud-salt
